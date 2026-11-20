@@ -2,6 +2,7 @@ import {
   AbsoluteFill,
   Img,
   OffthreadVideo,
+  Easing,
   Sequence,
   interpolate,
   spring,
@@ -34,24 +35,127 @@ const TIMELINE = {
   choices: [53, 60],
 } as const;
 
-const At: React.FC<{
-  range: readonly [number, number];
-  children: React.ReactNode;
-}> = ({ range, children }) => (
-  <Sequence from={s(range[0])} durationInFrames={s(range[1] - range[0])}>
-    {children}
-  </Sequence>
-);
+/* ---------- Transitions ---------- */
 
-const Clip: React.FC<{ src: string }> = ({ src }) => (
-  <AbsoluteFill style={{ backgroundColor: "black" }}>
-    <OffthreadVideo
-      src={staticFile(src)}
-      muted
-      style={{ width: "100%", height: "100%", objectFit: "cover" }}
-    />
-  </AbsoluteFill>
-);
+// Length of a zoom-blur dissolve (fast: ~0.27 s).
+const T = 8;
+const ease = Easing.inOut(Easing.cubic);
+
+type InKind = "none" | "zoom" | "flash" | "fromBlack" | "dissolve";
+type OutKind = "none" | "zoom" | "toBlack";
+
+// Frames the shot starts before its storyboard time, to overlap the previous one.
+const leadFor = (k: InKind) => (k === "zoom" || k === "dissolve" ? T : 0);
+
+// Real clip lengths (s): the clip is slowed imperceptibly (~3 %) to also fill
+// the overlap, so every storyboard timing stays exact.
+const CLIP_SECONDS: Record<string, number> = {
+  "clip1.mp4": 4.032,
+  "clip2.mp4": 8.042,
+  "clip4.mp4": 8.042,
+  "clip5.mp4": 8.042,
+  "clip6.mp4": 5.034,
+  "clip7.mp4": 6.037,
+  "clip8.mp4": 7.04,
+};
+
+const Shot: React.FC<{
+  range: readonly [number, number];
+  inKind?: InKind;
+  outKind?: OutKind;
+  video?: string;
+  background?: (lead: number) => React.ReactNode;
+  children?: React.ReactNode;
+}> = ({ range, inKind = "none", outKind = "none", video, background, children }) => {
+  const lead = leadFor(inKind);
+  const from = s(range[0]) - lead;
+  const duration = s(range[1] - range[0]) + lead;
+  return (
+    <Sequence from={from} durationInFrames={duration}>
+      <ShotFx inKind={inKind} outKind={outKind} lead={lead} duration={duration}>
+        {video ? (
+          <AbsoluteFill style={{ backgroundColor: "black" }}>
+            <OffthreadVideo
+              src={staticFile(video)}
+              muted
+              playbackRate={CLIP_SECONDS[video] / (duration / FPS)}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </AbsoluteFill>
+        ) : null}
+        {background?.(lead)}
+        {children ? (
+          <Sequence from={lead} layout="none">
+            {children}
+          </Sequence>
+        ) : null}
+      </ShotFx>
+    </Sequence>
+  );
+};
+
+const ShotFx: React.FC<{
+  inKind: InKind;
+  outKind: OutKind;
+  lead: number;
+  duration: number;
+  children: React.ReactNode;
+}> = ({ inKind, outKind, lead, duration, children }) => {
+  const frame = useCurrentFrame();
+  let opacity = 1;
+  let scale = 1;
+  let blur = 0;
+  let flash = 0;
+
+  // Entrance
+  if (inKind === "zoom" && frame < lead) {
+    const p = ease(frame / lead);
+    opacity = p;
+    scale = interpolate(p, [0, 1], [1.08, 1]);
+    blur = interpolate(p, [0, 1], [14, 0]);
+  } else if (inKind === "dissolve" && frame < lead) {
+    opacity = ease(frame / lead);
+  } else if (inKind === "fromBlack") {
+    const p = ease(Math.min(1, frame / 10));
+    opacity = p;
+    scale = interpolate(p, [0, 1], [1.04, 1]);
+  } else if (inKind === "flash") {
+    flash = interpolate(frame, [0, 2, 9], [0.55, 0.35, 0], {
+      extrapolateRight: "clamp",
+    });
+    scale = interpolate(frame, [0, 9], [1.05, 1], {
+      extrapolateRight: "clamp",
+      easing: Easing.out(Easing.cubic),
+    });
+  }
+
+  // Exit (the next shot dissolves on top during the last T frames)
+  const outStart = duration - T;
+  if (outKind === "zoom" && frame >= outStart) {
+    const p = ease((frame - outStart) / T);
+    scale *= interpolate(p, [0, 1], [1, 1.06]);
+    blur += interpolate(p, [0, 1], [0, 10]);
+  } else if (outKind === "toBlack") {
+    const start = duration - 12;
+    if (frame >= start) opacity *= 1 - ease((frame - start) / 12);
+  }
+
+  return (
+    <AbsoluteFill style={{ opacity }}>
+      <AbsoluteFill
+        style={{
+          transform: `scale(${scale})`,
+          filter: blur > 0.01 ? `blur(${blur}px)` : undefined,
+        }}
+      >
+        {children}
+      </AbsoluteFill>
+      {flash > 0 ? (
+        <AbsoluteFill style={{ backgroundColor: "white", opacity: flash }} />
+      ) : null}
+    </AbsoluteFill>
+  );
+};
 
 /* ---------- Overlays ---------- */
 
@@ -206,10 +310,10 @@ const Waveform: React.FC = () => {
 
 /* ---------- Scenes ---------- */
 
-const Scene3: React.FC = () => {
-  const frame = useCurrentFrame();
+const Scene3: React.FC<{ lead: number }> = ({ lead }) => {
+  const frame = useCurrentFrame() - lead;
   const dur = s(4);
-  const zoom = interpolate(frame, [0, dur], [1, 1.1]);
+  const zoom = interpolate(frame, [-lead, dur], [1, 1.1]);
   const blackStart = dur - s(0.5);
   const black = interpolate(frame, [blackStart, blackStart + 3], [0, 1], {
     extrapolateLeft: "clamp",
@@ -224,6 +328,7 @@ const Scene3: React.FC = () => {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       </AbsoluteFill>
+      <Sequence from={lead} layout="none">
       <FadeIn>
         <BigClock time={frame < clockFlip ? "03:16" : "03:17"} top={260} />
         <AbsoluteFill style={{ alignItems: "center" }}>
@@ -243,13 +348,14 @@ const Scene3: React.FC = () => {
           </div>
         </AbsoluteFill>
       </FadeIn>
+      </Sequence>
       <AbsoluteFill style={{ backgroundColor: "black", opacity: black }} />
     </AbsoluteFill>
   );
 };
 
-const Choices: React.FC = () => {
-  const frame = useCurrentFrame();
+const Choices: React.FC<{ lead: number }> = ({ lead }) => {
+  const frame = useCurrentFrame() - lead;
   const { fps } = useVideoConfig();
   const appear = (delay: number) =>
     spring({ frame: frame - delay, fps, config: { damping: 20 } });
@@ -305,17 +411,15 @@ const Choices: React.FC = () => {
 export const Episode1: React.FC = () => (
   <AbsoluteFill style={{ backgroundColor: "black" }}>
     {/* 0–4 s — Clip 1 : le téléphone */}
-    <At range={TIMELINE.clip1}>
-      <Clip src="clip1.mp4" />
+    <Shot range={TIMELINE.clip1} video="clip1.mp4" outKind="zoom">
       <BigClock time="03:14" />
       <Sequence from={s(1)}>
         <NotificationBanner detail="Noé · envoyé demain à 03:17" />
       </Sequence>
-    </At>
+    </Shot>
 
     {/* 4–12 s — Clip 2 : le vocal */}
-    <At range={TIMELINE.clip2}>
-      <Clip src="clip2.mp4" />
+    <Shot range={TIMELINE.clip2} video="clip2.mp4" inKind="zoom" outKind="zoom">
       <FadeIn>
         <Pill bottom={360}>
           <MicIcon />
@@ -323,52 +427,48 @@ export const Episode1: React.FC = () => (
           <Waveform />
         </Pill>
       </FadeIn>
-    </At>
+    </Shot>
 
     {/* 12–16 s — Scène 3 : image fixe, zoom lent, puis noir 0,5 s */}
-    <At range={TIMELINE.scene3}>
-      <Scene3 />
-    </At>
+    <Shot
+      range={TIMELINE.scene3}
+      inKind="zoom"
+      background={(lead) => <Scene3 lead={lead} />}
+    />
 
-    {/* 16–24 s — Clip 4 : les coups */}
-    <At range={TIMELINE.clip4}>
-      <Clip src="clip4.mp4" />
-    </At>
+    {/* 16–24 s — Clip 4 : les coups (flash sur le premier coup) */}
+    <Shot range={TIMELINE.clip4} video="clip4.mp4" inKind="flash" outKind="zoom" />
 
     {/* 24–32 s — Clip 5 : l'appel à Léa */}
-    <At range={TIMELINE.clip5}>
-      <Clip src="clip5.mp4" />
+    <Shot range={TIMELINE.clip5} video="clip5.mp4" inKind="zoom" outKind="zoom">
       <FadeIn>
         <Pill top={170}>
           <span style={{ width: 22, height: 22, borderRadius: 11, background: "#3ddc6a" }} />
           Appel : Léa
         </Pill>
       </FadeIn>
-    </At>
+    </Shot>
 
     {/* 32–37 s — Clip 6 : le judas */}
-    <At range={TIMELINE.clip6}>
-      <Clip src="clip6.mp4" />
-    </At>
+    <Shot range={TIMELINE.clip6} video="clip6.mp4" inKind="zoom" outKind="zoom" />
 
-    {/* 37–43 s — Clip 7 : le palier vide */}
-    <At range={TIMELINE.clip7}>
-      <Clip src="clip7.mp4" />
-    </At>
+    {/* 37–43 s — Clip 7 : le palier vide, fondu au noir */}
+    <Shot range={TIMELINE.clip7} video="clip7.mp4" inKind="zoom" outKind="toBlack" />
 
-    {/* 43–46 s — écran noir (chuchotement de Léa) : rien à afficher */}
+    {/* 43–46 s — écran noir (chuchotement de Léa) */}
 
     {/* 46–53 s — Clip 8 : le nouveau message (bannière à 48 s) */}
-    <At range={TIMELINE.clip8}>
-      <Clip src="clip8.mp4" />
+    <Shot range={TIMELINE.clip8} video="clip8.mp4" inKind="fromBlack">
       <Sequence from={s(2)}>
         <NotificationBanner detail="Noé · envoyé demain à 03:18" />
       </Sequence>
-    </At>
+    </Shot>
 
-    {/* 53–60 s — arrêt sur image désaturé + choix */}
-    <At range={TIMELINE.choices}>
-      <Choices />
-    </At>
+    {/* 53–60 s — arrêt sur image : la couleur se dissout en noir et blanc */}
+    <Shot
+      range={TIMELINE.choices}
+      inKind="dissolve"
+      background={(lead) => <Choices lead={lead} />}
+    />
   </AbsoluteFill>
 );
