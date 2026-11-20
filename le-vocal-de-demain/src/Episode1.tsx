@@ -1,5 +1,6 @@
 import {
   AbsoluteFill,
+  Audio,
   Img,
   OffthreadVideo,
   Easing,
@@ -410,6 +411,8 @@ const Choices: React.FC<{ lead: number }> = ({ lead }) => {
 
 export const Episode1: React.FC = () => (
   <AbsoluteFill style={{ backgroundColor: "black" }}>
+    {/* Bande-son assemblée par build_soundtrack.sh */}
+    <Audio src={staticFile("soundtrack.wav")} />
     {/* 0–4 s — Clip 1 : le téléphone */}
     <Shot range={TIMELINE.clip1} video="clip1.mp4" outKind="zoom">
       <BigClock time="03:14" />
