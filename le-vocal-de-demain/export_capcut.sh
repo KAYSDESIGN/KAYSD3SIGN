@@ -3,7 +3,7 @@
 # pas d'images B, image clé chaque seconde, timestamps à 0, audio coupé à la durée vidéo.
 set -euo pipefail
 in="$1"; out="${2:-${1%.mp4}-capcut.mp4}"
-dur=$(ffprobe -v error -select_streams v -show_entries stream=duration -of csv=p=0 "$in")
+dur=$(ffprobe -v error -select_streams v -show_entries stream=duration -of csv=p=0 "$in" | tr -d ",\n")
 ffmpeg -v error -y -i "$in" \
   -c:v libx264 -profile:v high -level 4.1 -pix_fmt yuv420p -color_range tv \
   -preset slow -crf 17 -bf 0 -g 30 -keyint_min 30 -sc_threshold 0 -fps_mode cfr -r 30 \
