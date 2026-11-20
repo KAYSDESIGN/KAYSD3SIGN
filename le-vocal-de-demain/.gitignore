@@ -1,0 +1,7 @@
+node_modules
+out
+# Médias personnels (clips, images, storyboard) : non publiés sur GitHub sans accord
+public/*.mp4
+public/*.jpg
+public/*.png
+storyboard.pdf
