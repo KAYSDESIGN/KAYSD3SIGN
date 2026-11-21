@@ -1,14 +1,14 @@
 feature,area,priority,original,clone,notes
-Inscription email + mot de passe,onboarding,must,yes,no,S01
-Connexion Apple et Google,onboarding,should,unknown,no,la politique parle de connexion sociale sans préciser
-Profil (nom photo fuseau date d'anniversaire),onboarding,must,yes,no,S02
-Appairage par code à 6 caractères,onboarding,must,yes,no,S03
-Accueil du jour avec avatars et raccourcis,home,must,yes,no,S04
-Nudges en un tap (tu me manques / je pense à toi),home,must,yes,no,S04 S14
-Humeur avec emoji et note,moods,must,yes,no,S05
-Question du jour partagée avec révélation,journal,must,yes,no,S08 boucle principale
+Inscription email + mot de passe,onboarding,must,yes,partial,S01 : écran et validation faits ; lien magique à brancher (replica-backend)
+Connexion Apple et Google,onboarding,should,unknown,partial,"S01 : boutons faits, connexion factice"
+Profil (nom photo fuseau date d'anniversaire),onboarding,must,yes,partial,S02 : prénom + fuseau ; photo et date d'anniversaire à faire
+Appairage par code à 6 caractères,onboarding,must,yes,yes,"S03 : inviter, partager, copier, saisir, erreurs ; données factices"
+Accueil du jour avec avatars et raccourcis,home,must,yes,yes,S04 ; données factices
+Nudges en un tap (tu me manques / je pense à toi),home,must,yes,partial,S04 : envoi + réception dans l'app ; push à brancher
+Humeur avec emoji et note,moods,must,yes,yes,S05 ; données factices
+Question du jour partagée avec révélation,journal,must,yes,yes,"S04 + S08, règle de révélation identique à la RLS ; données factices"
 Défi du jour photo / vocal / dessin / texte,challenges,must,yes,no,S06
-Streak quotidien du couple,engagement,must,yes,no,S04 S17
+Streak quotidien du couple,engagement,must,yes,yes,même logique que le trigger SQL ; données factices
 Notifications push,notifications,must,yes,no,
 Paywall Premium mois / an / à vie,payments,must,yes,no,S16
 Un abonnement débloque les deux partenaires,payments,must,yes,no,partage d'achat entre deux comptes
@@ -35,7 +35,7 @@ Trace du jour sur la carte,map,could,yes,no,S07
 Vérification d'âge 18+ et consentement,hotcouple,must,no,no,S20 obligatoire avant tout contenu adulte
 Niveau d'audace par partenaire (le plus bas l'emporte),hotcouple,must,no,no,S20
 Envies secrètes avec révélation des oui communs,hotcouple,should,no,no,S21 fonction phare
-Question coquine du jour,hotcouple,should,no,no,S22
+Question coquine du jour,hotcouple,should,no,partial,"S22 via S08 : tirage selon le niveau le plus bas fait ; débloqué par S20, pas encore construit"
 Défis coquins avec bouton passer,hotcouple,should,no,no,S23
 Mode discret (icône neutre / notifications génériques / PIN),hotcouple,should,no,no,S26
 Coffre photo privé chiffré,hotcouple,could,no,no,S25 modération et signalement requis
