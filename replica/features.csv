@@ -1,0 +1,45 @@
+feature,area,priority,original,clone,notes
+Inscription email + mot de passe,onboarding,must,yes,no,S01
+Connexion Apple et Google,onboarding,should,unknown,no,la politique parle de connexion sociale sans préciser
+Profil (nom photo fuseau date d'anniversaire),onboarding,must,yes,no,S02
+Appairage par code à 6 caractères,onboarding,must,yes,no,S03
+Accueil du jour avec avatars et raccourcis,home,must,yes,no,S04
+Nudges en un tap (tu me manques / je pense à toi),home,must,yes,no,S04 S14
+Humeur avec emoji et note,moods,must,yes,no,S05
+Question du jour partagée avec révélation,journal,must,yes,no,S08 boucle principale
+Défi du jour photo / vocal / dessin / texte,challenges,must,yes,no,S06
+Streak quotidien du couple,engagement,must,yes,no,S04 S17
+Notifications push,notifications,must,yes,no,
+Paywall Premium mois / an / à vie,payments,must,yes,no,S16
+Un abonnement débloque les deux partenaires,payments,must,yes,no,partage d'achat entre deux comptes
+Réglages notifications et compte,settings,must,yes,no,S18
+Désappairage qui efface le contenu partagé,settings,must,yes,no,F08
+Suppression de compte dans l'app,settings,must,yes,no,obligatoire pour l'App Store
+Carte partagée en direct avec distance,map,should,yes,no,S07 partie difficile
+Bien rentré·e et célébration des retrouvailles,map,should,yes,no,S07
+Pause du partage de position,map,should,yes,no,S07
+Moments photo épinglés sur la carte,moments,should,yes,no,S09
+Quiz de compatibilité en simultané,quizzes,should,yes,no,S10
+Bucket list partagée,lists,should,yes,no,S13
+Notes et messages entre partenaires,messages,should,yes,no,S14
+Comptes à rebours des dates spéciales,dates,should,yes,no,S15
+Widgets humeur / photo / distance,widgets,should,yes,no,S19 natif
+Jeu de trivia à deux,games,could,yes,no,S12
+Jeu de memory,games,could,yes,no,S12
+Morpion,games,could,yes,no,S12
+Jeu type puissance 4,games,could,yes,no,S12 sous un autre nom
+Jeu de mots type Wordle,games,could,yes,no,S12 sous un autre nom
+Fléchettes / Sumo / Spot It,games,could,yes,no,S12 noms et règles à réinventer
+Trace du jour sur la carte,map,could,yes,no,S07
+10 langues,i18n,could,yes,no,commencer FR + EN
+Vérification d'âge 18+ et consentement,hotcouple,must,no,no,S20 obligatoire avant tout contenu adulte
+Niveau d'audace par partenaire (le plus bas l'emporte),hotcouple,must,no,no,S20
+Envies secrètes avec révélation des oui communs,hotcouple,should,no,no,S21 fonction phare
+Question coquine du jour,hotcouple,should,no,no,S22
+Défis coquins avec bouton passer,hotcouple,should,no,no,S23
+Mode discret (icône neutre / notifications génériques / PIN),hotcouple,should,no,no,S26
+Coffre photo privé chiffré,hotcouple,could,no,no,S25 modération et signalement requis
+Dés et cartes coquines,hotcouple,could,no,no,S24
+Textes et questions de Space for Two,content,skip,yes,skip,leur propriété : tout réécrire
+Nom univers astronautes et illustrations,brand,skip,yes,skip,leur marque
+Utilisateurs et notes de l'original,network,skip,yes,skip,ne se clone pas
