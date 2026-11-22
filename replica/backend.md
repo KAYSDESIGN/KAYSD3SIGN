@@ -11,7 +11,7 @@ Projet Supabase : `lsaztmwydeuvavtehihi` (région eu-west-1, Irlande). Usage pri
 | Premium offert à tout couple (version privée) | `0003_private_couple.sql` | appliqué, **à retirer avant une publication** |
 | Description des quiz | `0004_quiz_blurb.sql` | appliqué |
 | Contenu (23 questions/défis, 10 envies, 3 quiz) | `supabase/seed.sql`, généré par `mobile/scripts/gen-seed-sql.ts` depuis `mobile/src/data/seed.ts` | chargé |
-| Couche de données de l'app | `mobile/src/data/supabase.ts` (mêmes signatures que `fake.ts`) | écrite, typée |
+| Couche de données de l'app | `mobile/src/data/supabase.ts` (mêmes signatures que `fake.ts`) | testée de bout en bout : 20 étapes à deux utilisateurs sur le vrai projet (`mobile/e2e/two-users-real.cjs`) |
 | Tests serveur | `supabase/tests.sql` : 26 vérifications, toutes OK sur une base locale | OK |
 
 Appliquer une migration : `SUPABASE_PROJECT_REF=lsaztmwydeuvavtehihi replica/run-sql.sh supabase/migrations/XXXX.sql`.
