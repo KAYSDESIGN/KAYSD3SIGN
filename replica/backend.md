@@ -47,3 +47,11 @@ Apple et Google : pas configurés (demandent des comptes développeur).
 - [ ] `npm audit` : 3 vulnérabilités modérées dans les outils de dev d'Expo, à revoir
 - [ ] politique de confidentialité : à écrire avant toute publication (Supabase = sous-traitant)
 - [x] sauvegardes : non incluses dans l'offre gratuite de Supabase. Pour un test privé c'est acceptable ; sinon, export manuel de temps en temps.
+
+## Version web en ligne (test privé)
+
+- Adresse : https://hotcouple-2b6781.homehub-28saz.workers.dev (Cloudflare Workers, compte gratuit). Non indexée (`noindex`).
+- Republier après un changement : depuis `mobile/`, `HC_WORKER=hotcouple-2b6781 CLOUDFLARE_ACCOUNT_ID=… CLOUDFLARE_API_TOKEN=… deploy/deploy-web.sh`.
+  Les fichiers sont embarqués dans le Worker (`deploy/build-worker.py`), sans passer par l'envoi de fichiers statiques de Cloudflare.
+- Testé en ligne : les 20 étapes de `mobile/e2e/two-users-real.cjs` passent sur cette adresse, comptes de test supprimés ensuite.
+- Limites de la version web : pas de position en arrière-plan, pas de widgets ; notifications non branchées.
