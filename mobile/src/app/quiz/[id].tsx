@@ -43,7 +43,7 @@ function QuizPlay() {
           {next.choices.map((c, i) => (
             <Pressable key={c} accessibilityRole="radio" accessibilityState={{ checked: false, disabled: answer.pending }} disabled={answer.pending}
               onPress={() => answer.mutate(session.id, next.id, i)}
-              className="min-h-[56px] justify-center rounded-md border border-border bg-surface px-4 active:border-accent active:bg-accent-soft">
+              className="min-h-[56px] justify-center rounded-md border border-glass-edge bg-surface px-4 active:border-accent active:bg-accent-soft">
               <Text className="font-sans-semibold text-base text-text">{c}</Text>
             </Pressable>
           ))}

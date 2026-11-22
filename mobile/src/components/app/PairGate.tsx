@@ -23,13 +23,13 @@ export function PairGateScreen({ info, tabs }: { info: PairGateInfo; tabs?: bool
     <Screen edges={tabs ? ["top"] : ["top", "bottom"]}>
       <Caption>{info.kicker}</Caption>
       <Heading>{info.title}</Heading>
-      <View className="items-center gap-3 rounded-lg border border-border bg-surface px-5 py-6">
+      <View className="items-center gap-3 rounded-lg border border-glass-edge bg-surface px-5 py-6">
         <View className="h-[56px] w-[56px] items-center justify-center rounded-pill bg-accent-soft">
           <Icon size={26} color={color["on-accent-soft"]} />
         </View>
         <Body className="text-center">{info.body}</Body>
         {info.example ? (
-          <View className="self-stretch rounded-md bg-bg p-4">
+          <View className="self-stretch rounded-md border border-glass-edge bg-surface-raised p-4">
             <Text className="font-sans-bold text-xs uppercase tracking-wider text-text-muted">Par exemple</Text>
             <Text className="mt-1 font-display-italic text-lg text-text">{info.example}</Text>
           </View>

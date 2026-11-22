@@ -5,7 +5,7 @@ import { router } from "expo-router";
 import { ChevronRight, Dices, Grid3x3, Smile, Columns3 } from "lucide-react-native";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Body, Caption, Heading, Muted, Toast } from "@/components/ui";
+import { Body, Caption, Glass, GradientFill, Heading, Muted, Toast } from "@/components/ui";
 import { api, useMutation, useQuery, type Game, type GameType } from "@/data";
 import { color, cx } from "@/theme";
 import { GAME_NAMES } from "@/components/app/games";
@@ -39,7 +39,7 @@ function Play() {
           {active.map((g) => (
             <Pressable key={g.id} accessibilityRole="button" accessibilityLabel={`${GAME_NAMES[g.game_type]}, ${status(g)}`}
               onPress={() => router.push({ pathname: "/game/[id]", params: { id: g.id } })}
-              className="min-h-[56px] flex-row items-center gap-3 rounded-md border border-border bg-surface px-4 active:bg-surface-raised">
+              className="min-h-[56px] flex-row items-center gap-3 rounded-md border border-glass-edge bg-surface px-4 active:bg-surface-raised">
               <View className="flex-1">
                 <Text className="font-sans-bold text-base text-text">{GAME_NAMES[g.game_type]}</Text>
                 <Text className={cx("font-sans-semibold text-sm", g.turn_user_id === profile?.id ? "text-accent" : "text-text-muted")}>{status(g)}</Text>
@@ -66,14 +66,19 @@ function Play() {
 
 function Tile({ icon: Icon, title, sub, onPress }: { icon: typeof Dices; title: string; sub: string; onPress: () => void }) {
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={`${title}. ${sub}`} onPress={onPress}
-      className="min-h-[112px] grow basis-[45%] justify-between rounded-lg border border-border bg-surface p-4 active:bg-surface-raised">
-      <Icon size={24} color={color.accent} />
-      <View>
-        <Text className="font-sans-bold text-base text-text">{title}</Text>
-        <Text className="font-sans text-sm text-text-muted">{sub}</Text>
-      </View>
-    </Pressable>
+    <Glass radius={26} className="grow basis-[45%]">
+      <Pressable accessibilityRole="button" accessibilityLabel={`${title}. ${sub}`} onPress={onPress}
+        className="min-h-[118px] justify-between p-4 active:bg-surface">
+        <View className="h-[40px] w-[40px] items-center justify-center overflow-hidden rounded-pill">
+          <GradientFill />
+          <View><Icon size={20} color="#FFFFFF" /></View>
+        </View>
+        <View>
+          <Text className="font-sans-bold text-base text-text">{title}</Text>
+          <Text className="font-sans text-sm text-text-muted">{sub}</Text>
+        </View>
+      </Pressable>
+    </Glass>
   );
 }
 

@@ -13,7 +13,7 @@ export function PlanOption({
       onPress={onSelect}
       className={cx(
         "min-h-[72px] flex-row items-center gap-3 rounded-md border px-4 py-3",
-        selected ? "border-2 border-accent bg-accent-soft" : "border-border bg-surface active:bg-surface-raised"
+        selected ? "border-2 border-accent bg-accent-soft" : "border-glass-edge bg-surface active:bg-surface-raised"
       )}
     >
       <View className={cx("h-[22px] w-[22px] items-center justify-center rounded-pill border-2", selected ? "border-accent" : "border-border-input")}>

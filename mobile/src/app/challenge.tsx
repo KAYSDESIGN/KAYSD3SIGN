@@ -54,7 +54,7 @@ function ChallengeBlock({ v, them }: { v: DailyView; them: string }) {
   }
 
   return (
-    <View className="gap-4 rounded-lg border border-border bg-surface p-5">
+    <View className="gap-4 rounded-lg border border-glass-edge bg-surface p-5">
       <View className="flex-row items-center justify-between">
         <Caption>{kicker}</Caption>
         {spicy ? <SpiceBadge level={v.assignment.prompt.spice_level} /> : null}

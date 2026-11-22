@@ -35,7 +35,7 @@ function Quizzes() {
                 const id = lastSession && lastSession.status === "open" ? lastSession.id : await start.mutate(quiz.id);
                 if (id) router.push({ pathname: "/quiz/[id]", params: { id } });
               }}
-              className="flex-row items-center gap-3 rounded-lg border border-border bg-surface p-4 active:bg-surface-raised"
+              className="flex-row items-center gap-3 rounded-lg border border-glass-edge bg-surface p-4 active:bg-surface-raised"
             >
               <View className="flex-1 gap-1">
                 <View className="flex-row items-center gap-2">

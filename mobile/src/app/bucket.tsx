@@ -38,7 +38,7 @@ function Bucket() {
         <View accessibilityRole="radiogroup" accessibilityLabel="Catégorie" className="flex-row flex-wrap gap-2">
           {CATS.map((c) => (
             <Pressable key={c.key} accessibilityRole="radio" accessibilityState={{ checked: cat === c.key }} onPress={() => setCat(c.key)}
-              className={cx("h-[36px] justify-center rounded-pill border px-3", cat === c.key ? "border-accent bg-accent-soft" : "border-border bg-bg")}>
+              className={cx("h-[36px] justify-center rounded-pill border px-3", cat === c.key ? "border-accent bg-accent-soft" : "border-glass-edge bg-surface-raised")}>
               <Text className={cx("font-sans-semibold text-sm", cat === c.key ? "text-on-accent-soft" : "text-text-muted")}>{c.label}</Text>
             </Pressable>
           ))}

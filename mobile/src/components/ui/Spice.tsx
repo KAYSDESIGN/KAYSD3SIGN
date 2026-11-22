@@ -33,7 +33,7 @@ export function SpiceSelector({ value, onChange }: { value: Spice; onChange: (s:
             onPress={() => onChange(k)}
             className={cx(
               "min-h-[64px] flex-row items-center gap-3 rounded-md border px-4 py-3",
-              on ? "border-accent bg-accent-soft" : "border-border bg-surface active:bg-surface-raised"
+              on ? "border-accent bg-accent-soft" : "border-glass-edge bg-surface active:bg-surface-raised"
             )}
           >
             <View className={cx("h-[22px] w-[22px] items-center justify-center rounded-pill border-2", on ? "border-accent" : "border-border-input")}>

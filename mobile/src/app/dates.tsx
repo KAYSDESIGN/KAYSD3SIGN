@@ -48,7 +48,7 @@ function Dates() {
       {list.loading && !list.data ? <Skeleton className="h-[120px]" /> : sorted.length ? (
         <View className="gap-2">
           {sorted.map(({ d, next, days }, i) => (
-            <View key={d.id} className={`flex-row items-center gap-3 rounded-md border p-4 ${i === 0 && days >= 0 ? "border-accent bg-accent-soft" : "border-border bg-surface"}`}>
+            <View key={d.id} className={`flex-row items-center gap-3 rounded-md border p-4 ${i === 0 && days >= 0 ? "border-accent bg-accent-soft" : "border-glass-edge bg-surface"}`}>
               <View className="flex-1">
                 <Text className="font-sans-bold text-base text-text">{d.title}</Text>
                 <Text className="font-sans text-sm text-text-muted">

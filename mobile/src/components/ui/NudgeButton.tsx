@@ -22,7 +22,7 @@ export function NudgeButton({ icon: Icon, label, onSend }: { icon: LucideIcon; l
       }}
       className={cx(
         "h-[44px] flex-row items-center gap-2 rounded-pill border px-4",
-        sent ? "border-success bg-surface" : "border-border bg-surface-raised active:bg-accent-soft"
+        sent ? "border-success bg-surface-raised" : "border-glass-edge bg-surface-raised active:bg-accent-soft"
       )}
     >
       {sent ? <Check size={18} color={color.success} /> : <Icon size={18} color={color.accent} />}

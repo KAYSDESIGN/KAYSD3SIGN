@@ -2,6 +2,7 @@ import { Text, View } from "react-native";
 import { Lock } from "lucide-react-native";
 import { color } from "@/theme";
 import { Button } from "./Button";
+import { Glass } from "./Glass";
 import { Caption } from "./Text";
 import { SpiceBadge, type Spice } from "./Spice";
 
@@ -15,7 +16,7 @@ export function DailyCard({
   mine?: string; theirs?: string; partnerName: string; onAnswer?: () => void;
 }) {
   return (
-    <View className="gap-4 rounded-lg border border-border bg-surface p-5">
+    <Glass className="gap-4 p-5">
       <View className="flex-row items-center justify-between">
         <Caption>{kicker}</Caption>
         {spice ? <SpiceBadge level={spice} /> : null}
@@ -27,7 +28,7 @@ export function DailyCard({
       {state === "waiting" ? (
         <View className="gap-3">
           <Answer who="Toi" text={mine} />
-          <View className="flex-row items-center gap-2 rounded-md bg-bg p-3">
+          <View className="flex-row items-center gap-2 rounded-md border border-glass-edge bg-surface-raised p-3">
             <Lock size={16} color={color["text-muted"]} />
             <Text className="flex-1 font-sans text-sm text-text-muted">
               La réponse de {partnerName} s'affichera quand vous aurez répondu tous les deux.
@@ -42,7 +43,7 @@ export function DailyCard({
           <Answer who={partnerName} text={theirs} accent />
         </View>
       ) : null}
-    </View>
+    </Glass>
   );
 }
 

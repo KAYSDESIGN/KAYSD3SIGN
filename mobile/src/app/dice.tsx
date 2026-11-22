@@ -53,7 +53,7 @@ function DiceScreen() {
       <Heading>Lancez, puis laissez-vous faire</Heading>
       <Body className="text-text-muted">{"À tour de rôle. Un « stop » de l'un·e ou de l'autre arrête le jeu, sans discussion."}</Body>
 
-      <View accessibilityLiveRegion="polite" className="min-h-[200px] items-center justify-center gap-3 rounded-lg border border-border bg-surface p-6">
+      <View accessibilityLiveRegion="polite" className="min-h-[200px] items-center justify-center gap-3 rounded-lg border border-glass-edge bg-surface p-6">
         {roll ? (
           <>
             <Text className="text-center font-display text-display text-text">{roll.action}</Text>

@@ -6,7 +6,7 @@ import { InviteButtons } from "@/components/app/PairGate";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
 import {
-  Body, Button, Caption, Card, CoupleAvatars, DailyCard, Heading, Muted, MOODS, NudgeButton, StreakBadge, Title, Toast, type DailyState,
+  Body, Button, Caption, Card, CoupleAvatars, Glass, DailyCard, Heading, Muted, MOODS, NudgeButton, StreakBadge, Title, Toast, type DailyState,
 } from "@/components/ui";
 import { api, useQuery, type DailyView } from "@/data";
 import { color } from "@/theme";
@@ -66,7 +66,7 @@ function SoloHome({ name }: { name: string }) {
         <Muted>Chaque jour une nouvelle question. Vous répondez chacun de votre côté, puis vous découvrez la réponse de l'autre.</Muted>
       </View>
 
-      <Pressable accessibilityRole="button" onPress={() => router.push("/age")} className="rounded-md border border-border bg-surface p-4 active:bg-surface-raised">
+      <Pressable accessibilityRole="button" onPress={() => router.push("/age")} className="rounded-md border border-glass-edge bg-surface p-4 active:bg-surface-raised">
         <Text className="font-sans-semibold text-sm text-text">🌶️ Choisir mon niveau d'audace</Text>
         <Muted>Confirme ton âge dès maintenant. Le contenu coquin s'ouvrira quand vous l'aurez fait tous les deux.</Muted>
       </Pressable>
@@ -112,7 +112,7 @@ function PairedHome() {
 
       <View className="flex-row items-center gap-4">
         <CoupleAvatars me={{ name: me || "?", mood: moodEmoji(moods.data?.mine?.mood) }} partner={{ name: them || "?", mood: moodEmoji(moods.data?.partner?.mood) }} />
-        <Pressable accessibilityRole="button" accessibilityLabel="Partager mon humeur" onPress={() => router.push("/mood")} className="flex-1 rounded-md border border-border bg-surface px-4 py-3 active:bg-surface-raised">
+        <Pressable accessibilityRole="button" accessibilityLabel="Partager mon humeur" onPress={() => router.push("/mood")} className="flex-1 rounded-md border border-glass-edge bg-surface px-4 py-3 active:bg-surface-raised">
           <Text className="font-sans-semibold text-sm text-text">{moods.data?.mine ? "Changer mon humeur" : "Comment tu te sens ?"}</Text>
           <Text numberOfLines={1} className="font-sans text-sm text-text-muted">
             {moods.data?.partner ? `${them} : ${MOODS.find((m) => m.key === moods.data?.partner?.mood)?.label}` : `${them} n'a pas encore partagé son humeur`}
@@ -183,15 +183,19 @@ function PairedHome() {
 
 function Shortcut({ icon: Icon, label, href }: { icon: typeof Heart; label: string; href: string }) {
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      onPress={() => router.push(href as never)}
-      className="min-h-[88px] grow basis-[30%] items-start justify-between rounded-md border border-border bg-surface p-3 active:bg-surface-raised"
-    >
-      <Icon size={20} color={color.accent} />
-      <Text numberOfLines={2} className="font-sans-semibold text-sm text-text">{label}</Text>
-    </Pressable>
+    <Glass radius={22} className="grow basis-[30%]">
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={label}
+        onPress={() => router.push(href as never)}
+        className="min-h-[92px] items-start justify-between p-3 active:bg-surface"
+      >
+        <View className="h-[34px] w-[34px] items-center justify-center rounded-pill bg-accent-soft">
+          <Icon size={18} color={color.accent} />
+        </View>
+        <Text numberOfLines={2} className="font-sans-semibold text-sm text-text">{label}</Text>
+      </Pressable>
+    </Glass>
   );
 }
 

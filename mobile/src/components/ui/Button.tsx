@@ -1,13 +1,14 @@
 import { ActivityIndicator, Pressable, Text, View, type PressableProps } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
 import { color, cx } from "@/theme";
+import { GradientFill } from "./Glass";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const box: Record<Variant, string> = {
-  primary: "bg-accent active:bg-accent-pressed",
-  secondary: "bg-surface-raised border border-border active:bg-surface",
+  primary: "overflow-hidden active:opacity-90",
+  secondary: "bg-surface-raised border border-glass-edge active:bg-surface",
   ghost: "bg-transparent active:bg-surface",
   danger: "bg-transparent border border-danger active:bg-surface",
 };
@@ -17,12 +18,7 @@ const label: Record<Variant, string> = {
   ghost: "text-accent",
   danger: "text-danger",
 };
-const iconColor: Record<Variant, string> = {
-  primary: color["on-accent"],
-  secondary: color.text,
-  ghost: color.accent,
-  danger: color.danger,
-};
+const iconColor = (v: Variant) => ({ primary: color["on-accent"], secondary: color.text, ghost: color.accent, danger: color.danger })[v];
 const height: Record<Size, string> = { sm: "h-[36px] px-3", md: "h-[44px] px-4", lg: "h-[52px] px-5" };
 const text: Record<Size, string> = { sm: "text-sm", md: "text-base", lg: "text-base" };
 
@@ -52,13 +48,15 @@ export function Button({
         "flex-row items-center justify-center rounded-pill",
         box[variant], height[size], block && "self-stretch", off && "opacity-50", className
       )}
+      style={variant === "primary" ? { boxShadow: "0 8px 22px rgba(207,36,112,0.32)" } : undefined}
       {...p}
     >
+      {variant === "primary" ? <GradientFill /> : null}
       {loading ? (
-        <ActivityIndicator color={iconColor[variant]} />
+        <ActivityIndicator color={iconColor(variant)} />
       ) : (
         <View className="flex-row items-center gap-2">
-          {Icon ? <Icon size={size === "sm" ? 16 : 18} color={iconColor[variant]} strokeWidth={2.2} /> : null}
+          {Icon ? <Icon size={size === "sm" ? 16 : 18} color={iconColor(variant)} strokeWidth={2.2} /> : null}
           <Text className={cx("font-sans-bold", text[size], label[variant])}>{children}</Text>
         </View>
       )}
@@ -77,6 +75,7 @@ export function IconButton({
       onPress={onPress}
       className={cx(
         "h-[44px] w-[44px] items-center justify-center rounded-pill",
+        "border border-glass-edge",
         tone === "accent" ? "bg-accent-soft active:bg-surface" : "bg-surface-raised active:bg-surface",
         className
       )}

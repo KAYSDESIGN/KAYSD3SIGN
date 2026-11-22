@@ -7,7 +7,7 @@ import {
   EmptyState, Heading, IconButton, MoodPicker, Muted, NudgeButton, PlanOption, SpiceBadge, SpiceSelector,
   StreakBadge, TextField, Title, Toast, type DesireAnswer, type MoodKey, type Spice,
 } from "@/components/ui";
-import { tokens } from "@/theme";
+import { activeScheme, tokens } from "@/theme";
 
 /** Galerie du design system : chaque primitive, chaque état. Route de dev, retirée des builds de prod. */
 export default function DesignSystem() {
@@ -29,7 +29,7 @@ export default function DesignSystem() {
 
         <Section title="Couleurs">
           <View className="flex-row flex-wrap gap-2">
-            {Object.entries(tokens.color).map(([k, v]) => (
+            {Object.entries(tokens.themes[activeScheme()].color).map(([k, v]) => (
               <View key={k} className="w-[31%] gap-1">
                 <View style={{ backgroundColor: v }} className="h-[44px] rounded-sm border border-border" />
                 <Text className="font-sans-semibold text-xs text-text">{k}</Text>

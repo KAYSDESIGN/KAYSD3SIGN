@@ -3,6 +3,15 @@
 Code : `mobile/src/components/ui/`. Galerie de tous les états : route `/design` de l'app.
 Tokens : `replica/design/tokens.json` (source), synchronisés par `npm run tokens` vers `mobile/src/theme/tokens.json` et `replica/design/tokens.css`.
 
+## v2 · verre liquide (22/11/2026)
+
+- **Deux thèmes automatiques** : clair « Aube rosée » le jour, sombre « Nuit néon » le soir (suit le téléphone). Rôles identiques, valeurs par thème dans `tokens.json > themes`, posées en variables CSS par `ThemeRoot`.
+- **Dégradé de marque** corail → rose → violet (`#D63A45 → #CF2470 → #8338EC`), assez profond pour du texte blanc à 4.5:1 : boutons principaux, anneaux d'avatar, onglet actif, « Oui ».
+- **Verre** (`Glass`) : flou d'arrière-plan (iOS, web ; Android : verre translucide sans flou pour l'instant), teinte translucide, liseré lumineux `glass-edge`, reflet en haut `glass-shine`, ombre douce. Fond de chaque écran : taches colorées floues (`GlassBackground`).
+- **Barre d'onglets flottante** en verre, onglet actif en pastille dégradée.
+- **Icône** : cœur de verre (cœur dégradé sur verre pastel), source `mobile/design-src/icon.html`, rendu `node design-src/render-icons.cjs`.
+- **Contraste** : `node mobile/scripts/check-contrast.mjs` calcule le pire fond réel (verre posé sur la tache la plus vive) : 46 paires, 0 échec.
+
 ## Identité (propre à HotCouple, rien de Space for Two)
 
 - **Ambiance** : intime, élégante, un peu nocturne. Thème sombre unique en v1 (usage le soir, discrétion à l'écran). Pas d'astronautes, pas d'espace.

@@ -8,7 +8,7 @@ import { Heart, MessageCircle, Send } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Caption, EmptyState, Heading, IconButton } from "@/components/ui";
+import { Caption, EmptyState, GlassBackground, Heading, IconButton } from "@/components/ui";
 import { api, useMutation, useQuery } from "@/data";
 import { color, cx } from "@/theme";
 
@@ -28,6 +28,7 @@ function Notes() {
 
   return (
     <SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-bg">
+      <GlassBackground />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} className="flex-1">
         <View className="w-full max-w-[560px] flex-1 self-center">
           <View className="gap-1 px-5 pb-3 pt-6">
@@ -58,7 +59,7 @@ function Notes() {
             })}
             {api.dev.enabled ? <DevPanel actions={[{ label: "Sam écrit un mot", onPress: () => api.dev.partnerNote() }]} /> : null}
           </ScrollView>
-          <View className="flex-row items-end gap-2 border-t border-border bg-surface px-4 py-3">
+          <View className="flex-row items-end gap-2 border-t border-glass-edge bg-surface px-4 py-3">
             <TextInput
               accessibilityLabel={`Message pour ${them}`}
               value={text}

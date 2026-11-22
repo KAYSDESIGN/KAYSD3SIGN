@@ -95,7 +95,7 @@ function Chips({ label, options, value, onChange }: { label: string; options: { 
       <View accessibilityRole="radiogroup" accessibilityLabel={label} className="flex-row flex-wrap gap-2">
         {options.map((o) => (
           <Pressable key={o.key} accessibilityRole="radio" accessibilityState={{ checked: o.key === value }} onPress={() => onChange(o.key)}
-            className={cx("h-[40px] justify-center rounded-pill border px-4", o.key === value ? "border-accent bg-accent-soft" : "border-border bg-bg")}>
+            className={cx("h-[40px] justify-center rounded-pill border px-4", o.key === value ? "border-accent bg-accent-soft" : "border-glass-edge bg-surface-raised")}>
             <Text className={cx("font-sans-semibold text-sm", o.key === value ? "text-on-accent-soft" : "text-text-muted")}>{o.label}</Text>
           </Pressable>
         ))}

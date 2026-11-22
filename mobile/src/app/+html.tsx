@@ -12,16 +12,17 @@ export default function Root({ children }: PropsWithChildren) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
         <meta name="robots" content="noindex, nofollow" />
-        <meta name="theme-color" content="#140A12" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F1F8" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#120818" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="HotCouple" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <link rel="manifest" href="/manifest.json" />
         <title>HotCouple</title>
         <ScrollViewStyleReset />
-        <style dangerouslySetInnerHTML={{ __html: "html,body{background:#140A12;}" }} />
+        <style dangerouslySetInnerHTML={{ __html: "html,body{background:#F8F1F8;}@media (prefers-color-scheme: dark){html,body{background:#120818;}}" }} />
         {headNodes}
       </head>
       <body {...bodyAttributes}>

@@ -13,8 +13,10 @@ const borderRadius = Object.fromEntries(Object.entries(t.radius).map(([k, v]) =>
 module.exports = {
   content: ["./src/**/*.{ts,tsx}"],
   presets: [require("nativewind/preset")],
+  darkMode: "media",
   theme: {
-    colors: { transparent: "transparent", ...t.color },
+    // Chaque rôle pointe vers une variable CSS posée par ThemeRoot (clair ou sombre).
+    colors: { transparent: "transparent", white: "#FFFFFF", ...Object.fromEntries(Object.keys(t.themes.light.color).map((k) => [k, `var(--c-${k})`])) },
     spacing,
     borderRadius,
     fontSize,

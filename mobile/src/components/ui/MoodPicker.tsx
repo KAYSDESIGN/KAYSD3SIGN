@@ -29,7 +29,7 @@ export function MoodPicker({ value, onChange }: { value?: MoodKey; onChange: (k:
             onPress={() => onChange(m.key)}
             className={cx(
               "w-[23%] items-center gap-1 rounded-md border py-3",
-              on ? "border-accent bg-accent-soft" : "border-border bg-surface active:bg-surface-raised"
+              on ? "border-accent bg-accent-soft" : "border-glass-edge bg-surface active:bg-surface-raised"
             )}
           >
             <Text className="text-xl">{m.emoji}</Text>
