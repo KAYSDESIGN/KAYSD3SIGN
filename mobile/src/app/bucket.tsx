@@ -6,7 +6,7 @@ import { ListChecks, Trash2 } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Button, Caption, Card, ChecklistItem, EmptyState, Heading, IconButton, TextField } from "@/components/ui";
+import { Button, Caption, Card, ChecklistItem, EmojiText, EmptyState, Heading, IconButton, TextField } from "@/components/ui";
 import { api, useMutation, useQuery, type BucketItem } from "@/data";
 import { cx } from "@/theme";
 
@@ -39,7 +39,7 @@ function Bucket() {
           {CATS.map((c) => (
             <Pressable key={c.key} accessibilityRole="radio" accessibilityState={{ checked: cat === c.key }} onPress={() => setCat(c.key)}
               className={cx("h-[36px] justify-center rounded-pill border px-3", cat === c.key ? "border-accent bg-accent-soft" : "border-glass-edge bg-surface-raised")}>
-              <Text className={cx("font-sans-semibold text-sm", cat === c.key ? "text-on-accent-soft" : "text-text-muted")}>{c.label}</Text>
+              <EmojiText size={15} className={cx("font-sans-semibold text-sm", cat === c.key ? "text-on-accent-soft" : "text-text-muted")}>{c.label}</EmojiText>
             </Pressable>
           ))}
         </View>

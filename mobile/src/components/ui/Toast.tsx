@@ -1,3 +1,4 @@
+import { EmojiText } from "./Emoji";
 import { Text } from "react-native";
 import { Glass } from "./Glass";
 import { CircleAlert, Heart, Info } from "lucide-react-native";
@@ -19,7 +20,7 @@ export function Toast({ tone = "info", children }: { tone?: Tone; children: stri
       className={cx("flex-row items-center gap-3 px-4 py-3", tone === "error" && "border-danger")}
     >
       <Icon size={18} color={tint(tone)} fill={tone === "nudge" ? color.accent : "transparent"} />
-      <Text className="flex-1 font-sans-semibold text-sm text-text">{children}</Text>
+      <EmojiText size={16} className="flex-1 font-sans-semibold text-sm text-text">{children}</EmojiText>
     </Glass>
   );
 }

@@ -1,3 +1,4 @@
+import { EmojiText } from "./Emoji";
 import { Pressable, Text, View } from "react-native";
 import { cx } from "@/theme";
 
@@ -40,7 +41,7 @@ export function SpiceSelector({ value, onChange }: { value: Spice; onChange: (s:
               {on ? <View className="h-[10px] w-[10px] rounded-pill bg-accent" /> : null}
             </View>
             <View className="flex-1">
-              <Text className="font-sans-bold text-base text-text">{s.label} <Text className="text-sm">{s.peppers}</Text></Text>
+              <EmojiText size={16} className="font-sans-bold text-base text-text">{`${s.label}  ${s.peppers}`}</EmojiText>
               <Text className="font-sans text-sm text-text-muted">{s.hint}</Text>
             </View>
           </Pressable>

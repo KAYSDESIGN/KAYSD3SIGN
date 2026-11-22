@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Pressable, Text } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Glass, LensGlass } from "@/components/ui";
+import { Emoji, Glass, LensGlass } from "@/components/ui";
 import { CircleUser, Flame, Gamepad2, Heart, House, X } from "lucide-react-native";
 import { View } from "react-native";
 import { GATE_HREF, useGate } from "@/components/app/useGate";
@@ -69,7 +69,7 @@ function FloatingTabBar({ state, descriptors, emitter, navigateToTab }: BottomTa
               {QUICK_NOTES.map((n) => (
                 <Pressable key={n.label} accessibilityRole="button" accessibilityLabel={`Envoyer : ${n.label}`} onPress={() => send(n)}
                   className="h-[48px] flex-row items-center gap-3 rounded-pill px-3 active:bg-surface-raised">
-                  <Text className="text-[22px]">{n.emoji}</Text>
+                  <Emoji char={n.emoji} size={26} />
                   <Text className="font-sans-bold text-[15px] text-text">{n.label}</Text>
                 </Pressable>
               ))}
@@ -107,7 +107,7 @@ function FloatingTabBar({ state, descriptors, emitter, navigateToTab }: BottomTa
               accessibilityLabel={paired ? (sent ? "Envoyé" : "Petits mots express") : "Inviter mon/ma partenaire"}
               onPress={press} className="flex-1 items-center justify-center active:opacity-70">
               <View>
-                {sent ? <Text className="text-[26px]">{sent}</Text>
+                {sent ? <Emoji char={sent} size={30} />
                   : open ? <X size={24} color={color.text} strokeWidth={2.4} />
                   : <Heart size={25} color={HEART} fill={HEART} />}
               </View>

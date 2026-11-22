@@ -1,3 +1,4 @@
+import { Emoji } from "./Emoji";
 import { Pressable, Text, View } from "react-native";
 import { cx } from "@/theme";
 
@@ -32,7 +33,7 @@ export function MoodPicker({ value, onChange }: { value?: MoodKey; onChange: (k:
               on ? "border-accent bg-accent-soft" : "border-glass-edge bg-surface active:bg-surface-raised"
             )}
           >
-            <Text className="text-xl">{m.emoji}</Text>
+            <Emoji char={m.emoji} size={30} />
             <Text numberOfLines={1} className={cx("font-sans-semibold text-xs", on ? "text-on-accent-soft" : "text-text-muted")}>{m.label}</Text>
           </Pressable>
         );

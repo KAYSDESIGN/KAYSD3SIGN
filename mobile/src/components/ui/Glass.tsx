@@ -1,11 +1,10 @@
 import type React from "react";
-import { useId, useRef, useState, type ReactNode } from "react";
-import { Platform, StyleSheet, useWindowDimensions, View, type ViewProps } from "react-native";
+import { useRef, useState, type ReactNode } from "react";
+import { Image, Platform, StyleSheet, useWindowDimensions, View, type ViewProps } from "react-native";
 import { BlurView } from "expo-blur";
 import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 import { LinearGradient } from "expo-linear-gradient";
-import Svg, { Defs, LinearGradient as SvgLinear, Path, Stop } from "react-native-svg";
-import { activeScheme, blobs, blur, color, cx, gradient } from "@/theme";
+import { activePalette, activeScheme, blobs, blur, color, cx, gradient } from "@/theme";
 
 const fill = StyleSheet.absoluteFill;
 const IOS_LIQUID = Platform.OS === "ios" && (() => { try { return isLiquidGlassAvailable(); } catch { return false; } })();
@@ -112,32 +111,22 @@ export function GradientFill({ radius, sheen = true }: { radius?: number; sheen?
   );
 }
 
-// Rubans de couleur du fond : de larges bandes courbes qui s'effacent aux extrémités.
-const RIBBONS = [
-  { d: "M-80 120 C 60 40, 200 220, 470 90 L 470 230 C 220 330, 80 160, -80 270 Z", a: 0, b: 1 },
-  { d: "M-80 430 C 90 330, 240 560, 470 400 L 470 560 C 250 690, 90 470, -80 590 Z", a: 2, b: 3 },
-  { d: "M-80 720 C 80 640, 260 860, 470 700 L 470 900 L -80 900 Z", a: 4, b: 5 },
-];
+const FROSTED = { light: require("../../../assets/bg/frosted-light.jpg"), dark: require("../../../assets/bg/frosted-dark.jpg") };
 
-/** Fond de chaque écran : couleur de base + rubans colorés doux, que le verre laisse voir. */
+/** Fond de chaque écran : dégradé de couleurs givré (palette Lilas) ou dégradé simple (autres palettes). */
 export function GlassBackground() {
-  const cols = blobs();
-  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const scheme = activeScheme();
+  if (activePalette() === "lilas") {
+    return (
+      <View pointerEvents="none" style={[fill, { backgroundColor: color.bg }]}>
+        <Image source={FROSTED[scheme]} resizeMode="cover" style={{ width: "100%", height: "100%" }} accessibilityIgnoresInvertColors />
+      </View>
+    );
+  }
+  const [a, b, c] = blobs();
   return (
     <View pointerEvents="none" style={[fill, { backgroundColor: color.bg }]}>
-      <Svg width="100%" height="100%" viewBox="0 0 390 844" preserveAspectRatio="none">
-        <Defs>
-          {RIBBONS.map((r, i) => (
-            <SvgLinear key={i} id={`rb-${uid}-${i}`} x1="0" y1="0" x2="1" y2="0.3">
-              <Stop offset="0" stopColor={cols[r.a]} stopOpacity={0} />
-              <Stop offset="0.3" stopColor={cols[r.a]} stopOpacity={0.95} />
-              <Stop offset="0.7" stopColor={cols[r.b]} stopOpacity={0.95} />
-              <Stop offset="1" stopColor={cols[r.b]} stopOpacity={0.15} />
-            </SvgLinear>
-          ))}
-        </Defs>
-        {RIBBONS.map((r, i) => <Path key={i} d={r.d} fill={`url(#rb-${uid}-${i})`} />)}
-      </Svg>
+      <LinearGradient colors={[a, b, c]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[fill, { opacity: 0.85 }]} />
     </View>
   );
 }

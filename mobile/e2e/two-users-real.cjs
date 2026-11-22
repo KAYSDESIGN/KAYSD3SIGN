@@ -82,7 +82,7 @@ const log = (...a) => console.log(...a);
       await B.getByRole('button', { name: 'Petits mots express' }).locator('visible=true').first().click();
       await B.getByRole('button', { name: 'Envoyer : Tu me manques' }).locator('visible=true').first().click();
       await A.click2("Retour à l'accueil");
-      await A.see('Sam : 🥺 Tu me manques', 25000);
+      await A.see(/Sam : .*Tu me manques/, 25000);
     });
     for (const [p, lvl, bd] of [[A, 'Brûlant', '14'], [B, 'Épicé', '20']]) await step(`${p.name} confirme son âge (${lvl})`, async () => {
       await p.getByRole('button', { name: /^Questions coquines/ }).locator('visible=true').first().click();

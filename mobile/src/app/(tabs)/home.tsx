@@ -7,7 +7,7 @@ import { Screen, Skeleton } from "@/components/app/Screen";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { useGate } from "@/components/app/useGate";
 import {
-  Button, DailyCard, Glass, GlassList, HeroCard, ListRow, MOODS, SectionTitle, Toast,
+  Button, DailyCard, Emoji, EmojiText, Glass, GlassList, HeroCard, ListRow, MOODS, SectionTitle, Toast,
   type DailyState,
 } from "@/components/ui";
 import { api, useQuery, type DailyView } from "@/data";
@@ -65,7 +65,7 @@ function Chips() {
     <Glass radius={28} className="flex-1">
       <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={() => router.push(href as never)}
         className="h-[96px] justify-between px-4 py-[14px] active:opacity-70">
-        <Text className="text-[22px]">{emoji}</Text>
+        <Emoji char={emoji} size={30} />
         <Text className="font-sans-bold text-[15px] text-text">{label}</Text>
       </Pressable>
     </Glass>
@@ -128,9 +128,9 @@ function PairedHome() {
       <ScreenHeader title={`Toi & ${them}`} right={<CoupleButton me={me} them={them} />} />
 
       <Pressable accessibilityRole="button" accessibilityLabel="Partager mon humeur" onPress={() => router.push("/mood")} className="-mt-3 flex-row items-center gap-2 active:opacity-60">
-        <Text numberOfLines={1} className="flex-1 font-sans-semibold text-[13px] text-text-muted">
+        <EmojiText size={15} numberOfLines={1} className="flex-1 font-sans-semibold text-[13px] text-text-muted">
           {`🔥 ${streak} jour${streak > 1 ? "s" : ""}  ·  ${partnerMood ? `${them} : ${partnerMood.emoji} ${partnerMood.label}` : `${them} n'a pas partagé son humeur`}  ·  ${myMood ? `toi : ${myMood.emoji}` : "ton humeur"}`}
-        </Text>
+        </EmojiText>
       </Pressable>
 
       {nudge.data ? <Toast tone="nudge">{`${them} : ${nudge.data.body}`}</Toast> : null}

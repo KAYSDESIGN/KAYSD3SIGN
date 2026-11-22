@@ -7,7 +7,7 @@ import { Flame, Heart, SearchX } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Button, Caption, EmptyState, Heading, Toast } from "@/components/ui";
+import { Button, Caption, EmojiText, EmptyState, Heading, Toast } from "@/components/ui";
 import { api, useMutation, useQuery, type Game } from "@/data";
 import { color, cx, FLAME, HEART } from "@/theme";
 import { GAME_NAMES } from "@/components/app/games";
@@ -34,7 +34,7 @@ function GameScreen() {
   return (
     <Screen>
       <Caption>{GAME_NAMES[g.game_type]}</Caption>
-      <Heading accessibilityLiveRegion="polite">{headline}</Heading>
+      <Heading accessibilityLiveRegion="polite"><EmojiText size={28}>{headline}</EmojiText></Heading>
       <View className="flex-row items-center gap-4">
         <Legend icon={<Heart size={16} color={HEART} fill={HEART} />} label="Toi" />
         <Legend icon={<Flame size={16} color={FLAME.stroke} fill={FLAME.fill} strokeWidth={1.8} />} label={them} />

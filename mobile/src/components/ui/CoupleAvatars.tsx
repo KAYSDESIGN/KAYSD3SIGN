@@ -1,3 +1,4 @@
+import { Emoji } from "./Emoji";
 import { Image, Text, View } from "react-native";
 import { cx } from "@/theme";
 import { GradientFill } from "./Glass";
@@ -27,7 +28,7 @@ function Bubble({ person, size, tone }: { person: Person; size: number; tone: st
       </View>
       {person.mood ? (
         <View className="absolute -bottom-1 -right-1 h-[26px] w-[26px] items-center justify-center rounded-pill border-2 border-glass-edge bg-bg">
-          <Text className="text-xs">{person.mood}</Text>
+          <Emoji char={person.mood} size={16} />
         </View>
       ) : null}
     </View>

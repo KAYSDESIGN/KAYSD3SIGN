@@ -6,7 +6,7 @@ import { CalendarClock } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Button, Caption, Card, EmptyState, Heading, Muted, TextField, Title, Toast } from "@/components/ui";
+import { Button, Caption, Card, EmojiText, EmptyState, Heading, Muted, TextField, Title, Toast } from "@/components/ui";
 import { api, useMutation, useQuery, type DatePlan } from "@/data";
 import { cx } from "@/theme";
 
@@ -51,7 +51,7 @@ function Plan() {
               <Card key={p.id} className={cx("gap-2", p.status === "accepted" && "border-accent")}>
                 <Text className="font-sans-bold text-base text-text">{when(p.starts_at)}</Text>
                 {p.theme ? <Text className="font-sans text-base text-text">{p.theme}</Text> : null}
-                <Muted>{`${mine ? "Proposée par toi" : `Proposée par ${them}`} · ${STATUS[p.status]}`}</Muted>
+                <EmojiText size={15} className="font-sans text-sm text-text-muted">{`${mine ? "Proposée par toi" : `Proposée par ${them}`} · ${STATUS[p.status]}`}</EmojiText>
                 {!mine && p.status === "proposed" ? (
                   <View className="flex-row gap-2">
                     <Button className="flex-1" onPress={() => respond.mutate(p.id, "accepted")}>Avec plaisir</Button>

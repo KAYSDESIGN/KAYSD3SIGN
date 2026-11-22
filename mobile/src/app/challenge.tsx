@@ -6,7 +6,7 @@ import { Camera } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Body, Button, Caption, DailyCard, EmptyState, Heading, SpiceBadge, TextField, Toast } from "@/components/ui";
+import { Body, Button, Caption, DailyCard, EmojiText, EmptyState, Heading, SpiceBadge, TextField, Toast } from "@/components/ui";
 import { api, useMutation, useQuery, type DailyView } from "@/data";
 
 
@@ -25,7 +25,7 @@ function Challenges() {
       {list.error ? <Toast tone="error">Impossible de charger les défis. Réessaie dans un instant.</Toast> : null}
       {list.data?.map((v) => <ChallengeBlock key={v.assignment.id} v={v} them={them} />)}
       {list.data?.length === 1 ? (
-        <Body className="text-text-muted">🌶️ Un défi coquin s'ajoutera ici quand vous aurez débloqué le contenu pour adultes.</Body>
+        <EmojiText size={17} className="font-sans text-base text-text-muted">🌶️ Un défi coquin s'ajoutera ici quand vous aurez débloqué le contenu pour adultes.</EmojiText>
       ) : null}
       {api.dev.enabled && list.data?.some((v) => !v.partnerAnswered) ? (
         <DevPanel actions={list.data.filter((v) => !v.partnerAnswered).map((v) => ({

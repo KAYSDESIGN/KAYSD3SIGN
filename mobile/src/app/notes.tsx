@@ -9,7 +9,7 @@ import { DevPanel } from "@/components/app/DevPanel";
 import { Skeleton } from "@/components/app/Screen";
 import { BackButton, EdgeSwipeBack } from "@/components/app/BackNav";
 import { useGate } from "@/components/app/useGate";
-import { Caption, EmptyState, GlassBackground, Heading, IconButton } from "@/components/ui";
+import { Caption, EmojiText, EmptyState, GlassBackground, Heading, IconButton } from "@/components/ui";
 import { api, useMutation, useQuery } from "@/data";
 import { color, cx } from "@/theme";
 
@@ -49,13 +49,13 @@ function Notes() {
                 return (
                   <View key={m.id} className="flex-row items-center justify-center gap-2 py-1">
                     <Heart size={14} color={color.accent} fill={color.accent} />
-                    <Text className="font-sans text-xs text-text-muted">{`${mine ? "Toi" : them} : ${m.body} · ${time(m.created_at)}`}</Text>
+                    <EmojiText size={15} className="font-sans text-xs text-text-muted">{`${mine ? "Toi" : them} : ${m.body} · ${time(m.created_at)}`}</EmojiText>
                   </View>
                 );
               }
               return (
                 <View key={m.id} className={cx("max-w-[80%] gap-1 rounded-lg px-4 py-3", mine ? "self-end bg-accent-soft" : "self-start bg-surface-raised")}>
-                  <Text className="font-sans text-base text-text">{m.body}</Text>
+                  <EmojiText size={19} className="font-sans text-base text-text">{m.body ?? ""}</EmojiText>
                   <Text className={cx("font-sans text-xs", mine ? "text-on-accent-soft" : "text-text-muted")}>{time(m.created_at)}</Text>
                 </View>
               );
