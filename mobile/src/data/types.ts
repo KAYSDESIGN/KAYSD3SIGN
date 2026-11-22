@@ -25,7 +25,7 @@ export type Couple = {
   premium_until: string | null;
 };
 
-export type Prompt = { id: string; kind: Slot; spice_level: Spice; body: string };
+export type Prompt = { id: string; kind: Slot; spice_level: Spice; body: string; challenge_kind?: "photo" | "voice" | "drawing" | "text" };
 
 export type Assignment = { id: string; couple_id: string; day: string; slot: Slot; prompt: Prompt };
 
@@ -73,3 +73,9 @@ export class DataError extends Error {
     super(code);
   }
 }
+
+export type ChallengeKind = "photo" | "voice" | "drawing" | "text";
+export type DesireAnswer = "yes" | "maybe" | "no";
+export type Desire = { id: string; category: string; spice_level: Spice; body: string; is_premium: boolean };
+export type BucketItem = { id: string; title: string; category: "trip" | "date" | "adventure" | "spicy"; done_at: string | null; created_by: string | null; created_at: string };
+export type Offer = { product: "monthly" | "yearly" | "lifetime"; title: string; price: string; detail: string; badge?: string };

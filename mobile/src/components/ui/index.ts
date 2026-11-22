@@ -14,3 +14,4 @@ export * from "./ChecklistItem";
 export * from "./PlanOption";
 export * from "./Toast";
 export * from "./EmptyState";
+export * from "./Checkbox";

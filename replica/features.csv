@@ -7,21 +7,21 @@ Accueil du jour avec avatars et raccourcis,home,must,yes,yes,S04 ; données fact
 Nudges en un tap (tu me manques / je pense à toi),home,must,yes,partial,S04 : envoi + réception dans l'app ; push à brancher
 Humeur avec emoji et note,moods,must,yes,yes,S05 ; données factices
 Question du jour partagée avec révélation,journal,must,yes,yes,"S04 + S08, règle de révélation identique à la RLS ; données factices"
-Défi du jour photo / vocal / dessin / texte,challenges,must,yes,no,S06
+Défi du jour photo / vocal / dessin / texte,challenges,must,yes,partial,"S06 : défis texte faits ; photo, vocal et dessin à faire (stockage)"
 Streak quotidien du couple,engagement,must,yes,yes,même logique que le trigger SQL ; données factices
 Notifications push,notifications,must,yes,no,
-Paywall Premium mois / an / à vie,payments,must,yes,no,S16
-Un abonnement débloque les deux partenaires,payments,must,yes,no,partage d'achat entre deux comptes
-Réglages notifications et compte,settings,must,yes,no,S18
-Désappairage qui efface le contenu partagé,settings,must,yes,no,F08
-Suppression de compte dans l'app,settings,must,yes,no,obligatoire pour l'App Store
+Paywall Premium mois / an / à vie,payments,must,yes,partial,S16 : écran et achat simulé ; RevenueCat à brancher
+Un abonnement débloque les deux partenaires,payments,must,yes,partial,Premium posé sur le couple (données factices) ; vrai partage via webhook à faire
+Réglages notifications et compte,settings,must,yes,partial,"S18 : prénom, mode discret, déconnexion ; réglages de notifications à faire"
+Désappairage qui efface le contenu partagé,settings,must,yes,yes,"S18, confirmation en deux temps ; données factices"
+Suppression de compte dans l'app,settings,must,yes,yes,"S18, Supprimer puis Supprimer définitivement ; données factices"
 Carte partagée en direct avec distance,map,should,yes,no,S07 partie difficile
 Bien rentré·e et célébration des retrouvailles,map,should,yes,no,S07
 Pause du partage de position,map,should,yes,no,S07
 Moments photo épinglés sur la carte,moments,should,yes,no,S09
 Quiz de compatibilité en simultané,quizzes,should,yes,no,S10
-Bucket list partagée,lists,should,yes,no,S13
-Notes et messages entre partenaires,messages,should,yes,no,S14
+Bucket list partagée,lists,should,yes,yes,"S13 : ajout, catégories, cocher, supprimer ; données factices"
+Notes et messages entre partenaires,messages,should,yes,yes,S14 ; temps réel simulé
 Comptes à rebours des dates spéciales,dates,should,yes,no,S15
 Widgets humeur / photo / distance,widgets,should,yes,no,S19 natif
 Jeu de trivia à deux,games,could,yes,no,S12
@@ -32,12 +32,12 @@ Jeu de mots type Wordle,games,could,yes,no,S12 sous un autre nom
 Fléchettes / Sumo / Spot It,games,could,yes,no,S12 noms et règles à réinventer
 Trace du jour sur la carte,map,could,yes,no,S07
 10 langues,i18n,could,yes,no,commencer FR + EN
-Vérification d'âge 18+ et consentement,hotcouple,must,no,no,S20 obligatoire avant tout contenu adulte
-Niveau d'audace par partenaire (le plus bas l'emporte),hotcouple,must,no,no,S20
-Envies secrètes avec révélation des oui communs,hotcouple,should,no,no,S21 fonction phare
-Question coquine du jour,hotcouple,should,no,partial,"S22 via S08 : tirage selon le niveau le plus bas fait ; débloqué par S20, pas encore construit"
-Défis coquins avec bouton passer,hotcouple,should,no,no,S23
-Mode discret (icône neutre / notifications génériques / PIN),hotcouple,should,no,no,S26
+Vérification d'âge 18+ et consentement,hotcouple,must,no,yes,"S20 : date de naissance validée + consentement ; déclaratif, voir replica-launch pour une vérification renforcée"
+Niveau d'audace par partenaire (le plus bas l'emporte),hotcouple,must,no,yes,S20 ; le tirage se refait si le niveau change
+Envies secrètes avec révélation des oui communs,hotcouple,should,no,yes,"S21 : réponses secrètes, matchs oui/oui, envies Premium verrouillées"
+Question coquine du jour,hotcouple,should,no,yes,"S22 via S04/S08, au niveau du couple"
+Défis coquins avec bouton passer,hotcouple,should,no,yes,"S23 dans S06, texte uniquement"
+Mode discret (icône neutre / notifications génériques / PIN),hotcouple,should,no,partial,"S18 : réglage enregistré ; icône, notifications et PIN à faire"
 Coffre photo privé chiffré,hotcouple,could,no,no,S25 modération et signalement requis
 Dés et cartes coquines,hotcouple,could,no,no,S24
 Textes et questions de Space for Two,content,skip,yes,skip,leur propriété : tout réécrire
