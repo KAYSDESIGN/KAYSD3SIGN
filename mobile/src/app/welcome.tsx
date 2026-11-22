@@ -1,19 +1,20 @@
 import { useState } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
-import { Mail } from "lucide-react-native";
 import { Screen } from "@/components/app/Screen";
 import { Body, Button, Caption, Display, Muted, TextField } from "@/components/ui";
-import { api, useMutation } from "@/data";
+import { api, useMutation, USING_SUPABASE } from "@/data";
+import { cx } from "@/theme";
 
-// S01 · Bienvenue / inscription
+// S01 · Bienvenue : créer un compte ou se connecter (email + mot de passe)
 export default function Welcome() {
+  const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [email, setEmail] = useState("");
-  const [showEmail, setShowEmail] = useState(false);
-  const emailIn = useMutation(api.signInWithEmail);
+  const [password, setPassword] = useState("");
+  const auth = useMutation(api.signInWithPassword);
   const provider = useMutation(api.signInWithProvider);
 
-  const go = (ok: unknown) => { if (ok) router.replace("/"); };
+  const submit = async () => { if (await auth.mutate(email, password, mode)) router.replace("/"); };
 
   return (
     <Screen className="flex-1 justify-between">
@@ -26,32 +27,29 @@ export default function Welcome() {
       </View>
 
       <View className="gap-3">
-        <Button size="lg" onPress={async () => go(await provider.mutate("apple"))} loading={provider.pending}>Continuer avec Apple</Button>
-        <Button size="lg" variant="secondary" onPress={async () => go(await provider.mutate("google"))} disabled={provider.pending}>Continuer avec Google</Button>
-        {showEmail ? (
-          <View className="gap-3">
-            <TextField
-              label="Ton email"
-              value={email}
-              onChangeText={(t) => { setEmail(t); emailIn.setError(null); }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              textContentType="emailAddress"
-              placeholder="toi@exemple.fr"
-              error={emailIn.error ?? undefined}
-              hint="On t'envoie un lien de connexion, pas de mot de passe."
-              onSubmitEditing={async () => go(await emailIn.mutate(email))}
-              returnKeyType="go"
-            />
-            <Button size="lg" onPress={async () => go(await emailIn.mutate(email))} loading={emailIn.pending} disabled={!email}>
-              Recevoir mon lien
-            </Button>
+        <View accessibilityRole="tablist" className="flex-row rounded-pill bg-surface p-1">
+          {([["signup", "Créer un compte"], ["signin", "Me connecter"]] as const).map(([k, l]) => (
+            <Pressable key={k} accessibilityRole="tab" accessibilityState={{ selected: mode === k }} onPress={() => { setMode(k); auth.setError(null); }}
+              className={cx("h-[40px] flex-1 items-center justify-center rounded-pill", mode === k ? "bg-surface-raised" : "")}>
+              <Text className={cx("font-sans-bold text-sm", mode === k ? "text-text" : "text-text-muted")}>{l}</Text>
+            </Pressable>
+          ))}
+        </View>
+        <TextField label="Email" value={email} onChangeText={(t) => { setEmail(t); auth.setError(null); }}
+          keyboardType="email-address" autoCapitalize="none" autoComplete="email" textContentType="emailAddress" placeholder="toi@exemple.fr" />
+        <TextField label="Mot de passe" value={password} onChangeText={(t) => { setPassword(t); auth.setError(null); }}
+          secureTextEntry autoCapitalize="none" autoComplete={mode === "signup" ? "new-password" : "current-password"}
+          textContentType={mode === "signup" ? "newPassword" : "password"} hint={mode === "signup" ? "8 caractères minimum." : undefined}
+          error={auth.error ?? undefined} onSubmitEditing={submit} returnKeyType="go" />
+        <Button size="lg" onPress={submit} loading={auth.pending} disabled={!email || !password}>
+          {mode === "signup" ? "Créer mon compte" : "Me connecter"}
+        </Button>
+        {!USING_SUPABASE ? (
+          <View className="flex-row gap-2">
+            <Button className="flex-1" variant="secondary" onPress={async () => { if (await provider.mutate("apple")) router.replace("/"); }}>Démo Apple</Button>
+            <Button className="flex-1" variant="secondary" onPress={async () => { if (await provider.mutate("google")) router.replace("/"); }}>Démo Google</Button>
           </View>
-        ) : (
-          <Button size="lg" variant="ghost" icon={Mail} onPress={() => setShowEmail(true)}>Continuer avec un email</Button>
-        )}
-        {provider.error ? <Text className="font-sans-semibold text-sm text-danger">{provider.error}</Text> : null}
+        ) : null}
         <Muted className="text-center">
           En continuant, tu confirmes avoir 18 ans ou plus et acceptes les conditions et la politique de confidentialité.
         </Muted>

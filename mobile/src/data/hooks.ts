@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { subscribe } from "./fake";
+import { api, USING_SUPABASE } from "./api";
 import { DataError } from "./types";
 
 type QueryState<T> = { data: T | undefined; loading: boolean; error: Error | null };
@@ -20,8 +20,11 @@ export function useQuery<T>(fn: () => Promise<T>, deps: unknown[] = []) {
     alive.current = true;
     setState((s) => ({ ...s, loading: true }));
     run();
-    const off = subscribe(run);
-    return () => { alive.current = false; off(); };
+    const off = api.subscribe(run);
+    // Filet de sécurité avec la vraie base : certains changements du partenaire ne nous sont
+    // pas diffusés tant que la règle de révélation les cache (ex. il/elle vient de répondre).
+    const poll = USING_SUPABASE ? setInterval(run, 15000) : null;
+    return () => { alive.current = false; off(); if (poll) clearInterval(poll); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
@@ -55,6 +58,11 @@ const MESSAGES: Record<string, string> = {
   stale_game: "La partie a bougé entre-temps. Regarde le plateau et rejoue.",
   premium_required: "Réservé à Premium.",
   invalid_date: "Cette date n'est pas valide.",
+  invalid_credentials: "Email ou mot de passe incorrect.",
+  weak_password: "8 caractères minimum pour le mot de passe.",
+  email_taken: "Un compte existe déjà avec cet email. Connecte-toi plutôt.",
+  signup_disabled: "Les inscriptions sont fermées sur cette version privée.",
+  confirm_email: "Compte créé. Confirme ton email avant de te connecter.",
 };
 
 export function errorMessage(e: unknown) {

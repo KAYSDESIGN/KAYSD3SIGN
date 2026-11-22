@@ -79,11 +79,14 @@ function isAdult(birthdate: string) {
 // --- auth (S01) --------------------------------------------------------------
 export async function getSession(): Promise<Session> { return s.session; }
 
-export async function signInWithEmail(email: string): Promise<Session> {
+export async function signInWithPassword(email: string, password: string, mode: "signin" | "signup"): Promise<Session> {
   await wait();
   const e = email.trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) throw new DataError("invalid_email");
+  if (password.length < 8) throw new DataError("weak_password");
   let id = Object.keys(s.emails).find((k) => s.emails[k] === e);
+  if (mode === "signup" && id) throw new DataError("email_taken");
+  if (mode === "signin" && !id) throw new DataError("invalid_credentials");
   if (!id) { id = uid(); s.emails[id] = e; s.profiles[id] = newProfile(id); }
   s.session = { user_id: id, email: e };
   emit();
@@ -91,7 +94,9 @@ export async function signInWithEmail(email: string): Promise<Session> {
 }
 
 export async function signInWithProvider(provider: "apple" | "google"): Promise<Session> {
-  return signInWithEmail(`${provider}.demo@hotcouple.app`);
+  const e = `${provider}.demo@hotcouple.app`;
+  const exists = Object.values(s.emails).includes(e);
+  return signInWithPassword(e, "demo-password", exists ? "signin" : "signup");
 }
 
 export async function signOut() { s.session = null; emit(); }

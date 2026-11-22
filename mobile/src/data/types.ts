@@ -71,7 +71,12 @@ export type DataErrorCode =
   | "invalid_move"
   | "stale_game"
   | "premium_required"
-  | "invalid_date";
+  | "invalid_date"
+  | "invalid_credentials"
+  | "weak_password"
+  | "email_taken"
+  | "signup_disabled"
+  | "confirm_email";
 
 export class DataError extends Error {
   constructor(public code: DataErrorCode) {
