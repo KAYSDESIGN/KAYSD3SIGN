@@ -32,7 +32,8 @@ function Quizzes() {
               accessibilityLabel={`${quiz.title}. ${quiz.blurb} ${locked ? "Réservé à Premium." : status}`}
               onPress={async () => {
                 if (locked) return router.push("/premium");
-                const id = lastSession && lastSession.status === "open" ? lastSession.id : await start.mutate(quiz.id);
+                // en cours ou terminé : on rouvre la partie (le résultat si elle est finie) ; sinon on en commence une
+                const id = lastSession ? lastSession.id : await start.mutate(quiz.id);
                 if (id) router.push({ pathname: "/quiz/[id]", params: { id } });
               }}
               className="lg flex-row items-center gap-3 rounded-[26px] bg-surface p-4 active:bg-surface-raised"

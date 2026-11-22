@@ -24,13 +24,14 @@ function QuizPlay() {
   const data = useQuery(() => api.getQuizSession(id), [id]);
   const answer = useMutation(api.answerQuiz);
   const [picked, setPicked] = useState<number[]>([]);
+  const replay = useMutation(api.startQuiz);
   const them = partner?.display_name ?? "ton/ta partenaire";
 
   if (data.loading && !data.data) return <Screen><Skeleton className="h-[34px] w-1/2" /><Skeleton className="h-[260px]" /></Screen>;
   if (!data.data) return <Screen><EmptyState icon={SearchX} title="Quiz introuvable" body="Il a peut-être été effacé." action="Retour" onAction={() => router.replace("/quiz")} /></Screen>;
 
   const { quiz, session } = data.data;
-  const next = quiz.questions.find((q) => session.mine[q.id] === undefined);
+  const next = session.status === "open" ? quiz.questions.find((q) => session.mine[q.id] === undefined) : undefined;
   const done = quiz.questions.filter((q) => session.mine[q.id] !== undefined).length;
 
   if (next) {
@@ -101,14 +102,19 @@ function QuizPlay() {
             <Card key={q.id} className={cx("gap-2", same && "border-accent")}>
               <Text className="font-sans-bold text-sm text-text">{q.body}</Text>
               <View className="flex-row gap-2">
-                <Answer who="Toi" text={a.map((i) => q.choices[i]).join(", ")} />
-                <Answer who={them} text={b.length ? b.map((i) => q.choices[i]).join(", ") : "-"} accent />
+                <Answer who="Toi" text={a.length ? a.map((i) => q.choices[i]).join(", ") : "—"} />
+                <Answer who={them} text={b.length ? b.map((i) => q.choices[i]).join(", ") : "—"} accent />
               </View>
               {same ? <Text className="font-sans-bold text-xs text-accent">{`♥ En commun : ${common.map((i) => q.choices[i]).join(", ")}`}</Text> : null}
             </Card>
           );
         })}
       </View>
+      <Button size="lg" loading={replay.pending} onPress={async () => {
+        const nid = await replay.mutate(quiz.id);
+        if (nid) router.replace({ pathname: "/quiz/[id]", params: { id: nid } });
+      }}>Rejouer</Button>
+      {replay.error ? <Toast tone="error">{replay.error}</Toast> : null}
       <Button variant="secondary" onPress={() => (router.canGoBack() ? router.back() : router.replace("/quiz"))}>Retour aux quiz</Button>
     </Screen>
   );
