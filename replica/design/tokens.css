@@ -25,6 +25,7 @@
   --c-on-spice: #3A0A1E;
   --c-focus: #7C3AED;
   --c-tab-bar: rgba(255,255,255,0.20);
+  --c-brand-ink: #B0185A;
   --grad-0: #D63A45;
   --grad-1: #CF2470;
   --grad-2: #8338EC;
@@ -63,5 +64,6 @@
     --c-on-spice: #3A0A1E;
     --c-focus: #E9D5FF;
     --c-tab-bar: rgba(255,255,255,0.07);
+    --c-brand-ink: #B0185A;
   }
 }

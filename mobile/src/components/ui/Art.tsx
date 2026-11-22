@@ -2,14 +2,14 @@ import { useId } from "react";
 import { StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from "react-native-svg";
-import { activeScheme, tokens } from "@/theme";
+import { activeScheme, art } from "@/theme";
 
 export type ArtName = "rose" | "ember" | "violet" | "night";
 
 /** Couleurs de texte sur une illustration : prune foncé en clair, blanc en sombre. */
 export function artInk() {
   const dark = activeScheme() === "dark";
-  const ink = dark ? tokens.art.ink.dark : tokens.art.ink.light;
+  const ink = dark ? art().ink.dark : art().ink.light;
   return {
     dark,
     title: ink.title,
@@ -25,7 +25,7 @@ export function artInk() {
  */
 export function Art({ name = "rose" }: { name?: ArtName }) {
   const dark = activeScheme() === "dark";
-  const [a, b, c] = (dark ? tokens.art.dark : tokens.art.light)[name] as string[];
+  const [a, b, c] = (dark ? art().dark : art().light)[name] as string[];
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>

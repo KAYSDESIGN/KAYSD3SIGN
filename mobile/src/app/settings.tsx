@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Pressable, Switch, Text, View } from "react-native";
-import { setThemePref, useThemePref } from "@/theme/preference";
+import { setPalettePref, setThemePref, usePalettePref, useThemePref } from "@/theme/preference";
 import { router } from "expo-router";
 import { Screen } from "@/components/app/Screen";
 import { AvatarPicker } from "@/components/app/AvatarPicker";
@@ -19,6 +19,7 @@ export default function SettingsScreen() {
   const [confirm, setConfirm] = useState<null | "unpair" | "delete" | "delete2">(null);
   const [saved, setSaved] = useState(false);
   const pref = useThemePref();
+  const palettePref = usePalettePref();
   const them = partner?.display_name ?? "ton/ta partenaire";
   const value = name ?? profile?.display_name ?? "";
 
@@ -52,6 +53,15 @@ export default function SettingsScreen() {
           ))}
         </View>
         <Muted>Automatique suit le réglage jour/nuit de ton téléphone.</Muted>
+        <Title>Couleurs</Title>
+        <View accessibilityRole="radiogroup" accessibilityLabel="Couleurs" className="flex-row rounded-pill border border-glass-edge bg-surface p-1">
+          {([["neon", "Magenta néon"], ["coral", "Rose corail"]] as const).map(([k, l]) => (
+            <Pressable key={k} accessibilityRole="radio" accessibilityState={{ checked: palettePref === k }} onPress={() => setPalettePref(k)}
+              className={palettePref === k ? "h-[40px] flex-1 items-center justify-center rounded-pill border border-glass-edge bg-surface-raised" : "h-[40px] flex-1 items-center justify-center rounded-pill"}>
+              <Text className={palettePref === k ? "font-sans-bold text-sm text-text" : "font-sans-semibold text-sm text-text-muted"}>{l}</Text>
+            </Pressable>
+          ))}
+        </View>
       </Card>
 
       <Card className="gap-3">

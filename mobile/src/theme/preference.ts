@@ -32,3 +32,20 @@ export function useThemePref(): ThemePref {
   }, []);
   return pref;
 }
+
+/** Palette de couleurs, gardée sur l'appareil : magenta néon (par défaut) ou rose corail. */
+export type PalettePref = "neon" | "coral";
+const PKEY = "hotcouple.palette";
+let currentPal: PalettePref = "neon";
+let palLoaded = false;
+const palListeners = new Set<(p: PalettePref) => void>();
+async function loadPal() {
+  if (palLoaded) return; palLoaded = true;
+  try { const v = await AsyncStorage.getItem(PKEY); if (v === "neon" || v === "coral") { currentPal = v; palListeners.forEach((l) => l(v)); } } catch { /* défaut */ }
+}
+export function setPalettePref(p: PalettePref) { currentPal = p; palListeners.forEach((l) => l(p)); AsyncStorage.setItem(PKEY, p).catch(() => {}); }
+export function usePalettePref(): PalettePref {
+  const [p, setP] = useState<PalettePref>(currentPal);
+  useEffect(() => { palListeners.add(setP); loadPal(); return () => { palListeners.delete(setP); }; }, []);
+  return p;
+}

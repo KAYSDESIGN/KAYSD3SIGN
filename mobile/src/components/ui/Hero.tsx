@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react-native";
 import { Art, artInk, type ArtName } from "./Art";
 import { Glass } from "./Glass";
 import { activeScheme, cx } from "@/theme";
+import { color as brandColor } from "@/theme";
 
 /** Grande carte « Aujourd'hui » façon App Store : illustration pleine, titre blanc, panneaux de verre en bas. */
 export function HeroCard({
@@ -50,8 +51,8 @@ export function WhitePill({ label, onPress, icon: Icon }: { label: string; onPre
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress}
       className="h-[36px] flex-row items-center gap-1 rounded-pill px-4 active:opacity-80" style={{ backgroundColor: "rgba(255,255,255,0.96)" }}>
-      {Icon ? <Icon size={15} color="#B0185A" /> : null}
-      <Text className="font-sans-bold text-[13px] uppercase tracking-wider" style={{ color: "#B0185A" }}>{label}</Text>
+      {Icon ? <Icon size={15} color={brandColor["brand-ink"]} /> : null}
+      <Text className="font-sans-bold text-[13px] uppercase tracking-wider" style={{ color: brandColor["brand-ink"] }}>{label}</Text>
     </Pressable>
   );
 }

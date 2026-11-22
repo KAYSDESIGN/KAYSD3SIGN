@@ -26,6 +26,15 @@ function worstCases(theme) {
     "accent-soft-worst": over(c["accent-soft"], over(c.surface, base)), "tabbar-worst": over(c["tab-bar"], base), "bg-worst": base };
 }
 let fails = 0;
+const base = JSON.parse(JSON.stringify(t));
+for (const pal of ["coral", "neon"]) {
+const P = pal === "coral" ? null : base.palettes[pal];
+for (const k of ["light", "dark"]) {
+  t.themes[k] = { ...base.themes[k], color: { ...base.themes[k].color, ...(P?.[k]?.color ?? {}) }, blobs: P?.[k]?.blobs ?? base.themes[k].blobs };
+}
+t.gradient = { brand: P?.gradient ?? base.gradient.brand };
+t.art = P?.art ?? base.art;
+console.log(`\n=== palette ${pal} ===`);
 for (const name of ["light", "dark"]) {
   const cols = { ...t.themes[name].color, ...worstCases(t.themes[name]) };
   console.log(`\n${name} — pires fonds : ${JSON.stringify(worstCases(t.themes[name]))}`);
@@ -46,6 +55,7 @@ for (const name of ["light", "dark"]) {
       if (!ok) console.log(`  FAIL ${r.toFixed(2)}:1  carte ${name}/${art} ${role} sur ${c}`);
     }
   }
+}
 }
 console.log(`\n${fails} échec(s)`);
 process.exit(fails ? 1 : 0);

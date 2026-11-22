@@ -1,6 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 import { Lock } from "lucide-react-native";
 import { cx } from "@/theme";
+import { color as brandColor } from "@/theme";
 import { Glass } from "./Glass";
 import { HeroCard } from "./Hero";
 import { artInk, type ArtName } from "./Art";
@@ -25,7 +26,7 @@ export function DesireCard({
         {OPTIONS.map((o) => {
           const on = value === o.key;
           const label = (
-            <Text className="font-sans-bold text-[15px]" style={{ color: on ? (o.key === "yes" ? "#B0185A" : "#2A1530") : ink.title }}>{o.label}</Text>
+            <Text className="font-sans-bold text-[15px]" style={{ color: on ? (o.key === "yes" ? brandColor["brand-ink"] : "#2A1530") : ink.title }}>{o.label}</Text>
           );
           return on ? (
             <Pressable key={o.key} accessibilityRole="radio" accessibilityState={{ checked: true }} onPress={() => onChange(o.key)}

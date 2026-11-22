@@ -2,8 +2,8 @@ import { ScrollViewStyleReset, useServerDocumentContext } from "expo-router/html
 import type { PropsWithChildren } from "react";
 
 const GLASS_CSS = [
-  "html,body{background:#F7F4F8;}",
-  "@media (prefers-color-scheme: dark){html,body{background:#07040A;}}",
+  "html,body{background:#F1F0F5;}",
+  "@media (prefers-color-scheme: dark){html,body{background:#08060C;}}",
   // Verre liquide (classe lg) : clair, peu flouté, saturé, lumière sur tout le pourtour, reflet en haut à gauche
   ".lg{position:relative;isolation:isolate;-webkit-backdrop-filter:blur(7px) saturate(190%) brightness(1.06);backdrop-filter:blur(7px) saturate(190%) brightness(1.06);",
   "box-shadow:inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.55),inset 1px 0 1px rgba(255,255,255,.5),inset -1px 0 1px rgba(255,255,255,.5),inset 0 0 22px rgba(255,255,255,.32),0 10px 30px rgba(40,10,50,.13),0 1px 2px rgba(40,10,50,.08);}",
