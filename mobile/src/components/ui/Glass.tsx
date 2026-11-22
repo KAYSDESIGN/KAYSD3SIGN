@@ -26,33 +26,30 @@ export function glassLight(opts: { lift?: boolean; glow?: boolean } = {}) {
 /** Ancien nom, gardé pour les écrans qui l'importent. */
 export const glassShadow = (_strong = false) => glassLight({ lift: true });
 
+export type GlassTone = "clear" | "bright" | "smoke";
+
+function toneTint(tone: GlassTone, strong?: boolean) {
+  if (tone === "smoke") return "rgba(30,6,30,0.22)";            // posé sur une illustration : garde le texte blanc lisible
+  if (tone === "bright") return activeScheme() === "dark" ? "rgba(255,255,255,0.20)" : "rgba(255,255,255,0.62)";
+  return strong ? color["surface-raised"] : color.surface;
+}
+
 /**
- * Surface « verre liquide » : très transparente, l'arrière-plan reste visible mais flou et plus coloré,
- * bords qui accrochent la lumière, reflet en diagonale.
- * - iPhone avec iOS 26 : le vrai Liquid Glass d'Apple (expo-glass-effect).
- * - Web : backdrop-filter (flou + saturation).
- * - Ailleurs : expo-blur, ou verre translucide sans flou sur Android.
+ * Verre liquide façon iOS 26 / App Store : clair et épais, peu flouté, couleurs derrière saturées,
+ * lumière sur tout le pourtour (liseré conique), reflet spéculaire en haut à gauche.
+ * - iPhone iOS 26 : vrai Liquid Glass (expo-glass-effect).
+ * - Web : classe CSS « lg » (voir +html.tsx) : backdrop-filter + liseré + reflet.
+ * - Ailleurs : expo-blur (Android : translucide sans flou pour l'instant).
  */
 export function Glass({
-  children, className, strong, radius = 28, shadow = true, style, ...p
-}: ViewProps & { children?: ReactNode; className?: string; strong?: boolean; radius?: number; shadow?: boolean }) {
+  children, className, strong, tone = "clear", radius = 28, shadow = true, style, ...p
+}: ViewProps & { children?: ReactNode; className?: string; strong?: boolean; tone?: GlassTone; radius?: number; shadow?: boolean }) {
   const b = blur() as { tint: "light" | "dark"; intensity: number; css: string };
-  const tint = strong ? color["surface-raised"] : color.surface;
-  const shine = (
-    <LinearGradient
-      pointerEvents="none"
-      colors={[color["glass-shine"], "transparent", "transparent"]}
-      locations={[0, 0.45, 1]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={fill}
-    />
-  );
-  const base = [{ borderRadius: radius }, glassLight({ lift: shadow }), style];
+  const tint = toneTint(tone, strong);
 
   if (IOS_LIQUID) {
     return (
-      <GlassView glassEffectStyle="clear" tintColor={tint} style={[...base, { overflow: "hidden" }]} {...p}>
+      <GlassView glassEffectStyle="clear" tintColor={tint} style={[{ borderRadius: radius, overflow: "hidden" }, style]} {...p}>
         <View className={cx(className)} style={{ flex: 1 }}>{children}</View>
       </GlassView>
     );
@@ -61,27 +58,20 @@ export function Glass({
   if (Platform.OS === "web") {
     return (
       <View
-        className={cx("overflow-hidden border border-glass-edge", className)}
-        style={[...base, { backgroundColor: tint, backdropFilter: b.css, WebkitBackdropFilter: b.css } as object]}
+        className={cx("lg overflow-hidden", !shadow && "lg-flat", tone === "smoke" && "lg-smoke", className)}
+        style={[{ borderRadius: radius, backgroundColor: tint }, style]}
         {...p}
       >
-        {shine}
         {children}
       </View>
     );
   }
 
   return (
-    <View className={cx("overflow-hidden border border-glass-edge", className)} style={base} {...p}>
-      <BlurView
-        pointerEvents="none"
-        intensity={b.intensity}
-        tint={b.tint}
-        style={fill}
-        {...(Platform.OS === "android" ? { blurMethod: "none" as const } : {})}
-      />
+    <View className={cx("overflow-hidden border border-glass-edge", className)} style={[{ borderRadius: radius }, glassLight({ lift: shadow }), style]} {...p}>
+      <BlurView pointerEvents="none" intensity={b.intensity} tint={b.tint} style={fill} {...(Platform.OS === "android" ? { blurMethod: "none" as const } : {})} />
       <View pointerEvents="none" style={[fill, { backgroundColor: tint }]} />
-      {shine}
+      <LinearGradient pointerEvents="none" colors={[color["glass-shine"], "transparent", "transparent"]} locations={[0, 0.45, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={fill} />
       {children}
     </View>
   );

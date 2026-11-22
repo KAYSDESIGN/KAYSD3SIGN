@@ -5,7 +5,8 @@ import { router } from "expo-router";
 import { ChevronRight, Dices, Grid3x3, Smile, Columns3 } from "lucide-react-native";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Body, Caption, Glass, GradientFill, Heading, Muted, Toast } from "@/components/ui";
+import { Body, Caption, Glass, GlassList, GradientFill, ListRow, Muted, SectionTitle, Toast } from "@/components/ui";
+import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { api, useMutation, useQuery, type Game, type GameType } from "@/data";
 import { color, cx } from "@/theme";
 import { GAME_NAMES } from "@/components/app/games";
@@ -28,8 +29,7 @@ function Play() {
 
   return (
     <Screen edges={["top"]}>
-      <Caption>Jouer</Caption>
-      <Heading>À deux, même à distance</Heading>
+      <ScreenHeader kicker="JOUER" title="À deux, même à distance" />
       {finished.length ? <Body className="text-text-muted">{`Score : toi ${wins} · ${them} ${losses}`}</Body> : null}
       {create.error ? <Toast tone="error">{create.error}</Toast> : null}
 
@@ -51,13 +51,13 @@ function Play() {
       ) : null}
 
       <View className="gap-2">
-        <Caption>Nouvelle partie</Caption>
-        <View className="flex-row flex-wrap gap-2">
-          <Tile icon={Grid3x3} title={GAME_NAMES.tic_tac_toe} sub="3 cœurs alignés" onPress={() => start("tic_tac_toe")} />
-          <Tile icon={Columns3} title={GAME_NAMES.four_in_row} sub="4 pions à la suite" onPress={() => start("four_in_row")} />
-          <Tile icon={Smile} title="Quiz à deux" sub="Votre score de complicité" onPress={() => router.push("/quiz")} />
-          <Tile icon={Dices} title="Dés coquins" sub="Pour pimenter la soirée" onPress={() => router.push("/dice")} />
-        </View>
+        <SectionTitle title="Nouvelle partie" />
+        <GlassList>
+          <ListRow first icon={Grid3x3} tone="rose" title={GAME_NAMES.tic_tac_toe} subtitle="3 cœurs alignés" action="Jouer" onPress={() => start("tic_tac_toe")} />
+          <ListRow icon={Columns3} tone="violet" title={GAME_NAMES.four_in_row} subtitle="4 pions à la suite" action="Jouer" onPress={() => start("four_in_row")} />
+          <ListRow icon={Smile} tone="coral" title="Quiz à deux" subtitle="Votre score de complicité" action="Jouer" onPress={() => router.push("/quiz")} />
+          <ListRow icon={Dices} tone="night" title="Dés coquins" subtitle="Pour pimenter la soirée" action="Lancer" onPress={() => router.push("/dice")} />
+        </GlassList>
         <Muted>{"D'autres jeux arrivent : mots, mémoire, quiz de culture."}</Muted>
       </View>
     </Screen>

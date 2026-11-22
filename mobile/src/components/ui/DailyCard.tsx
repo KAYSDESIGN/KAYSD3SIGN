@@ -1,57 +1,52 @@
 import { Text, View } from "react-native";
 import { Lock } from "lucide-react-native";
-import { color } from "@/theme";
-import { Button } from "./Button";
-import { Glass } from "./Glass";
-import { Caption } from "./Text";
+import type { ArtName } from "./Art";
+import { HeroCard, Plate, PlateText, WhitePill } from "./Hero";
 import { SpiceBadge, type Spice } from "./Spice";
 
 export type DailyState = "todo" | "waiting" | "revealed";
 
-/** Carte « question du jour » : à faire, en attente du partenaire, révélée. */
+/** Carte du jour façon App Store : illustration, question en grand, panneaux de verre pour l'état. */
 export function DailyCard({
-  kicker, prompt, state, spice, mine, theirs, partnerName, onAnswer,
+  kicker, prompt, state, spice, mine, theirs, partnerName, onAnswer, partnerAnswered, art,
 }: {
   kicker: string; prompt: string; state: DailyState; spice?: Spice;
-  mine?: string; theirs?: string; partnerName: string; onAnswer?: () => void;
+  mine?: string; theirs?: string; partnerName: string; onAnswer?: () => void; partnerAnswered?: boolean; art?: ArtName;
 }) {
   return (
-    <Glass className="gap-4 p-5">
-      <View className="flex-row items-center justify-between">
-        <Caption>{kicker}</Caption>
-        {spice ? <SpiceBadge level={spice} /> : null}
-      </View>
-      <Text accessibilityRole="header" className="font-display text-xl text-text">{prompt}</Text>
+    <HeroCard art={art ?? (spice ? "ember" : "rose")} kicker={kicker} title={prompt} badge={spice ? <SpiceBadge level={spice} /> : undefined}
+      minHeight={state === "todo" ? 330 : 260}>
+      {state === "todo" ? (
+        <Plate className="flex-row items-center gap-3">
+          <PlateText
+            title={partnerAnswered ? `${partnerName} a déjà répondu` : "À toi de commencer"}
+            body={partnerAnswered ? "Réponds pour découvrir sa réponse" : `${partnerName} découvrira ta réponse après la sienne`}
+          />
+          <WhitePill label="Répondre" onPress={onAnswer} />
+        </Plate>
+      ) : null}
 
-      {state === "todo" ? <Button onPress={onAnswer}>Répondre</Button> : null}
-
+      {state !== "todo" ? <Answer who="Toi" text={mine} /> : null}
       {state === "waiting" ? (
-        <View className="gap-3">
-          <Answer who="Toi" text={mine} />
-          <View className="flex-row items-center gap-2 rounded-md border border-glass-edge bg-surface-raised p-3">
-            <Lock size={16} color={color["text-muted"]} />
-            <Text className="flex-1 font-sans text-sm text-text-muted">
-              La réponse de {partnerName} s'affichera quand vous aurez répondu tous les deux.
-            </Text>
-          </View>
-        </View>
+        <Plate className="flex-row items-center gap-3">
+          <Lock size={16} color="#FFFFFF" />
+          <Text className="flex-1 font-sans text-[13px]" style={{ color: "rgba(255,255,255,0.92)" }}>
+            La réponse de {partnerName} s'affichera quand vous aurez répondu tous les deux.
+          </Text>
+        </Plate>
       ) : null}
-
-      {state === "revealed" ? (
-        <View className="gap-3">
-          <Answer who="Toi" text={mine} />
-          <Answer who={partnerName} text={theirs} accent />
-        </View>
-      ) : null}
-    </Glass>
+      {state === "revealed" ? <Answer who={partnerName} text={theirs} /> : null}
+    </HeroCard>
   );
 }
 
-function Answer({ who, text, accent }: { who: string; text?: string; accent?: boolean }) {
+function Answer({ who, text }: { who: string; text?: string }) {
   return (
-    <View className={accent ? "gap-1 rounded-md bg-accent-soft p-3" : "gap-1 rounded-md bg-surface-raised p-3"}>
-      <Text className={accent ? "font-sans-bold text-xs text-on-accent-soft" : "font-sans-bold text-xs text-text-muted"}>{who}</Text>
-      <Text className="font-sans text-base text-text">{text}</Text>
-    </View>
+    <Plate>
+      <View className="gap-1">
+        <Text className="font-sans-bold text-xs uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.85)" }}>{who}</Text>
+        <Text className="font-sans text-base" style={{ color: "#FFFFFF" }}>{text}</Text>
+      </View>
+    </Plate>
   );
 }

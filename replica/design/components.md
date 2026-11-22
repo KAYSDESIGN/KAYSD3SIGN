@@ -3,6 +3,14 @@
 Code : `mobile/src/components/ui/`. Galerie de tous les états : route `/design` de l'app.
 Tokens : `replica/design/tokens.json` (source), synchronisés par `npm run tokens` vers `mobile/src/theme/tokens.json` et `replica/design/tokens.css`.
 
+## v3 · direction « App Store » (22/11/2026)
+
+- **Fond épuré** (presque blanc / presque noir) avec des taches pastel très douces ; **la couleur vient du contenu** : grandes cartes illustrées (`HeroCard` + `Art` : rose, ember, violet, night), titre blanc en Fraunces, voile sombre en haut pour la lisibilité.
+- **Verre liquide sur tout ce qui flotte** : panneaux fumés posés sur les cartes (`Plate`), pastilles blanches d'action (`WhitePill`), listes façon App Store (`GlassList`, `ListRow`, `AppTile`), boutons du haut (`CoupleButton`), puces, champs, onglets segmentés.
+- **Verre clair et épais** (web : classe `lg`) : flou 7 px, saturation 190 %, liseré conique tout autour, reflet spéculaire en haut à gauche ; iPhone iOS 26 : vrai Liquid Glass (`expo-glass-effect`).
+- **Barre d'onglets** : capsule de verre avec libellés (Nous, Jouer, Envies, Profil) + bouton rond séparé ❤ qui envoie « Tu me manques » en un geste. La carte reste accessible depuis l'accueil.
+- En-tête d'écran (`ScreenHeader`) : date en capitales, grand titre, bouton de verre à droite.
+
 ## v2 · verre liquide (22/11/2026)
 
 - **Deux thèmes automatiques** : clair « Aube rosée » le jour, sombre « Nuit néon » le soir (suit le téléphone). Rôles identiques, valeurs par thème dans `tokens.json > themes`, posées en variables CSS par `ThemeRoot`.

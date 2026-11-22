@@ -2,13 +2,26 @@ import { ScrollViewStyleReset, useServerDocumentContext } from "expo-router/html
 import type { PropsWithChildren } from "react";
 
 const GLASS_CSS = [
-  "html,body{background:#F8F1F8;}",
-  "@media (prefers-color-scheme: dark){html,body{background:#120818;}}",
-  // verre liquide : tout ce qui est translucide floute et sature ce qu'il y a derrière
-  ".bg-surface,.bg-surface-raised,.bg-accent-soft{-webkit-backdrop-filter:blur(12px) saturate(185%);backdrop-filter:blur(12px) saturate(185%);}",
-  // bords qui accrochent la lumière (haut-gauche fort, bas-droite doux, halo intérieur)
-  ".border-glass-edge{box-shadow:inset 1.5px 1.5px 0 rgba(255,255,255,.85),inset -1px -1px 0 rgba(255,255,255,.4),inset 0 0 18px rgba(255,255,255,.18);}",
-  "@media (prefers-color-scheme: dark){.border-glass-edge{box-shadow:inset 1.2px 1.2px 0 rgba(255,255,255,.3),inset -1px -1px 0 rgba(255,255,255,.12),inset 0 0 16px rgba(255,255,255,.06);}}",
+  "html,body{background:#F7F4F8;}",
+  "@media (prefers-color-scheme: dark){html,body{background:#07040A;}}",
+  // Verre liquide (classe lg) : clair, peu flouté, saturé, lumière sur tout le pourtour, reflet en haut à gauche
+  ".lg{position:relative;isolation:isolate;-webkit-backdrop-filter:blur(7px) saturate(190%) brightness(1.06);backdrop-filter:blur(7px) saturate(190%) brightness(1.06);",
+  "box-shadow:inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.55),inset 1px 0 1px rgba(255,255,255,.5),inset -1px 0 1px rgba(255,255,255,.5),inset 0 0 22px rgba(255,255,255,.32),0 10px 30px rgba(40,10,50,.13),0 1px 2px rgba(40,10,50,.08);}",
+  ".lg.lg-flat{box-shadow:inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.55),inset 1px 0 1px rgba(255,255,255,.5),inset -1px 0 1px rgba(255,255,255,.5),inset 0 0 22px rgba(255,255,255,.32);}",
+  ".lg::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;background:radial-gradient(120% 70% at 18% 0%,rgba(255,255,255,.55),rgba(255,255,255,0) 55%);}",
+  ".lg::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;",
+  "background:conic-gradient(from 210deg,rgba(255,255,255,.95),rgba(255,255,255,.15) 25%,rgba(255,255,255,.7) 50%,rgba(255,255,255,.12) 75%,rgba(255,255,255,.95));",
+  "-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;}",
+  ".lg-smoke::before{background:radial-gradient(120% 70% at 18% 0%,rgba(255,255,255,.28),rgba(255,255,255,0) 55%);}",
+  "@media (prefers-color-scheme: dark){",
+  ".lg{box-shadow:inset 0 1.2px 1px rgba(255,255,255,.45),inset 0 -1px 1px rgba(255,255,255,.15),inset 1px 0 1px rgba(255,255,255,.18),inset -1px 0 1px rgba(255,255,255,.18),inset 0 0 18px rgba(255,255,255,.07),0 10px 30px rgba(0,0,0,.5);}",
+  ".lg.lg-flat{box-shadow:inset 0 1.2px 1px rgba(255,255,255,.45),inset 0 -1px 1px rgba(255,255,255,.15),inset 1px 0 1px rgba(255,255,255,.18),inset -1px 0 1px rgba(255,255,255,.18),inset 0 0 18px rgba(255,255,255,.07);}",
+  ".lg::before{background:radial-gradient(120% 70% at 18% 0%,rgba(255,255,255,.16),rgba(255,255,255,0) 55%);}",
+  ".lg::after{opacity:.5;}}",
+  // tout ce qui est translucide (boutons, puces, champs) devient aussi du verre
+  ".bg-surface,.bg-surface-raised,.bg-accent-soft{-webkit-backdrop-filter:blur(7px) saturate(190%) brightness(1.05);backdrop-filter:blur(7px) saturate(190%) brightness(1.05);}",
+  ".border-glass-edge{box-shadow:inset 0 1.5px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(255,255,255,.45),inset 1px 0 1px rgba(255,255,255,.4),inset -1px 0 1px rgba(255,255,255,.4),inset 0 0 16px rgba(255,255,255,.22);}",
+  "@media (prefers-color-scheme: dark){.border-glass-edge{box-shadow:inset 0 1.2px 1px rgba(255,255,255,.4),inset 0 -1px 1px rgba(255,255,255,.14),inset 1px 0 1px rgba(255,255,255,.16),inset -1px 0 1px rgba(255,255,255,.16),inset 0 0 14px rgba(255,255,255,.06);}}",
 ].join("");
 
 // Page HTML de la version web : installable sur l'écran d'accueil, jamais indexée.

@@ -1,39 +1,46 @@
 import { Pressable, Text, View } from "react-native";
+import { Lock } from "lucide-react-native";
 import { cx } from "@/theme";
-import { Glass, GradientFill } from "./Glass";
+import { Glass } from "./Glass";
+import { HeroCard } from "./Hero";
+import type { ArtName } from "./Art";
 
 export type DesireAnswer = "yes" | "maybe" | "no";
-const OPTIONS: { key: DesireAnswer; label: string; on: string; text: string }[] = [
-  { key: "no", label: "Non", on: "bg-surface-raised border-border-input", text: "text-text" },
-  { key: "maybe", label: "Peut-être", on: "bg-surface-raised border-gold", text: "text-gold" },
-  { key: "yes", label: "Oui", on: "overflow-hidden border-transparent", text: "text-on-accent" },
+const OPTIONS: { key: DesireAnswer; label: string }[] = [
+  { key: "no", label: "Non" }, { key: "maybe", label: "Peut-être" }, { key: "yes", label: "Oui" },
 ];
 
-/** Carte d'envie secrète : la réponse n'est jamais montrée au partenaire, seuls les oui communs. */
+/** Carte d'envie secrète façon App Store : choix en pastilles de verre, la réponse choisie devient blanche. */
 export function DesireCard({
-  text, value, onChange,
-}: { text: string; value?: DesireAnswer; onChange: (a: DesireAnswer) => void }) {
+  text, value, onChange, kicker = "Envie secrète", art = "violet",
+}: { text: string; value?: DesireAnswer; onChange: (a: DesireAnswer) => void; kicker?: string; art?: ArtName }) {
   return (
-    <Glass className="gap-4 p-5">
-      <Text className="font-display text-xl text-text">{text}</Text>
+    <HeroCard art={art} kicker={kicker} title={text} minHeight={260}>
+      <View className="flex-row items-center gap-2 px-2 pb-1">
+        <Lock size={13} color="#FFFFFF" />
+        <Text className="font-sans text-xs" style={{ color: "rgba(255,255,255,0.9)" }}>Secret : seuls vos « oui » communs sont révélés.</Text>
+      </View>
       <View accessibilityRole="radiogroup" accessibilityLabel="Ta réponse, gardée secrète" className="flex-row gap-2">
         {OPTIONS.map((o) => {
           const on = value === o.key;
-          return (
-            <Pressable
-              key={o.key}
-              accessibilityRole="radio"
-              accessibilityState={{ checked: on }}
-              onPress={() => onChange(o.key)}
-              className={cx("h-[44px] flex-1 items-center justify-center rounded-pill border", on ? o.on : "border-glass-edge bg-surface-raised active:bg-surface")}
-            >
-              {on && o.key === "yes" ? <GradientFill /> : null}
-              <View><Text className={cx("font-sans-bold text-sm", on ? o.text : "text-text-muted")}>{o.label}</Text></View>
+          const label = (
+            <Text className="font-sans-bold text-[15px]" style={{ color: on ? (o.key === "yes" ? "#B0185A" : "#2A1530") : "#FFFFFF" }}>{o.label}</Text>
+          );
+          return on ? (
+            <Pressable key={o.key} accessibilityRole="radio" accessibilityState={{ checked: true }} onPress={() => onChange(o.key)}
+              className="h-[48px] flex-1 items-center justify-center rounded-pill" style={{ backgroundColor: "rgba(255,255,255,0.96)", boxShadow: "0 6px 16px rgba(40,0,30,0.25)" }}>
+              {label}
             </Pressable>
+          ) : (
+            <Glass key={o.key} tone="smoke" radius={999} shadow={false} className="h-[48px] flex-1">
+              <Pressable accessibilityRole="radio" accessibilityState={{ checked: false }} onPress={() => onChange(o.key)}
+                className={cx("flex-1 items-center justify-center active:opacity-70")}>
+                {label}
+              </Pressable>
+            </Glass>
           );
         })}
       </View>
-      <Text className="font-sans text-xs text-text-muted">🔒 Secret. Seuls vos « oui » communs seront révélés.</Text>
-    </Glass>
+    </HeroCard>
   );
 }

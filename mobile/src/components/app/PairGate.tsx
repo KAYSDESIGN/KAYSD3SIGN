@@ -2,7 +2,8 @@ import type { ComponentType, ReactNode } from "react";
 import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { HeartHandshake, type LucideIcon } from "lucide-react-native";
-import { Body, Button, Caption, Heading, Muted } from "@/components/ui";
+import { Button, HeroCard, Muted, Plate, PlateText } from "@/components/ui";
+import { ScreenHeader } from "./ScreenHeader";
 import { color } from "@/theme";
 import { Screen, Skeleton } from "./Screen";
 import { useGate } from "./useGate";
@@ -18,23 +19,12 @@ export type PairGateInfo = {
 
 /** Écran de présentation tant que le/la partenaire n'a pas rejoint : on voit ce que fait la fonction, et on peut inviter. */
 export function PairGateScreen({ info, tabs }: { info: PairGateInfo; tabs?: boolean }) {
-  const Icon = info.icon ?? HeartHandshake;
   return (
     <Screen edges={tabs ? ["top"] : ["top", "bottom"]}>
-      <Caption>{info.kicker}</Caption>
-      <Heading>{info.title}</Heading>
-      <View className="items-center gap-3 rounded-lg border border-glass-edge bg-surface px-5 py-6">
-        <View className="h-[56px] w-[56px] items-center justify-center rounded-pill bg-accent-soft">
-          <Icon size={26} color={color["on-accent-soft"]} />
-        </View>
-        <Body className="text-center">{info.body}</Body>
-        {info.example ? (
-          <View className="self-stretch rounded-md border border-glass-edge bg-surface-raised p-4">
-            <Text className="font-sans-bold text-xs uppercase tracking-wider text-text-muted">Par exemple</Text>
-            <Text className="mt-1 font-display-italic text-lg text-text">{info.example}</Text>
-          </View>
-        ) : null}
-      </View>
+      <ScreenHeader kicker={info.kicker.toUpperCase()} title={info.title} />
+      <HeroCard art="violet" kicker={info.example ? "Par exemple" : info.kicker} title={info.example ?? info.title} minHeight={260}>
+        <Plate><PlateText title="Comment ça marche" body={info.body} /></Plate>
+      </HeroCard>
       <InviteButtons />
       <Muted className="text-center">Cette partie s'ouvre dès que vous êtes deux.</Muted>
     </Screen>

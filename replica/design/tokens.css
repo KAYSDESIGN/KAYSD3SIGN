@@ -1,8 +1,8 @@
 :root {
   color-scheme: light dark;
-  --c-bg: #F8F1F8;
-  --c-surface: rgba(255,255,255,0.18);
-  --c-surface-raised: rgba(255,255,255,0.32);
+  --c-bg: #F7F4F8;
+  --c-surface: rgba(255,255,255,0.20);
+  --c-surface-raised: rgba(255,255,255,0.40);
   --c-border: rgba(60,20,70,0.10);
   --c-glass-edge: rgba(255,255,255,0.60);
   --c-glass-shine: rgba(255,255,255,0.38);
@@ -24,7 +24,7 @@
   --c-spice-hot: #FF8A95;
   --c-on-spice: #3A0A1E;
   --c-focus: #7C3AED;
-  --c-tab-bar: rgba(255,255,255,0.16);
+  --c-tab-bar: rgba(255,255,255,0.20);
   --grad-0: #D63A45;
   --grad-1: #CF2470;
   --grad-2: #8338EC;
@@ -38,9 +38,9 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --c-bg: #120818;
-    --c-surface: rgba(255,255,255,0.06);
-    --c-surface-raised: rgba(255,255,255,0.11);
+    --c-bg: #07040A;
+    --c-surface: rgba(255,255,255,0.07);
+    --c-surface-raised: rgba(255,255,255,0.13);
     --c-border: rgba(255,255,255,0.12);
     --c-glass-edge: rgba(255,255,255,0.24);
     --c-glass-shine: rgba(255,255,255,0.14);
@@ -62,6 +62,6 @@
     --c-spice-hot: #FF8A95;
     --c-on-spice: #3A0A1E;
     --c-focus: #E9D5FF;
-    --c-tab-bar: rgba(255,255,255,0.06);
+    --c-tab-bar: rgba(255,255,255,0.07);
   }
 }

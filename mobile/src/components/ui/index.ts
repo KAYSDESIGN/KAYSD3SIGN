@@ -16,3 +16,6 @@ export * from "./Toast";
 export * from "./EmptyState";
 export * from "./Checkbox";
 export * from "./Glass";
+export * from "./Art";
+export * from "./Hero";
+export * from "./List";

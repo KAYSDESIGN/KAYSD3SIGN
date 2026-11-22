@@ -1,31 +1,64 @@
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
-import { CalendarClock, Camera, Heart, Lock, ListChecks, MessageCircle, Smile, Sparkles, Target } from "lucide-react-native";
+import { CalendarClock, Camera, Heart, ListChecks, MapPin, MessageCircle, Smile, Sparkles, Target } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
-import { InviteButtons } from "@/components/app/PairGate";
 import { Screen, Skeleton } from "@/components/app/Screen";
+import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { useGate } from "@/components/app/useGate";
 import {
-  Body, Button, Caption, Card, CoupleAvatars, Glass, DailyCard, Heading, Muted, MOODS, NudgeButton, StreakBadge, Title, Toast, type DailyState,
+  DailyCard, Glass, GlassList, HeroCard, ListRow, MOODS, NudgeButton, Plate, PlateText, SectionTitle, StreakBadge, Toast, WhitePill,
+  type DailyState,
 } from "@/components/ui";
 import { api, useQuery, type DailyView } from "@/data";
-import { color } from "@/theme";
+import { gradient } from "@/theme";
 
-const moodEmoji = (k?: string) => MOODS.find((m) => m.key === k)?.emoji;
+const moodOf = (k?: string) => MOODS.find((m) => m.key === k);
 
 function stateOf(v: DailyView): DailyState {
   if (!v.mine) return "todo";
   return v.theirs ? "revealed" : "waiting";
 }
 
-function greeting() {
-  const h = new Date().getHours();
-  return h < 5 ? "Encore debout" : h < 12 ? "Bonjour" : h < 18 ? "Bel après-midi" : "Bonsoir";
+/** Bouton rond en verre avec les deux initiales (comme le bouton de compte de l'App Store). */
+function CoupleButton({ me, them }: { me: string; them?: string }) {
+  const bubble = (l: string, c: string, shift = 0) => (
+    <View className="h-[34px] w-[34px] items-center justify-center rounded-pill" style={{ backgroundColor: c, marginLeft: shift, borderWidth: 2, borderColor: "rgba(255,255,255,0.9)" }}>
+      <Text className="font-display text-base" style={{ color: "#FFFFFF" }}>{l.slice(0, 1).toUpperCase()}</Text>
+    </View>
+  );
+  return (
+    <Glass radius={999} className="flex-row px-[6px] py-[5px]">
+      <Pressable accessibilityRole="button" accessibilityLabel="Profil du couple" onPress={() => router.push("/us")} className="flex-row">
+        {bubble(me || "?", gradient[0])}
+        {bubble(them || "+", them ? gradient[2] : "rgba(120,100,130,0.6)", -10)}
+      </Pressable>
+    </Glass>
+  );
+}
+
+const SHORTCUTS = [
+  { icon: Target, tone: "coral", title: "Défi du jour", subtitle: "Un petit défi à relever à deux", action: "Ouvrir", href: "/challenge" },
+  { icon: Smile, tone: "violet", title: "Quiz à deux", subtitle: "Votre score de complicité", action: "Jouer", href: "/quiz" },
+  { icon: CalendarClock, tone: "rose", title: "Soirée à deux", subtitle: "Proposer un jour, une heure, un thème", action: "Voir", href: "/plan" },
+  { icon: MessageCircle, tone: "plum", title: "Petits mots", subtitle: "Rien que pour vous deux", action: "Écrire", href: "/notes" },
+  { icon: ListChecks, tone: "amber", title: "Nos envies d'ailleurs", subtitle: "Voyages, sorties, premières fois", action: "Voir", href: "/bucket" },
+  { icon: Camera, tone: "coral", title: "Moments", subtitle: "Vos photos à deux", action: "Voir", href: "/moments" },
+  { icon: MapPin, tone: "night", title: "Carte à deux", subtitle: "Savoir que l'autre est bien rentré·e", action: "Voir", href: "/map" },
+] as const;
+
+function Shortcuts() {
+  return (
+    <GlassList>
+      {SHORTCUTS.map((s, i) => (
+        <ListRow key={s.href} first={i === 0} icon={s.icon} tone={s.tone} title={s.title} subtitle={s.subtitle} action={s.action} onPress={() => router.push(s.href as never)} />
+      ))}
+    </GlassList>
+  );
 }
 
 // S04 · Accueil
 export default function Home() {
-  const { profile, partner, paired, gate } = useGate();
+  const { profile, paired, gate } = useGate();
   if (gate !== "loading" && !paired) return <SoloHome name={profile?.display_name ?? ""} />;
   return <PairedHome />;
 }
@@ -36,52 +69,41 @@ function SoloHome({ name }: { name: string }) {
   const code = couple.data?.invite_code ?? null;
   return (
     <Screen edges={["top"]}>
-      <View className="gap-1">
-        <Caption>{greeting()}, {name}</Caption>
-        <Heading>Ton espace à deux t'attend</Heading>
-      </View>
+      <ScreenHeader title={`Bienvenue, ${name}`} right={<CoupleButton me={name} />} />
 
       {code ? (
-        <Card raised className="items-center gap-3 py-5">
-          <Caption>Ton code d'invitation</Caption>
-          <Text accessibilityLabel={`Ton code : ${code.split("").join(" ")}`} className="font-sans-bold text-display tracking-[8px] text-text">{code}</Text>
-          <Muted className="text-center">En attente de ton/ta partenaire. Dès qu'il ou elle l'a saisi, tout s'ouvre.</Muted>
-          <Button variant="secondary" onPress={() => router.push("/onboarding/pair")}>Partager le code</Button>
-          <Button variant="ghost" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })}>J'ai plutôt reçu un code</Button>
-        </Card>
+        <HeroCard art="violet" kicker="Ton code d'invitation" title={code.split("").join(" ")} minHeight={250}>
+          <Plate className="flex-row items-center gap-3">
+            <PlateText title="En attente de ton/ta partenaire" body="Dès que le code est saisi, tout s'ouvre." />
+            <WhitePill label="Partager" onPress={() => router.push("/onboarding/pair")} />
+          </Plate>
+          <Pressable accessibilityRole="button" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })} className="items-center py-1">
+            <Text className="font-sans-bold text-sm" style={{ color: "#FFFFFF" }}>J'ai plutôt reçu un code</Text>
+          </Pressable>
+        </HeroCard>
       ) : (
-        <Card raised className="gap-3">
-          <Title>Invite ton/ta partenaire</Title>
-          <Body className="text-text-muted">Tu peux tout visiter avant. Les questions, les jeux et les envies s'ouvrent dès que vous êtes deux.</Body>
-          <InviteButtons />
-        </Card>
+        <HeroCard art="rose" kicker="Pour commencer" title="Ton espace à deux t'attend" minHeight={300}>
+          <Plate className="flex-row items-center gap-3">
+            <PlateText title="Invite ton/ta partenaire" body="Tu peux tout visiter avant." />
+            <WhitePill label="Inviter" onPress={() => router.push("/onboarding/pair")} />
+          </Plate>
+          <Pressable accessibilityRole="button" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })} className="items-center py-1">
+            <Text className="font-sans-bold text-sm" style={{ color: "#FFFFFF" }}>J'ai reçu un code</Text>
+          </Pressable>
+        </HeroCard>
       )}
 
-      <View className="gap-3 rounded-lg border border-dashed border-border p-5">
-        <View className="flex-row items-center justify-between">
-          <Caption>Aperçu · question du jour</Caption>
-          <Lock size={16} color={color["text-muted"]} />
-        </View>
-        <Text className="font-display text-xl text-text">Quel moment de cette semaine aimerais-tu revivre avec moi ?</Text>
-        <Muted>Chaque jour une nouvelle question. Vous répondez chacun de votre côté, puis vous découvrez la réponse de l'autre.</Muted>
-      </View>
+      <SectionTitle title="Aperçu" />
+      <HeroCard art="ember" kicker="Question du jour" title="Quel moment de cette semaine aimerais-tu revivre avec moi ?" minHeight={230}>
+        <Plate><PlateText title="Chaque jour une nouvelle question" body="Vous répondez chacun de votre côté, puis vous découvrez la réponse de l'autre." /></Plate>
+      </HeroCard>
 
-      <Pressable accessibilityRole="button" onPress={() => router.push("/age")} className="rounded-md border border-glass-edge bg-surface p-4 active:bg-surface-raised">
-        <Text className="font-sans-semibold text-sm text-text">🌶️ Choisir mon niveau d'audace</Text>
-        <Muted>Confirme ton âge dès maintenant. Le contenu coquin s'ouvrira quand vous l'aurez fait tous les deux.</Muted>
-      </Pressable>
+      <GlassList>
+        <ListRow first icon={Sparkles} tone="rose" title="Mon niveau d'audace" subtitle="Confirme ton âge dès maintenant" action="Choisir" onPress={() => router.push("/age")} />
+      </GlassList>
 
-      <View className="gap-3">
-        <Caption>Ce qui vous attend</Caption>
-        <View className="flex-row flex-wrap gap-2">
-          <Shortcut icon={Target} label="Défi du jour" href="/challenge" />
-          <Shortcut icon={Camera} label="Moments" href="/moments" />
-          <Shortcut icon={Smile} label="Quiz" href="/quiz" />
-          <Shortcut icon={CalendarClock} label="Soirée à deux" href="/plan" />
-          <Shortcut icon={ListChecks} label="Nos envies d'ailleurs" href="/bucket" />
-          <Shortcut icon={MessageCircle} label="Petits mots" href="/notes" />
-        </View>
-      </View>
+      <SectionTitle title="Ce qui vous attend" />
+      <Shortcuts />
 
       {api.dev.enabled && code ? <DevPanel actions={[{ label: "Sam rejoint avec le code", onPress: () => api.dev.partnerJoins() }]} /> : null}
     </Screen>
@@ -98,74 +120,62 @@ function PairedHome() {
   const me = profile?.display_name ?? "";
   const them = partner?.display_name ?? "";
   const streak = couple.data?.streak_count ?? 0;
-  const broken = !!couple.data?.streak_last_day && streak > 0 && isOlderThanYesterday(couple.data.streak_last_day);
+  const partnerMood = moodOf(moods.data?.partner?.mood);
+  const myMood = moodOf(moods.data?.mine?.mood);
 
   return (
     <Screen edges={["top"]}>
-      <View className="flex-row items-center justify-between">
-        <View className="flex-1 gap-1 pr-3">
-          <Caption>{greeting()}, {me}</Caption>
-          <Heading numberOfLines={2}>Toi et {them}</Heading>
-        </View>
-        <StreakBadge days={broken ? 0 : streak} broken={broken} />
-      </View>
+      <ScreenHeader title={`Toi & ${them}`} right={<CoupleButton me={me} them={them} />} />
 
-      <View className="flex-row items-center gap-4">
-        <CoupleAvatars me={{ name: me || "?", mood: moodEmoji(moods.data?.mine?.mood) }} partner={{ name: them || "?", mood: moodEmoji(moods.data?.partner?.mood) }} />
-        <Pressable accessibilityRole="button" accessibilityLabel="Partager mon humeur" onPress={() => router.push("/mood")} className="flex-1 rounded-md border border-glass-edge bg-surface px-4 py-3 active:bg-surface-raised">
-          <Text className="font-sans-semibold text-sm text-text">{moods.data?.mine ? "Changer mon humeur" : "Comment tu te sens ?"}</Text>
-          <Text numberOfLines={1} className="font-sans text-sm text-text-muted">
-            {moods.data?.partner ? `${them} : ${MOODS.find((m) => m.key === moods.data?.partner?.mood)?.label}` : `${them} n'a pas encore partagé son humeur`}
-          </Text>
-        </Pressable>
+      <View className="flex-row items-center gap-2">
+        <StreakBadge days={streak} />
+        <Glass radius={999} shadow={false} className="flex-1">
+          <Pressable accessibilityRole="button" accessibilityLabel="Partager mon humeur" onPress={() => router.push("/mood")} className="h-[34px] flex-row items-center gap-2 px-3">
+            <Text className="text-sm">{partnerMood?.emoji ?? "💭"}</Text>
+            <Text numberOfLines={1} className="flex-1 font-sans-semibold text-[13px] text-text">
+              {partnerMood ? `${them} : ${partnerMood.label}` : `${them} n'a pas partagé son humeur`}
+            </Text>
+            <Text className="font-sans-bold text-[12px] text-accent">{myMood ? myMood.emoji : "Mon humeur"}</Text>
+          </Pressable>
+        </Glass>
       </View>
 
       {nudge.data ? <Toast tone="nudge">{`${them} : ${nudge.data.body}`}</Toast> : null}
+
+      {today.loading && !today.data ? (
+        <Skeleton className="h-[330px]" />
+      ) : today.error ? (
+        <Toast tone="error">Impossible de charger la question du jour. Réessaie dans un instant.</Toast>
+      ) : (
+        today.data?.map((v) => (
+          <DailyCard
+            key={v.assignment.id}
+            kicker={v.assignment.slot === "question" ? "Question du jour" : "Question coquine"}
+            spice={v.assignment.slot === "question" ? undefined : v.assignment.prompt.spice_level}
+            prompt={v.assignment.prompt.body}
+            state={stateOf(v)}
+            partnerAnswered={v.partnerAnswered}
+            mine={v.mine?.skipped ? "Passée" : v.mine?.body ?? undefined}
+            theirs={v.theirs?.skipped ? "Passée" : v.theirs?.body ?? undefined}
+            partnerName={them}
+            onAnswer={() => router.push({ pathname: "/daily/[id]", params: { id: v.assignment.id } })}
+          />
+        ))
+      )}
+
+      {today.data && today.data.length === 1 ? (
+        <GlassList>
+          <ListRow first icon={Sparkles} tone="rose" title="Questions coquines" subtitle="Confirmez tous les deux votre âge et votre niveau d'audace" action="Débloquer" onPress={() => router.push("/age")} />
+        </GlassList>
+      ) : null}
 
       <View className="flex-row flex-wrap gap-2">
         <NudgeButton icon={Heart} label="Tu me manques" onSend={() => api.sendNudge("Tu me manques")} />
         <NudgeButton icon={Sparkles} label="Je pense à toi" onSend={() => api.sendNudge("Je pense à toi")} />
       </View>
 
-      <View className="gap-3">
-        {today.loading && !today.data ? (
-          <Skeleton className="h-[200px]" />
-        ) : today.error ? (
-          <Toast tone="error">Impossible de charger la question du jour. Tire vers le bas pour réessayer.</Toast>
-        ) : (
-          today.data?.map((v) => (
-            <DailyCard
-              key={v.assignment.id}
-              kicker={v.assignment.slot === "question" ? "Question du jour" : "Question coquine"}
-              spice={v.assignment.slot === "question" ? undefined : v.assignment.prompt.spice_level}
-              prompt={v.assignment.prompt.body}
-              state={stateOf(v)}
-              mine={v.mine?.skipped ? "Passée" : v.mine?.body ?? undefined}
-              theirs={v.theirs?.skipped ? "Passée" : v.theirs?.body ?? undefined}
-              partnerName={them}
-              onAnswer={() => router.push({ pathname: "/daily/[id]", params: { id: v.assignment.id } })}
-            />
-          ))
-        )}
-        {today.data && today.data.length === 1 ? (
-          <Pressable accessibilityRole="button" onPress={() => router.push("/age")} className="rounded-md border border-dashed border-border p-4 active:bg-surface">
-            <Text className="font-sans-semibold text-sm text-text">🌶️ Débloquer les questions coquines</Text>
-            <Muted>Confirmez tous les deux votre âge et choisissez votre niveau d'audace.</Muted>
-          </Pressable>
-        ) : null}
-      </View>
-
-      <View className="gap-3">
-        <Caption>Pour vous deux</Caption>
-        <View className="flex-row flex-wrap gap-2">
-          <Shortcut icon={Target} label="Défi du jour" href="/challenge" />
-          <Shortcut icon={Camera} label="Moments" href="/moments" />
-          <Shortcut icon={Smile} label="Quiz" href="/quiz" />
-          <Shortcut icon={CalendarClock} label="Soirée à deux" href="/plan" />
-          <Shortcut icon={ListChecks} label="Nos envies d'ailleurs" href="/bucket" />
-          <Shortcut icon={MessageCircle} label="Petits mots" href="/notes" />
-        </View>
-      </View>
+      <SectionTitle title="Pour vous deux" />
+      <Shortcuts />
 
       {api.dev.enabled && today.data?.length ? (
         <DevPanel actions={[
@@ -181,25 +191,3 @@ function PairedHome() {
   );
 }
 
-function Shortcut({ icon: Icon, label, href }: { icon: typeof Heart; label: string; href: string }) {
-  return (
-    <Glass radius={22} className="grow basis-[30%]">
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={label}
-        onPress={() => router.push(href as never)}
-        className="min-h-[92px] items-start justify-between p-3 active:bg-surface"
-      >
-        <View className="h-[34px] w-[34px] items-center justify-center rounded-pill bg-accent-soft">
-          <Icon size={18} color={color.accent} />
-        </View>
-        <Text numberOfLines={2} className="font-sans-semibold text-sm text-text">{label}</Text>
-      </Pressable>
-    </Glass>
-  );
-}
-
-function isOlderThanYesterday(day: string) {
-  const y = new Date(); y.setDate(y.getDate() - 1);
-  return day < y.toISOString().slice(0, 10);
-}

@@ -7,7 +7,8 @@ import { Flame, Lock, Sparkles } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Body, Button, Caption, Card, DesireCard, EmptyState, Heading, Muted, SpiceBadge } from "@/components/ui";
+import { Body, Button, Caption, Card, DesireCard, EmptyState, Heading, Muted, SPICE, SpiceBadge } from "@/components/ui";
+import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { api, useQuery } from "@/data";
 import { color, cx } from "@/theme";
 
@@ -25,8 +26,7 @@ function Desires() {
   if (!status.data?.effective) {
     return (
       <Screen edges={["top"]}>
-        <Caption>Envies secrètes</Caption>
-        <Heading>Ce que vous n'osez pas dire</Heading>
+        <ScreenHeader kicker="ENVIES SECRÈTES" title="Ce que vous n'osez pas dire" />
         <EmptyState
           icon={Lock}
           title="À débloquer à deux"
@@ -48,10 +48,8 @@ function Desires() {
   return (
     <Screen edges={["top"]}>
       <View className="flex-row items-center justify-between">
-        <Caption>Envies secrètes</Caption>
-        <SpiceBadge level={status.data.effective} />
+        <ScreenHeader kicker="ENVIES SECRÈTES" title="Ce que vous n'osez pas dire" right={<SpiceBadge level={status.data.effective} />} />
       </View>
-      <Heading>Ce que vous n'osez pas dire</Heading>
       <Body className="text-text-muted">
         {`Réponds oui, peut-être ou non. ${them} ne verra jamais tes réponses, seulement ce que vous voulez tous les deux.`}
       </Body>
@@ -69,7 +67,9 @@ function Desires() {
         <View className="gap-3">
           {rows.loading && !rows.data ? <Skeleton className="h-[180px]" /> : null}
           {open.map((r) => (
-            <DesireCard key={r.desire.id} text={r.desire.body} value={r.answer ?? undefined} onChange={(a) => api.answerDesire(r.desire.id, a)} />
+            <DesireCard key={r.desire.id} text={r.desire.body} kicker={`${r.desire.category} · ${SPICE[r.desire.spice_level].label}`}
+              art={r.desire.spice_level === "hot" ? "night" : r.desire.spice_level === "spicy" ? "ember" : "violet"}
+              value={r.answer ?? undefined} onChange={(a) => api.answerDesire(r.desire.id, a)} />
           ))}
           {locked.length ? (
             <Card className="gap-3">

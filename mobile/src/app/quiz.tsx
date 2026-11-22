@@ -4,7 +4,8 @@ import { Smile as SmileIcon } from "lucide-react-native";
 import { router } from "expo-router";
 import { ChevronRight, Lock } from "lucide-react-native";
 import { Screen, Skeleton } from "@/components/app/Screen";
-import { Body, Caption, Heading, SpiceBadge, Toast } from "@/components/ui";
+import { Body, SpiceBadge, Toast } from "@/components/ui";
+import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { api, useMutation, useQuery } from "@/data";
 import { color } from "@/theme";
 
@@ -15,8 +16,7 @@ function Quizzes() {
 
   return (
     <Screen>
-      <Caption>Quiz à deux</Caption>
-      <Heading>Êtes-vous sur la même longueur d'onde ?</Heading>
+      <ScreenHeader kicker="QUIZ À DEUX" title="Sur la même longueur d'onde ?" />
       <Body className="text-text-muted">Répondez chacun de votre côté. Votre score de complicité s'affiche quand vous avez fini tous les deux.</Body>
       {start.error ? <Toast tone="error">{start.error}</Toast> : null}
       {list.loading && !list.data ? <Skeleton className="h-[200px]" /> : null}
@@ -35,7 +35,7 @@ function Quizzes() {
                 const id = lastSession && lastSession.status === "open" ? lastSession.id : await start.mutate(quiz.id);
                 if (id) router.push({ pathname: "/quiz/[id]", params: { id } });
               }}
-              className="flex-row items-center gap-3 rounded-lg border border-glass-edge bg-surface p-4 active:bg-surface-raised"
+              className="lg flex-row items-center gap-3 rounded-[26px] bg-surface p-4 active:bg-surface-raised"
             >
               <View className="flex-1 gap-1">
                 <View className="flex-row items-center gap-2">

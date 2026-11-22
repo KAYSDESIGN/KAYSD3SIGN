@@ -19,7 +19,7 @@ export default function Us() {
   return (
     <Screen edges={["top"]}>
       <View className="flex-row items-center justify-between">
-        <Caption>Nous</Caption>
+        <Caption>PROFIL</Caption>
         <IconButton icon={Settings} label="Réglages" onPress={() => router.push("/settings")} />
       </View>
       <View className="items-center gap-3">
@@ -33,7 +33,7 @@ export default function Us() {
       </View>
 
       {!paired ? <InviteButtons /> : null}
-      <Card className="gap-0 py-1">
+      <Card className="gap-0 px-4 py-1">
         <Row icon={Sparkles} label={premium.data ? "Premium actif pour vous deux" : "Passer à Premium"} onPress={() => router.push("/premium")} tint={color.gold} />
         <Row icon={Flame} label="Niveau d'audace et 18+" onPress={() => router.push("/age")} />
         <Row icon={MessageCircle} label="Petits mots" onPress={() => router.push("/notes")} />
