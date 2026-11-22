@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import type { LucideIcon } from "lucide-react-native";
 import { Glass } from "./Glass";
 import { color, cx } from "@/theme";
@@ -11,14 +10,12 @@ const TILE: Record<string, [string, string]> = {
 };
 export type TileColor = keyof typeof TILE;
 
-/** Icône d'app : carré arrondi en dégradé, icône blanche, petit reflet. */
-export function AppTile({ icon: Icon, tone = "rose", size = 50 }: { icon: LucideIcon; tone?: TileColor; size?: number }) {
+/** Icône d'app : petit carré de verre, icône à l'encre (épuré). */
+export function AppTile({ icon: Icon, size = 46 }: { icon: LucideIcon; tone?: TileColor; size?: number }) {
   return (
-    <View className="items-center justify-center overflow-hidden" style={{ width: size, height: size, borderRadius: size * 0.26, boxShadow: "0 4px 10px rgba(40,10,50,0.18)" }}>
-      <LinearGradient colors={TILE[tone]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: "absolute", inset: 0 }} />
-      <LinearGradient colors={["rgba(255,255,255,0.35)", "rgba(255,255,255,0)"]} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.55 }} style={{ position: "absolute", inset: 0 }} />
-      <View><Icon size={size * 0.48} color="#FFFFFF" strokeWidth={2.1} /></View>
-    </View>
+    <Glass radius={size * 0.32} shadow={false} tone="bright" style={{ width: size, height: size }} className="items-center justify-center">
+      <View><Icon size={size * 0.46} color={color.text} strokeWidth={2} /></View>
+    </Glass>
   );
 }
 

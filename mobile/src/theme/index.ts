@@ -2,11 +2,11 @@ import tokens from "./tokens.json";
 
 export { tokens };
 export type Scheme = "light" | "dark";
-export type Palette = "neon" | "coral";
+export type Palette = "lilas" | "neon" | "coral";
 export type ColorRole = keyof typeof tokens.themes.light.color;
 
 let active: Scheme = "light";
-let palette: Palette = (tokens.palettes.default as Palette) ?? "neon";
+let palette: Palette = (tokens.palettes.default as Palette) ?? "lilas";
 /** Appelé par ThemeRoot à chaque changement (l'arbre est remonté dans la foulée). */
 export function setActiveScheme(s: Scheme) { active = s; }
 export function setActivePalette(p: Palette) { palette = p; }
@@ -55,3 +55,8 @@ export function cx(...parts: Array<string | false | null | undefined>) {
 
 /** Couleur « flamme » : orange vif, contour orange profond (≥ 3:1 sur les cases claires et sombres). */
 export const FLAME = { fill: "#FF8A1E", stroke: "#E8590C" } as const;
+
+/** Rouge du cœur (bouton ❤, pions du morpion), identique dans toutes les palettes. */
+export const HEART = "#EE4058";
+/** Couleurs des initiales quand il n'y a pas de photo. */
+export const AVATAR_COLORS = ["#9C82E8", "#E7738E"] as const;

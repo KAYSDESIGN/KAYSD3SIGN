@@ -7,18 +7,18 @@ type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const box: Record<Variant, string> = {
-  primary: "overflow-hidden active:opacity-90",
+  primary: "active:opacity-85",
   secondary: "bg-surface-raised border border-glass-edge active:bg-surface",
   ghost: "bg-transparent active:bg-surface",
   danger: "bg-transparent border border-danger active:bg-surface",
 };
 const label: Record<Variant, string> = {
-  primary: "text-on-accent",
+  primary: "text-bg",
   secondary: "text-text",
   ghost: "text-accent",
   danger: "text-danger",
 };
-const iconColor = (v: Variant) => ({ primary: color["on-accent"], secondary: color.text, ghost: color.accent, danger: color.danger })[v];
+const iconColor = (v: Variant) => ({ primary: color.bg, secondary: color.text, ghost: color.accent, danger: color.danger })[v];
 const height: Record<Size, string> = { sm: "h-[36px] px-3", md: "h-[44px] px-4", lg: "h-[52px] px-5" };
 const text: Record<Size, string> = { sm: "text-sm", md: "text-base", lg: "text-base" };
 
@@ -48,10 +48,9 @@ export function Button({
         "flex-row items-center justify-center rounded-pill",
         box[variant], height[size], block && "self-stretch", off && "opacity-50", className
       )}
-      style={variant === "primary" ? glassLight({ lift: false, glow: true }) : variant === "secondary" ? glassLight({ lift: false }) : undefined}
+      style={variant === "primary" ? { backgroundColor: color.text, boxShadow: "0 8px 20px rgba(29,27,32,0.22)" } : variant === "secondary" ? glassLight({ lift: false }) : undefined}
       {...p}
     >
-      {variant === "primary" ? <GradientFill /> : null}
       {loading ? (
         <ActivityIndicator color={iconColor(variant)} />
       ) : (

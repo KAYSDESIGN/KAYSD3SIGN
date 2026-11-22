@@ -2,21 +2,14 @@ import { useId } from "react";
 import { StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from "react-native-svg";
-import { activeScheme, art } from "@/theme";
+import { activeScheme, art, color } from "@/theme";
 
 export type ArtName = "rose" | "ember" | "violet" | "night";
 
 /** Couleurs de texte sur une illustration : prune foncé en clair, blanc en sombre. */
 export function artInk() {
   const dark = activeScheme() === "dark";
-  const ink = dark ? art().ink.dark : art().ink.light;
-  return {
-    dark,
-    title: ink.title,
-    body: ink.body,
-    soft: dark ? "rgba(255,255,255,0.88)" : "rgba(42,21,48,0.78)",
-    plateTone: (dark ? "smoke" : "bright") as "smoke" | "bright",
-  };
+  return { dark, title: color.text, body: color["text-muted"], soft: color["text-muted"], plateTone: "bright" as const };
 }
 
 /**

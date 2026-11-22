@@ -33,15 +33,15 @@ export function useThemePref(): ThemePref {
   return pref;
 }
 
-/** Palette de couleurs, gardée sur l'appareil : magenta néon (par défaut) ou rose corail. */
-export type PalettePref = "neon" | "coral";
+/** Palette de couleurs, gardée sur l'appareil : lilas (par défaut), magenta néon ou rose corail. */
+export type PalettePref = "lilas" | "neon" | "coral";
 const PKEY = "hotcouple.palette";
-let currentPal: PalettePref = "neon";
+let currentPal: PalettePref = "lilas";
 let palLoaded = false;
 const palListeners = new Set<(p: PalettePref) => void>();
 async function loadPal() {
   if (palLoaded) return; palLoaded = true;
-  try { const v = await AsyncStorage.getItem(PKEY); if (v === "neon" || v === "coral") { currentPal = v; palListeners.forEach((l) => l(v)); } } catch { /* défaut */ }
+  try { const v = await AsyncStorage.getItem(PKEY); if (v === "lilas" || v === "neon" || v === "coral") { currentPal = v; palListeners.forEach((l) => l(v)); } } catch { /* défaut */ }
 }
 export function setPalettePref(p: PalettePref) { currentPal = p; palListeners.forEach((l) => l(p)); AsyncStorage.setItem(PKEY, p).catch(() => {}); }
 export function usePalettePref(): PalettePref {

@@ -7,11 +7,11 @@ import { Screen, Skeleton } from "@/components/app/Screen";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { useGate } from "@/components/app/useGate";
 import {
-  artInk, DailyCard, Glass, GlassList, HeroCard, ListRow, MOODS, Plate, PlateText, SectionTitle, StreakBadge, Toast, WhitePill,
+  Button, DailyCard, Glass, GlassList, HeroCard, ListRow, MOODS, SectionTitle, Toast,
   type DailyState,
 } from "@/components/ui";
 import { api, useQuery, type DailyView } from "@/data";
-import { gradient } from "@/theme";
+import { AVATAR_COLORS } from "@/theme";
 
 const moodOf = (k?: string) => MOODS.find((m) => m.key === k);
 
@@ -32,8 +32,8 @@ function CoupleButton({ me, them }: { me: string; them?: string }) {
   return (
     <Glass radius={999} className="flex-row px-[6px] py-[5px]">
       <Pressable accessibilityRole="button" accessibilityLabel="Profil du couple" onPress={() => router.push("/us")} className="flex-row">
-        {bubble(me || "?", gradient[0], 0, photos.mine)}
-        {bubble(them || "+", them ? gradient[2] : "rgba(120,100,130,0.6)", -10, them ? photos.partner : null)}
+        {bubble(me || "?", AVATAR_COLORS[0], 0, photos.mine)}
+        {bubble(them || "+", them ? AVATAR_COLORS[1] : "rgba(120,100,130,0.6)", -10, them ? photos.partner : null)}
       </Pressable>
     </Glass>
   );
@@ -59,6 +59,20 @@ function Shortcuts() {
   );
 }
 
+/** Deux grands raccourcis en verre, comme sur la maquette. */
+function Chips() {
+  const chip = (emoji: string, label: string, href: string) => (
+    <Glass radius={28} className="flex-1">
+      <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={() => router.push(href as never)}
+        className="h-[96px] justify-between px-4 py-[14px] active:opacity-70">
+        <Text className="text-[22px]">{emoji}</Text>
+        <Text className="font-sans-bold text-[15px] text-text">{label}</Text>
+      </Pressable>
+    </Glass>
+  );
+  return <View className="flex-row gap-3">{chip("🔥", "Envies", "/desires")}{chip("🎲", "Jouer", "/play")}</View>;
+}
+
 // S04 · Accueil
 export default function Home() {
   const { profile, paired, gate } = useGate();
@@ -75,35 +89,18 @@ function SoloHome({ name }: { name: string }) {
       <ScreenHeader title={`Bienvenue, ${name}`} right={<CoupleButton me={name} />} />
 
       {code ? (
-        <HeroCard art="violet" kicker="Ton code d'invitation" title={code.split("").join(" ")} minHeight={250}>
-          <Plate className="flex-row items-center gap-3">
-            <PlateText title="En attente de ton/ta partenaire" body="Dès que le code est saisi, tout s'ouvre." />
-            <WhitePill label="Partager" onPress={() => router.push("/onboarding/pair")} />
-          </Plate>
-          <Pressable accessibilityRole="button" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })} className="items-center py-1">
-            <Text className="font-sans-bold text-sm" style={{ color: artInk().title }}>J'ai plutôt reçu un code</Text>
-          </Pressable>
+        <HeroCard kicker="Ton code d'invitation · en attente" title={code.split("").join(" ")}>
+          <Button size="lg" onPress={() => router.push("/onboarding/pair")}>Partager le code</Button>
+          <Button variant="ghost" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })}>J'ai plutôt reçu un code</Button>
         </HeroCard>
       ) : (
-        <HeroCard art="rose" kicker="Pour commencer" title="Ton espace à deux t'attend" minHeight={300}>
-          <Plate className="flex-row items-center gap-3">
-            <PlateText title="Invite ton/ta partenaire" body="Tu peux tout visiter avant." />
-            <WhitePill label="Inviter" onPress={() => router.push("/onboarding/pair")} />
-          </Plate>
-          <Pressable accessibilityRole="button" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })} className="items-center py-1">
-            <Text className="font-sans-bold text-sm" style={{ color: artInk().title }}>J'ai reçu un code</Text>
-          </Pressable>
+        <HeroCard kicker="Pour commencer" title="Ton espace à deux t'attend">
+          <Button size="lg" onPress={() => router.push("/onboarding/pair")}>Inviter</Button>
+          <Button variant="ghost" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })}>J'ai reçu un code</Button>
         </HeroCard>
       )}
 
-      <SectionTitle title="Aperçu" />
-      <HeroCard art="ember" kicker="Question du jour" title="Quel moment de cette semaine aimerais-tu revivre avec moi ?" minHeight={230}>
-        <Plate><PlateText title="Chaque jour une nouvelle question" body="Vous répondez chacun de votre côté, puis vous découvrez la réponse de l'autre." /></Plate>
-      </HeroCard>
-
-      <GlassList>
-        <ListRow first icon={Sparkles} tone="rose" title="Mon niveau d'audace" subtitle="Confirme ton âge dès maintenant" action="Choisir" onPress={() => router.push("/age")} />
-      </GlassList>
+      <Chips />
 
       <SectionTitle title="Ce qui vous attend" />
       <Shortcuts />
@@ -130,18 +127,11 @@ function PairedHome() {
     <Screen edges={["top"]}>
       <ScreenHeader title={`Toi & ${them}`} right={<CoupleButton me={me} them={them} />} />
 
-      <View className="flex-row items-center gap-2">
-        <StreakBadge days={streak} />
-        <Glass radius={999} shadow={false} className="flex-1">
-          <Pressable accessibilityRole="button" accessibilityLabel="Partager mon humeur" onPress={() => router.push("/mood")} className="h-[34px] flex-row items-center gap-2 px-3">
-            <Text className="text-sm">{partnerMood?.emoji ?? "💭"}</Text>
-            <Text numberOfLines={1} className="flex-1 font-sans-semibold text-[13px] text-text">
-              {partnerMood ? `${them} : ${partnerMood.label}` : `${them} n'a pas partagé son humeur`}
-            </Text>
-            <Text className="font-sans-bold text-[12px] text-accent">{myMood ? myMood.emoji : "Mon humeur"}</Text>
-          </Pressable>
-        </Glass>
-      </View>
+      <Pressable accessibilityRole="button" accessibilityLabel="Partager mon humeur" onPress={() => router.push("/mood")} className="-mt-3 flex-row items-center gap-2 active:opacity-60">
+        <Text numberOfLines={1} className="flex-1 font-sans-semibold text-[13px] text-text-muted">
+          {`🔥 ${streak} jour${streak > 1 ? "s" : ""}  ·  ${partnerMood ? `${them} : ${partnerMood.emoji} ${partnerMood.label}` : `${them} n'a pas partagé son humeur`}  ·  ${myMood ? `toi : ${myMood.emoji}` : "ton humeur"}`}
+        </Text>
+      </Pressable>
 
       {nudge.data ? <Toast tone="nudge">{`${them} : ${nudge.data.body}`}</Toast> : null}
 
@@ -171,6 +161,8 @@ function PairedHome() {
           <ListRow first icon={Sparkles} tone="rose" title="Questions coquines" subtitle="Confirmez tous les deux votre âge et votre niveau d'audace" action="Débloquer" onPress={() => router.push("/age")} />
         </GlassList>
       ) : null}
+
+      <Chips />
 
       <SectionTitle title="Pour vous deux" />
       <Shortcuts />

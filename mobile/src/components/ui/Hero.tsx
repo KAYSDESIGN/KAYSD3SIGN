@@ -1,58 +1,50 @@
 import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { Art, artInk, type ArtName } from "./Art";
+import type { ArtName } from "./Art";
 import { Glass } from "./Glass";
-import { activeScheme, cx } from "@/theme";
-import { color as brandColor } from "@/theme";
+import { color, cx } from "@/theme";
 
-/** Grande carte « Aujourd'hui » façon App Store : illustration pleine, titre blanc, panneaux de verre en bas. */
+/** Carte principale : verre quasi incolore, petite ligne d'info, grande phrase, actions en bas. */
 export function HeroCard({
-  art = "rose", kicker, title, badge, children, minHeight = 340,
-}: { art?: ArtName; kicker: string; title: string; badge?: ReactNode; children?: ReactNode; minHeight?: number }) {
-  const dark = activeScheme() === "dark";
-  const ink = artInk();
+  kicker, title, badge, children, dot,
+}: { art?: ArtName; kicker: string; title: string; badge?: ReactNode; children?: ReactNode; minHeight?: number; dot?: boolean }) {
   return (
-    <View
-      className="overflow-hidden rounded-[30px]"
-      style={{ minHeight, boxShadow: dark ? "0 14px 34px rgba(0,0,0,0.5)" : "0 14px 34px rgba(40,10,50,0.18)" }}
-    >
-      <Art name={art} />
-      <View className="gap-2 px-5 pt-5">
-        <View className="flex-row items-center justify-between">
-          <Text className="font-sans-bold text-xs uppercase tracking-wider" style={{ color: ink.soft }}>{kicker}</Text>
-          {badge}
+    <Glass radius={32} className="gap-4 p-[22px]">
+      <View className="flex-row items-center justify-between gap-2">
+        <View className="flex-1 flex-row items-center gap-2">
+          {dot ? <View className="h-[8px] w-[8px] rounded-pill" style={{ backgroundColor: "#EE4058" }} /> : null}
+          <Text numberOfLines={1} className="flex-1 font-sans-semibold text-[13px] text-text-muted">{kicker}</Text>
         </View>
-        <Text accessibilityRole="header" className="font-display text-[27px] leading-[32px] tracking-tight" style={{ color: ink.title }}>{title}</Text>
+        {badge}
       </View>
-      <View className="flex-1" />
-      {children ? <View className="gap-2 p-[10px]">{children}</View> : null}
-    </View>
+      <Text accessibilityRole="header" className="font-display text-[25px] leading-[30px] tracking-tight text-text">{title}</Text>
+      {children ? <View className="gap-3">{children}</View> : null}
+    </Glass>
   );
 }
 
-/** Panneau de verre fumé posé sur une illustration (texte blanc). */
+/** Zone d'information dans une carte (verre un peu plus visible). */
 export function Plate({ children, className }: { children: ReactNode; className?: string }) {
-  return <Glass tone={artInk().plateTone} radius={22} shadow={false} className={cx("px-4 py-3", className)}>{children}</Glass>;
+  return <View className={cx("rounded-[20px] border border-glass-edge bg-surface-raised px-4 py-3", className)}>{children}</View>;
 }
 
 export function PlateText({ title, body }: { title: string; body?: string }) {
-  const ink = artInk();
   return (
     <View className="flex-1 gap-[2px]">
-      <Text className="font-sans-bold text-[15px]" style={{ color: ink.title }}>{title}</Text>
-      {body ? <Text className="font-sans text-[13px]" style={{ color: ink.body }}>{body}</Text> : null}
+      <Text className="font-sans-bold text-[15px] text-text">{title}</Text>
+      {body ? <Text className="font-sans text-[13px] text-text-muted">{body}</Text> : null}
     </View>
   );
 }
 
-/** Pastille blanche (action principale sur une illustration), texte en couleur de marque. */
+/** Bouton pilule à l'encre (anthracite le jour, blanc la nuit). */
 export function WhitePill({ label, onPress, icon: Icon }: { label: string; onPress?: () => void; icon?: LucideIcon }) {
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress}
-      className="h-[36px] flex-row items-center gap-1 rounded-pill px-4 active:opacity-80" style={{ backgroundColor: "rgba(255,255,255,0.96)" }}>
-      {Icon ? <Icon size={15} color={brandColor["brand-ink"]} /> : null}
-      <Text className="font-sans-bold text-[13px] uppercase tracking-wider" style={{ color: brandColor["brand-ink"] }}>{label}</Text>
+      className="h-[40px] flex-row items-center gap-1 rounded-pill px-5 active:opacity-80" style={{ backgroundColor: color.text }}>
+      {Icon ? <Icon size={15} color={color.bg} /> : null}
+      <Text className="font-sans-bold text-[14px]" style={{ color: color.bg }}>{label}</Text>
     </Pressable>
   );
 }

@@ -5,11 +5,11 @@ import { useState } from "react";
 import { Pressable, Text } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Glass } from "@/components/ui";
+import { Glass, LensGlass } from "@/components/ui";
 import { CircleUser, Flame, Gamepad2, Heart, House, X } from "lucide-react-native";
 import { View } from "react-native";
 import { GATE_HREF, useGate } from "@/components/app/useGate";
-import { color, cx } from "@/theme";
+import { color, cx, HEART } from "@/theme";
 
 export default function TabsLayout() {
   const { gate } = useGate();
@@ -83,36 +83,36 @@ function FloatingTabBar({ state, descriptors, emitter, navigateToTab }: BottomTa
               const { options } = descriptors[route.key];
               const Icon = TAB_ICONS[route.name] ?? House;
               const label = (options.title ?? route.name) as string;
-              return (
-                <Pressable
-                  key={route.key}
-                  accessibilityRole="tab"
-                  accessibilityState={{ selected: focused }}
-                  accessibilityLabel={label}
-                  onPress={() => {
-                    setOpen(false);
-                    const e = emitter.emit({ type: "tabPress", target: route.key, canPreventDefault: true });
-                    if (!focused && !e.defaultPrevented) navigateToTab(route.key);
-                  }}
-                  className={cx("h-[54px] min-w-[68px] items-center justify-center gap-[2px] rounded-pill px-2", focused && "bg-surface-raised border border-glass-edge")}
-                >
-                  <View><Icon size={22} color={focused ? color.accent : color["text-muted"]} strokeWidth={focused ? 2.4 : 1.9} /></View>
-                  <Text className="font-sans-bold text-[10.5px]" style={{ color: focused ? color.accent : color["text-muted"] }}>{label}</Text>
+              const press = () => {
+                setOpen(false);
+                const e = emitter.emit({ type: "tabPress", target: route.key, canPreventDefault: true });
+                if (!focused && !e.defaultPrevented) navigateToTab(route.key);
+              };
+              const icon = <Icon size={24} color={color.text} strokeWidth={focused ? 2.4 : 2} />;
+              return focused ? (
+                <LensGlass key={route.key} tinted radius={999} style={{ width: 72, height: 52 }}>
+                  <Pressable accessibilityRole="tab" accessibilityState={{ selected: true }} accessibilityLabel={label} onPress={press}
+                    className="flex-1 items-center justify-center"><View>{icon}</View></Pressable>
+                </LensGlass>
+              ) : (
+                <Pressable key={route.key} accessibilityRole="tab" accessibilityState={{ selected: false }} accessibilityLabel={label} onPress={press}
+                  className="h-[52px] w-[58px] items-center justify-center rounded-pill active:opacity-60" style={{ opacity: 0.72 }}>
+                  <View>{icon}</View>
                 </Pressable>
               );
             })}
           </Glass>
-          <Glass radius={999} style={{ width: 64, height: 64 }}>
+          <LensGlass radius={999} style={{ width: 64, height: 64 }}>
             <Pressable accessibilityRole="button" accessibilityState={{ expanded: open }}
               accessibilityLabel={paired ? (sent ? "Envoyé" : "Petits mots express") : "Inviter mon/ma partenaire"}
               onPress={press} className="flex-1 items-center justify-center active:opacity-70">
               <View>
                 {sent ? <Text className="text-[26px]">{sent}</Text>
                   : open ? <X size={24} color={color.text} strokeWidth={2.4} />
-                  : <Heart size={25} color={color.accent} fill={color.accent} />}
+                  : <Heart size={25} color={HEART} fill={HEART} />}
               </View>
             </Pressable>
-          </Glass>
+          </LensGlass>
         </View>
       </View>
     </View>

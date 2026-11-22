@@ -1,7 +1,8 @@
 import { Text, View } from "react-native";
 import { Lock } from "lucide-react-native";
 import { artInk, type ArtName } from "./Art";
-import { HeroCard, Plate, PlateText, WhitePill } from "./Hero";
+import { Button } from "./Button";
+import { HeroCard, Plate } from "./Hero";
 import { SpiceBadge, type Spice } from "./Spice";
 
 export type DailyState = "todo" | "waiting" | "revealed";
@@ -14,16 +15,10 @@ export function DailyCard({
   mine?: string; theirs?: string; partnerName: string; onAnswer?: () => void; partnerAnswered?: boolean; art?: ArtName;
 }) {
   return (
-    <HeroCard art={art ?? (spice ? "ember" : "rose")} kicker={kicker} title={prompt} badge={spice ? <SpiceBadge level={spice} /> : undefined}
-      minHeight={state === "todo" ? 330 : 260}>
+    <HeroCard kicker={partnerAnswered && state === "todo" ? `${kicker} · ${partnerName} a répondu` : kicker} dot={partnerAnswered && state === "todo"}
+      title={prompt} badge={spice ? <SpiceBadge level={spice} /> : undefined}>
       {state === "todo" ? (
-        <Plate className="flex-row items-center gap-3">
-          <PlateText
-            title={partnerAnswered ? `${partnerName} a déjà répondu` : "À toi de commencer"}
-            body={partnerAnswered ? "Réponds pour découvrir sa réponse" : `${partnerName} découvrira ta réponse après la sienne`}
-          />
-          <WhitePill label="Répondre" onPress={onAnswer} />
-        </Plate>
+        <Button size="lg" onPress={onAnswer}>Répondre</Button>
       ) : null}
 
       {state !== "todo" ? <Answer who="Toi" text={mine} /> : null}

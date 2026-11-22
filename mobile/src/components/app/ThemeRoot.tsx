@@ -29,6 +29,10 @@ export function ThemeRoot({ children }: { children: ReactNode }) {
   const palette = usePalettePref();
   setActiveScheme(scheme);
   setActivePalette(palette);
+  // web : la feuille de style du verre suit le thème choisi (et pas seulement celui du téléphone)
+  useEffect(() => {
+    if (Platform.OS === "web" && typeof document !== "undefined") document.documentElement.dataset.scheme = scheme;
+  }, [scheme]);
   return (
     <View key={`${scheme}-${palette}`} style={[{ flex: 1, backgroundColor: color.bg }, vars(themeVars(scheme))]}>
       <StatusBar style={scheme === "dark" ? "light" : "dark"} />

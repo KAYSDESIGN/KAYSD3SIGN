@@ -27,7 +27,7 @@ function worstCases(theme) {
 }
 let fails = 0;
 const base = JSON.parse(JSON.stringify(t));
-for (const pal of ["coral", "neon"]) {
+for (const pal of ["coral", "neon", "lilas"]) {
 const P = pal === "coral" ? null : base.palettes[pal];
 for (const k of ["light", "dark"]) {
   t.themes[k] = { ...base.themes[k], color: { ...base.themes[k].color, ...(P?.[k]?.color ?? {}) }, blobs: P?.[k]?.blobs ?? base.themes[k].blobs };
