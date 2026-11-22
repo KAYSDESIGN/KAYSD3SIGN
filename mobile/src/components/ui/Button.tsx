@@ -1,7 +1,7 @@
 import { ActivityIndicator, Pressable, Text, View, type PressableProps } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
 import { color, cx } from "@/theme";
-import { GradientFill } from "./Glass";
+import { glassLight, GradientFill } from "./Glass";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
@@ -48,7 +48,7 @@ export function Button({
         "flex-row items-center justify-center rounded-pill",
         box[variant], height[size], block && "self-stretch", off && "opacity-50", className
       )}
-      style={variant === "primary" ? { boxShadow: "0 8px 22px rgba(207,36,112,0.32)" } : undefined}
+      style={variant === "primary" ? glassLight({ lift: false, glow: true }) : variant === "secondary" ? glassLight({ lift: false }) : undefined}
       {...p}
     >
       {variant === "primary" ? <GradientFill /> : null}

@@ -19,7 +19,7 @@ export function TextField({ label, hint, error, className, editable = true, ...p
         onFocus={(e) => { setFocused(true); p.onFocus?.(e); }}
         onBlur={(e) => { setFocused(false); p.onBlur?.(e); }}
         className={cx(
-          "h-[48px] rounded-md border bg-bg px-4 font-sans text-base text-text",
+          "h-[48px] rounded-md border bg-surface-raised px-4 font-sans text-base text-text",
           error ? "border-danger" : focused ? "border-focus border-2" : "border-border-input",
           !editable && "opacity-50"
         )}

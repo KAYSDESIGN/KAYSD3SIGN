@@ -1,6 +1,16 @@
 import { ScrollViewStyleReset, useServerDocumentContext } from "expo-router/html";
 import type { PropsWithChildren } from "react";
 
+const GLASS_CSS = [
+  "html,body{background:#F8F1F8;}",
+  "@media (prefers-color-scheme: dark){html,body{background:#120818;}}",
+  // verre liquide : tout ce qui est translucide floute et sature ce qu'il y a derrière
+  ".bg-surface,.bg-surface-raised,.bg-accent-soft{-webkit-backdrop-filter:blur(12px) saturate(185%);backdrop-filter:blur(12px) saturate(185%);}",
+  // bords qui accrochent la lumière (haut-gauche fort, bas-droite doux, halo intérieur)
+  ".border-glass-edge{box-shadow:inset 1.5px 1.5px 0 rgba(255,255,255,.85),inset -1px -1px 0 rgba(255,255,255,.4),inset 0 0 18px rgba(255,255,255,.18);}",
+  "@media (prefers-color-scheme: dark){.border-glass-edge{box-shadow:inset 1.2px 1.2px 0 rgba(255,255,255,.3),inset -1px -1px 0 rgba(255,255,255,.12),inset 0 0 16px rgba(255,255,255,.06);}}",
+].join("");
+
 // Page HTML de la version web : installable sur l'écran d'accueil, jamais indexée.
 // SDK 58 : headNodes et bodyNodes portent les styles et les scripts de l'app, ne pas les retirer.
 export default function Root({ children }: PropsWithChildren) {
@@ -22,7 +32,7 @@ export default function Root({ children }: PropsWithChildren) {
         <link rel="manifest" href="/manifest.json" />
         <title>HotCouple</title>
         <ScrollViewStyleReset />
-        <style dangerouslySetInnerHTML={{ __html: "html,body{background:#F8F1F8;}@media (prefers-color-scheme: dark){html,body{background:#120818;}}" }} />
+        <style dangerouslySetInnerHTML={{ __html: GLASS_CSS }} />
         {headNodes}
       </head>
       <body {...bodyAttributes}>

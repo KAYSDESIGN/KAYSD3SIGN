@@ -45,7 +45,7 @@ function Box({ label, placeholder, value, onChange, max, wide }: { label: string
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
       style={{ minWidth: 0, width: 0 }}
-      className={cx("h-[52px] rounded-md bg-bg text-center font-sans-bold text-lg text-text", wide ? "flex-[1.6]" : "flex-1", focus ? "border-2 border-focus" : "border border-border-input")}
+      className={cx("h-[52px] rounded-md bg-surface-raised text-center font-sans-bold text-lg text-text", wide ? "flex-[1.6]" : "flex-1", focus ? "border-2 border-focus" : "border border-border-input")}
     />
   );
 }

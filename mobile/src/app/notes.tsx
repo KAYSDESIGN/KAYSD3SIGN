@@ -70,7 +70,7 @@ function Notes() {
               maxLength={2000}
               onSubmitEditing={submit}
               blurOnSubmit={false}
-              className="max-h-[120px] min-h-[44px] flex-1 rounded-lg border border-border-input bg-bg px-4 py-3 font-sans text-base text-text"
+              className="max-h-[120px] min-h-[44px] flex-1 rounded-lg border border-border-input bg-surface-raised px-4 py-3 font-sans text-base text-text"
             />
             <IconButton icon={Send} label="Envoyer" tone="accent" onPress={submit} />
           </View>

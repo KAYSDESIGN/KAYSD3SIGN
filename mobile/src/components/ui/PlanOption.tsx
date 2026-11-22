@@ -1,5 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { cx } from "@/theme";
+import { GradientFill } from "./Glass";
 
 /** Offre du paywall (radio). Le prix vient du store (RevenueCat), jamais codé en dur. */
 export function PlanOption({
@@ -23,7 +24,7 @@ export function PlanOption({
         <View className="flex-row items-center gap-2">
           <Text className="font-sans-bold text-base text-text">{title}</Text>
           {badge ? (
-            <View className="rounded-pill bg-gold px-2 py-[2px]"><Text className="font-sans-bold text-xs text-on-accent">{badge}</Text></View>
+            <View className="overflow-hidden rounded-pill px-2 py-[2px]"><GradientFill sheen={false} /><View><Text className="font-sans-bold text-xs text-on-accent">{badge}</Text></View></View>
           ) : null}
         </View>
         <Text className="font-sans text-sm text-text-muted">{detail}</Text>

@@ -1,11 +1,11 @@
 :root {
   color-scheme: light dark;
   --c-bg: #F8F1F8;
-  --c-surface: rgba(255,255,255,0.52);
-  --c-surface-raised: rgba(255,255,255,0.78);
+  --c-surface: rgba(255,255,255,0.18);
+  --c-surface-raised: rgba(255,255,255,0.32);
   --c-border: rgba(60,20,70,0.10);
-  --c-glass-edge: rgba(255,255,255,0.90);
-  --c-glass-shine: rgba(255,255,255,0.75);
+  --c-glass-edge: rgba(255,255,255,0.60);
+  --c-glass-shine: rgba(255,255,255,0.38);
   --c-border-input: #9A84A2;
   --c-text: #28122E;
   --c-text-muted: #66506E;
@@ -13,18 +13,18 @@
   --c-accent: #C8185E;
   --c-accent-pressed: #A91450;
   --c-on-accent: #FFFFFF;
-  --c-accent-soft: rgba(255,79,139,0.14);
+  --c-accent-soft: rgba(255,79,139,0.16);
   --c-on-accent-soft: #9E1450;
   --c-gold: #7F4A00;
-  --c-danger: #B0202F;
-  --c-success: #137A52;
+  --c-danger: #9E1B2A;
+  --c-success: #0E6B47;
   --c-warning: #8A6200;
   --c-spice-soft: #FFC2D6;
   --c-spice-spicy: #FFB08A;
   --c-spice-hot: #FF8A95;
   --c-on-spice: #3A0A1E;
   --c-focus: #7C3AED;
-  --c-tab-bar: rgba(255,255,255,0.62);
+  --c-tab-bar: rgba(255,255,255,0.16);
   --grad-0: #D63A45;
   --grad-1: #CF2470;
   --grad-2: #8338EC;
@@ -39,29 +39,29 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --c-bg: #120818;
-    --c-surface: rgba(30,10,38,0.42);
-    --c-surface-raised: rgba(48,18,60,0.58);
+    --c-surface: rgba(255,255,255,0.06);
+    --c-surface-raised: rgba(255,255,255,0.11);
     --c-border: rgba(255,255,255,0.12);
-    --c-glass-edge: rgba(255,255,255,0.26);
-    --c-glass-shine: rgba(255,255,255,0.18);
+    --c-glass-edge: rgba(255,255,255,0.24);
+    --c-glass-shine: rgba(255,255,255,0.14);
     --c-border-input: #9C82A3;
     --c-text: #FFF4FA;
-    --c-text-muted: #DEC9E3;
+    --c-text-muted: #E8D8EC;
     --c-text-subtle: #B9A2C0;
     --c-accent: #FF7AA6;
     --c-accent-pressed: #FF5C92;
     --c-on-accent: #FFFFFF;
-    --c-accent-soft: rgba(255,79,139,0.20);
-    --c-on-accent-soft: #FFC2D6;
-    --c-gold: #FFD7A8;
-    --c-danger: #FFB0B0;
-    --c-success: #9AF2CC;
+    --c-accent-soft: rgba(255,79,139,0.18);
+    --c-on-accent-soft: #FFD0E0;
+    --c-gold: #FFE0B8;
+    --c-danger: #FFC2C2;
+    --c-success: #B0F5D6;
     --c-warning: #F5CB5C;
     --c-spice-soft: #FFC2D6;
     --c-spice-spicy: #FFB08A;
     --c-spice-hot: #FF8A95;
     --c-on-spice: #3A0A1E;
     --c-focus: #E9D5FF;
-    --c-tab-bar: rgba(30,10,38,0.55);
+    --c-tab-bar: rgba(255,255,255,0.06);
   }
 }
