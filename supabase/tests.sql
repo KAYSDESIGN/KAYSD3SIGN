@@ -86,3 +86,11 @@ select chk('1 seul match (d01)', (select count(*) from mutual_desires()) = 1);
 select as_user('00000000-0000-0000-0000-00000000000c');
 select chk('intrus ne voit rien', (select count(*) from couples) + (select count(*) from responses) + (select count(*) from games) + (select count(*) from messages) = 0);
 select chk('intrus : get_today vide', json_array_length(get_today('questions')) = 0);
+-- rejoindre avec un code annule sa propre invitation en attente
+reset role;
+insert into auth.users(id) values ('00000000-0000-0000-0000-0000000000d1'),('00000000-0000-0000-0000-0000000000d2');
+set role authenticated;
+select as_user('00000000-0000-0000-0000-0000000000d1'); create temp table c1 as select create_couple() c;
+select as_user('00000000-0000-0000-0000-0000000000d2'); create temp table c2 as select create_couple() c;
+select join_couple((select c from c1)) is not null;
+select chk('D2 a rejoint D1, son invitation a disparu', (select count(*) from couple_members where couple_id = my_couple_id()) = 2);

@@ -1,4 +1,6 @@
 import type React from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { MessageCircle as MessageCircleIcon } from "lucide-react-native";
 import { useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,7 +15,7 @@ import { color, cx } from "@/theme";
 const time = (iso: string) => new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 
 // S14 · Petits mots
-export default function Notes() {
+function Notes() {
   const { profile, partner } = useGate();
   const msgs = useQuery(api.getMessages);
   const send = useMutation(api.sendNote);
@@ -77,3 +79,5 @@ export default function Notes() {
     </SafeAreaView>
   );
 }
+
+export default withPartner(Notes, { id: "S14", kicker: "Petits mots", title: "Des messages rien que pour vous deux", body: "Un merci, un souvenir, une promesse pour ce soir. Les « tu me manques » s'y retrouvent aussi.", example: "Hâte de te retrouver ce soir.", icon: MessageCircleIcon });

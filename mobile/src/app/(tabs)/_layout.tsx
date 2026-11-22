@@ -7,7 +7,7 @@ import { color, tokens } from "@/theme";
 export default function TabsLayout() {
   const { gate } = useGate();
   if (gate === "loading") return <View className="flex-1 bg-bg" />;
-  if (gate !== "ready") return <Redirect href={GATE_HREF[gate]} />;
+  if (gate === "signed_out" || gate === "needs_profile") return <Redirect href={GATE_HREF[gate]} />;
 
   const icon = (I: typeof House) => ({ color: c, focused }: { color: unknown; focused: boolean }) =>
     <I size={22} color={String(c)} strokeWidth={focused ? 2.4 : 2} />;

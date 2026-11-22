@@ -1,6 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import { CalendarHeart, ChevronRight, Flame, MessageCircle, Settings, Sparkles } from "lucide-react-native";
+import { InviteButtons } from "@/components/app/PairGate";
 import { Screen } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
 import { Caption, Card, CoupleAvatars, Heading, IconButton, Muted, SpiceBadge, StreakBadge } from "@/components/ui";
@@ -9,7 +10,7 @@ import { color } from "@/theme";
 
 // S17 · Profil du couple
 export default function Us() {
-  const { profile, partner } = useGate();
+  const { profile, partner, paired } = useGate();
   const couple = useQuery(api.getCouple);
   const premium = useQuery(api.isPremium);
   const spice = useQuery(api.getSpiceStatus);
@@ -23,13 +24,15 @@ export default function Us() {
       </View>
       <View className="items-center gap-3">
         <CoupleAvatars me={{ name: me || "?" }} partner={{ name: them || "?" }} size={88} />
-        <Heading className="text-center">{me} & {them}</Heading>
+        {!paired ? <Muted className="text-center">Ton/ta partenaire n'a pas encore rejoint ton espace.</Muted> : null}
+        <Heading className="text-center">{paired ? `${me} & ${them}` : `${me} & …`}</Heading>
         <View className="flex-row items-center gap-2">
-          <StreakBadge days={couple.data?.streak_count ?? 0} />
+          {paired ? <StreakBadge days={couple.data?.streak_count ?? 0} /> : null}
           {spice.data?.effective ? <SpiceBadge level={spice.data.effective} /> : null}
         </View>
       </View>
 
+      {!paired ? <InviteButtons /> : null}
       <Card className="gap-0 py-1">
         <Row icon={Sparkles} label={premium.data ? "Premium actif pour vous deux" : "Passer à Premium"} onPress={() => router.push("/premium")} tint={color.gold} />
         <Row icon={Flame} label="Niveau d'audace et 18+" onPress={() => router.push("/age")} />

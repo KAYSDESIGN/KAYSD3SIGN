@@ -1,4 +1,6 @@
 import type React from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { Gamepad2 as Gamepad2Icon } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Flame, Heart, SearchX } from "lucide-react-native";
@@ -11,7 +13,7 @@ import { color, cx } from "@/theme";
 import { GAME_NAMES } from "@/components/app/games";
 
 // S12 · Partie (morpion et quatre d'affilée). Les coups sont validés côté données (Edge Function game-move en vrai).
-export default function GameScreen() {
+function GameScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { profile, partner } = useGate();
   const game = useQuery(() => api.getGame(id), [id]);
@@ -100,3 +102,5 @@ function FourInRow({ g, me, onPlay, enabled }: BoardProps) {
     </View>
   );
 }
+
+export default withPartner(GameScreen, { id: "S12", kicker: "Jouer", title: "Une partie se joue à deux", body: "Chacun joue à son tour, même à distance. Le plateau se met à jour tout seul.", icon: Gamepad2Icon });

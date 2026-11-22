@@ -1,4 +1,6 @@
 import { Pressable, Text, View } from "react-native";
+import { withPartner } from "@/components/app/PairGate";
+import { Smile as SmileIcon } from "lucide-react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { SearchX } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
@@ -15,7 +17,7 @@ function verdict(score: number) {
 }
 
 // S10 · Partie de quiz : une question à la fois, puis le résultat
-export default function QuizPlay() {
+function QuizPlay() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { partner } = useGate();
   const data = useQuery(() => api.getQuizSession(id), [id]);
@@ -101,3 +103,5 @@ function Answer({ who, text, accent }: { who: string; text: string; accent?: boo
     </View>
   );
 }
+
+export default withPartner(QuizPlay, { id: "S10", kicker: "Quiz à deux", title: "Un quiz se joue à deux", body: "Les réponses de l'autre restent cachées jusqu'à ce que vous ayez fini tous les deux.", icon: SmileIcon });

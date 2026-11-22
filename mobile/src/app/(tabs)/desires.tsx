@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { Flame as FlameIcon } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Flame, Lock, Sparkles } from "lucide-react-native";
@@ -10,7 +12,7 @@ import { api, useQuery } from "@/data";
 import { color, cx } from "@/theme";
 
 // S21 · Envies secrètes : chacun répond en secret, seuls les oui communs apparaissent
-export default function Desires() {
+function Desires() {
   const { partner } = useGate();
   const status = useQuery(api.getSpiceStatus);
   const rows = useQuery(api.getDesires);
@@ -106,3 +108,5 @@ export default function Desires() {
 
 /** Montre juste le début, pour donner envie sans tout dévoiler. */
 function blur(t: string) { const w = t.split(" "); return w.slice(0, 2).join(" ") + " …"; }
+
+export default withPartner(Desires, { id: "S21", kicker: "Envies secrètes", title: "Ce que vous n'osez pas dire", body: "Chacun répond oui, peut-être ou non, en secret. Seuls vos oui communs apparaissent, jamais un non ni un peut-être.", example: "Un massage aux huiles, sans se presser", icon: FlameIcon }, { tabs: true });

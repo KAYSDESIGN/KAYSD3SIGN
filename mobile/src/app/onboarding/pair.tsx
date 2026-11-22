@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Share, Text, View } from "react-native";
-import { Redirect } from "expo-router";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
 import { Copy, Share2 } from "lucide-react-native";
 import * as Clipboard from "expo-clipboard";
 import { DevPanel } from "@/components/app/DevPanel";
@@ -10,7 +10,9 @@ import { api, useMutation, useQuery } from "@/data";
 
 // S03 · Appairage : inviter (créer un code) ou rejoindre (saisir le code reçu)
 export default function Pair() {
-  const [mode, setMode] = useState<"choose" | "invite" | "join">("choose");
+  const params = useLocalSearchParams<{ mode?: string }>();
+  const [mode, setMode] = useState<"choose" | "invite" | "join">(params.mode === "join" ? "join" : "choose");
+  const later = () => (router.canGoBack() ? router.back() : router.replace("/home"));
   const couple = useQuery(api.getCouple);
   const partner = useQuery(api.getPartner);
   const create = useMutation(api.createCouple);
@@ -23,7 +25,7 @@ export default function Pair() {
   if (partner.data) return <Redirect href="/" />;
 
   const pendingCode = couple.data?.invite_code ?? null;
-  const showInvite = mode === "invite" || !!pendingCode;
+  const showInvite = mode === "invite" || (!!pendingCode && mode !== "join");
 
   if (couple.loading && !couple.data) {
     return <Screen><Skeleton className="h-[34px] w-2/3" /><Skeleton className="h-[160px]" /></Screen>;
@@ -33,7 +35,7 @@ export default function Pair() {
     const expires = couple.data?.invite_expires_at ? new Date(couple.data.invite_expires_at) : null;
     return (
       <Screen>
-        <Caption>Étape 2 sur 2</Caption>
+        <Caption>Inviter</Caption>
         <Heading>Invite ton/ta partenaire</Heading>
         <Body className="text-text-muted">Envoie-lui ce code. Dès qu'il ou elle l'aura saisi dans HotCouple, votre espace s'ouvre.</Body>
         <Card raised className="items-center gap-3 py-6">
@@ -56,6 +58,8 @@ export default function Pair() {
         )}
         {create.error ? <Toast tone="error">{create.error}</Toast> : null}
         {pendingCode ? <Muted className="text-center">En attente de ton/ta partenaire…</Muted> : null}
+        {pendingCode ? <Button variant="ghost" onPress={() => setMode("join")}>J'ai plutôt reçu un code</Button> : null}
+        {pendingCode ? <Button variant="ghost" onPress={later}>Visiter l'app en attendant</Button> : null}
         {pendingCode ? <DevPanel actions={[{ label: "Sam rejoint avec le code", onPress: () => api.dev.partnerJoins() }]} /> : null}
         {!pendingCode ? <Button variant="ghost" onPress={() => setMode("choose")}>Retour</Button> : null}
       </Screen>
@@ -66,7 +70,7 @@ export default function Pair() {
     const submit = async () => { if (code.length === 6) await joinM.mutate(code); };
     return (
       <Screen>
-        <Caption>Étape 2 sur 2</Caption>
+        <Caption>Inviter</Caption>
         <Heading>Entre le code reçu</Heading>
         <Body className="text-text-muted">6 caractères, sans 0 ni O, sans 1 ni I.</Body>
         <CodeInput value={code} onChange={(v) => { setCode(v); joinM.setError(null); }} error={joinM.error ?? undefined} />
@@ -79,11 +83,12 @@ export default function Pair() {
 
   return (
     <Screen>
-      <Caption>Étape 2 sur 2</Caption>
+      <Caption>Inviter</Caption>
       <Heading>Retrouvez-vous ici</Heading>
       <Body className="text-text-muted">L'un·e de vous crée un code, l'autre le saisit. C'est tout.</Body>
       <Button size="lg" onPress={() => setMode("invite")}>J'invite mon/ma partenaire</Button>
       <Button size="lg" variant="secondary" onPress={() => setMode("join")}>J'ai reçu un code</Button>
+      <Button variant="ghost" onPress={later}>Plus tard, je visite d'abord</Button>
     </Screen>
   );
 }

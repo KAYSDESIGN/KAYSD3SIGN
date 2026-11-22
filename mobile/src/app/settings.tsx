@@ -9,7 +9,7 @@ import { color } from "@/theme";
 
 // S18 · Réglages (et S26 · mode discret)
 export default function SettingsScreen() {
-  const { profile, partner } = useGate();
+  const { profile, partner, paired } = useGate();
   const [name, setName] = useState<string | null>(null);
   const save = useMutation(api.updateProfile);
   const unpair = useMutation(api.unpair);
@@ -59,7 +59,7 @@ export default function SettingsScreen() {
         <Caption>Zone sensible</Caption>
         <Button variant="secondary" onPress={async () => { await api.signOut(); router.replace("/welcome"); }}>Se déconnecter</Button>
 
-        {confirm === "unpair" ? (
+        {!paired ? null : confirm === "unpair" ? (
           <Card className="gap-3 border-danger">
             <Title>{`Se séparer de ${them} ?`}</Title>
             <Body className="text-text-muted">Toutes vos réponses, envies, listes et petits mots seront effacés, pour vous deux. Impossible de revenir en arrière.</Body>

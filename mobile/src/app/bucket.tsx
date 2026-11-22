@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { ListChecks as ListChecksIcon } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 import { ListChecks, Trash2 } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
@@ -14,7 +16,7 @@ const CATS: { key: BucketItem["category"]; label: string }[] = [
 const label = (k: BucketItem["category"]) => CATS.find((c) => c.key === k)?.label ?? "";
 
 // S13 · Bucket list partagée
-export default function Bucket() {
+function Bucket() {
   const { profile, partner } = useGate();
   const items = useQuery(api.getBucket);
   const add = useMutation(api.addBucketItem);
@@ -64,3 +66,4 @@ export default function Bucket() {
   );
 }
 
+export default withPartner(Bucket, { id: "S13", kicker: "Nos envies d'ailleurs", title: "Votre liste de choses à vivre ensemble", body: "Voyages, sorties, premières fois : vous ajoutez des idées tous les deux et vous les cochez une fois vécues.", example: "Week-end surprise à la mer", icon: ListChecksIcon });

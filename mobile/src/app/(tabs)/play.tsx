@@ -1,4 +1,6 @@
 import { Pressable, Text, View } from "react-native";
+import { withPartner } from "@/components/app/PairGate";
+import { Gamepad2 as Gamepad2Icon } from "lucide-react-native";
 import { router } from "expo-router";
 import { ChevronRight, Dices, Grid3x3, Smile, Columns3 } from "lucide-react-native";
 import { Screen, Skeleton } from "@/components/app/Screen";
@@ -11,7 +13,7 @@ import { GAME_NAMES } from "@/components/app/games";
 
 
 // S11 · Jouer
-export default function Play() {
+function Play() {
   const { profile, partner } = useGate();
   const games = useQuery(api.getGames);
   const create = useMutation(api.createGame);
@@ -74,3 +76,5 @@ function Tile({ icon: Icon, title, sub, onPress }: { icon: typeof Dices; title: 
     </Pressable>
   );
 }
+
+export default withPartner(Play, { id: "S11", kicker: "Jouer", title: "À deux, même à distance", body: "Morpion du cœur, Quatre d'affilée, quiz de complicité et dés coquins. Chacun joue à son tour, le plateau se met à jour tout seul.", example: "« À toi de jouer » : ton cœur contre sa flamme.", icon: Gamepad2Icon }, { tabs: true });

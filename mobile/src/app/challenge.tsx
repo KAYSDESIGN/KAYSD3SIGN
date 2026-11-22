@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { Target as TargetIcon } from "lucide-react-native";
 import { View } from "react-native";
 import { Camera } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
@@ -9,7 +11,7 @@ import { api, useMutation, useQuery, type DailyView } from "@/data";
 
 
 // S06 · Défi du jour, et S23 · défi coquin (passable sans pénalité)
-export default function Challenges() {
+function Challenges() {
   const { partner } = useGate();
   const list = useQuery(api.getChallenges);
   const them = partner?.display_name ?? "ton/ta partenaire";
@@ -69,3 +71,4 @@ function ChallengeBlock({ v, them }: { v: DailyView; them: string }) {
   );
 }
 
+export default withPartner(Challenges, { id: "S06", kicker: "Défis du jour", title: "Un défi par jour, à relever à deux", body: "Chaque jour, un petit défi : un mot, une idée, bientôt une photo. Tu découvres la réponse de l'autre après avoir envoyé la tienne.", example: "Écris trois choses que tu as adorées chez l'autre cette semaine.", icon: TargetIcon });

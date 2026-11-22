@@ -145,10 +145,16 @@ export async function createCouple(): Promise<string> {
 }
 
 function join(userId: string, code: string) {
-  if (coupleOf(userId)) throw new DataError("already_paired");
   const c = Object.values(s.couples).find((x) => x.invite_code === code.toUpperCase()
     && x.invite_expires_at && new Date(x.invite_expires_at) > new Date());
   if (!c) throw new DataError("invalid_or_expired_code");
+  const mine = coupleOf(userId);
+  if (mine) { // même règle que join_couple : on annule sa propre invitation en attente
+    if (mine === c.id) throw new DataError("invalid_or_expired_code");
+    if (membersOf(mine).length > 1) throw new DataError("already_paired");
+    s.members = s.members.filter((m) => m.couple_id !== mine);
+    delete s.couples[mine];
+  }
   if (membersOf(c.id).length >= 2) throw new DataError("couple_full");
   s.members.push({ couple_id: c.id, user_id: userId });
   c.invite_code = null; c.invite_expires_at = null;

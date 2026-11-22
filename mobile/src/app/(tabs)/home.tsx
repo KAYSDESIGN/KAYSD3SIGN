@@ -1,11 +1,12 @@
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
-import { CalendarClock, Camera, Heart, ListChecks, MessageCircle, Smile, Sparkles, Target } from "lucide-react-native";
+import { CalendarClock, Camera, Heart, Lock, ListChecks, MessageCircle, Smile, Sparkles, Target } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
+import { InviteButtons } from "@/components/app/PairGate";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
 import {
-  Caption, CoupleAvatars, DailyCard, Heading, Muted, MOODS, NudgeButton, StreakBadge, Toast, type DailyState,
+  Body, Button, Caption, Card, CoupleAvatars, DailyCard, Heading, Muted, MOODS, NudgeButton, StreakBadge, Title, Toast, type DailyState,
 } from "@/components/ui";
 import { api, useQuery, type DailyView } from "@/data";
 import { color } from "@/theme";
@@ -24,6 +25,70 @@ function greeting() {
 
 // S04 · Accueil
 export default function Home() {
+  const { profile, partner, paired, gate } = useGate();
+  if (gate !== "loading" && !paired) return <SoloHome name={profile?.display_name ?? ""} />;
+  return <PairedHome />;
+}
+
+/** Accueil avant l'arrivée du/de la partenaire : on visite, on invite quand on veut. */
+function SoloHome({ name }: { name: string }) {
+  const couple = useQuery(api.getCouple);
+  const code = couple.data?.invite_code ?? null;
+  return (
+    <Screen edges={["top"]}>
+      <View className="gap-1">
+        <Caption>{greeting()}, {name}</Caption>
+        <Heading>Ton espace à deux t'attend</Heading>
+      </View>
+
+      {code ? (
+        <Card raised className="items-center gap-3 py-5">
+          <Caption>Ton code d'invitation</Caption>
+          <Text accessibilityLabel={`Ton code : ${code.split("").join(" ")}`} className="font-sans-bold text-display tracking-[8px] text-text">{code}</Text>
+          <Muted className="text-center">En attente de ton/ta partenaire. Dès qu'il ou elle l'a saisi, tout s'ouvre.</Muted>
+          <Button variant="secondary" onPress={() => router.push("/onboarding/pair")}>Partager le code</Button>
+          <Button variant="ghost" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })}>J'ai plutôt reçu un code</Button>
+        </Card>
+      ) : (
+        <Card raised className="gap-3">
+          <Title>Invite ton/ta partenaire</Title>
+          <Body className="text-text-muted">Tu peux tout visiter avant. Les questions, les jeux et les envies s'ouvrent dès que vous êtes deux.</Body>
+          <InviteButtons />
+        </Card>
+      )}
+
+      <View className="gap-3 rounded-lg border border-dashed border-border p-5">
+        <View className="flex-row items-center justify-between">
+          <Caption>Aperçu · question du jour</Caption>
+          <Lock size={16} color={color["text-muted"]} />
+        </View>
+        <Text className="font-display text-xl text-text">Quel moment de cette semaine aimerais-tu revivre avec moi ?</Text>
+        <Muted>Chaque jour une nouvelle question. Vous répondez chacun de votre côté, puis vous découvrez la réponse de l'autre.</Muted>
+      </View>
+
+      <Pressable accessibilityRole="button" onPress={() => router.push("/age")} className="rounded-md border border-border bg-surface p-4 active:bg-surface-raised">
+        <Text className="font-sans-semibold text-sm text-text">🌶️ Choisir mon niveau d'audace</Text>
+        <Muted>Confirme ton âge dès maintenant. Le contenu coquin s'ouvrira quand vous l'aurez fait tous les deux.</Muted>
+      </Pressable>
+
+      <View className="gap-3">
+        <Caption>Ce qui vous attend</Caption>
+        <View className="flex-row flex-wrap gap-2">
+          <Shortcut icon={Target} label="Défi du jour" href="/challenge" />
+          <Shortcut icon={Camera} label="Moments" href="/moments" />
+          <Shortcut icon={Smile} label="Quiz" href="/quiz" />
+          <Shortcut icon={CalendarClock} label="Soirée à deux" href="/plan" />
+          <Shortcut icon={ListChecks} label="Nos envies d'ailleurs" href="/bucket" />
+          <Shortcut icon={MessageCircle} label="Petits mots" href="/notes" />
+        </View>
+      </View>
+
+      {api.dev.enabled && code ? <DevPanel actions={[{ label: "Sam rejoint avec le code", onPress: () => api.dev.partnerJoins() }]} /> : null}
+    </Screen>
+  );
+}
+
+function PairedHome() {
   const { profile, partner } = useGate();
   const couple = useQuery(api.getCouple);
   const today = useQuery(api.getToday);

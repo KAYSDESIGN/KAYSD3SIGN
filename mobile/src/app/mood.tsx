@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { Smile as SmileIcon } from "lucide-react-native";
 import { router } from "expo-router";
 import { Screen } from "@/components/app/Screen";
 import { Body, Button, Caption, Heading, MoodPicker, TextField, type MoodKey } from "@/components/ui";
 import { api, useMutation, useQuery } from "@/data";
 
 // S05 · Humeur
-export default function MoodScreen() {
+function MoodScreen() {
   const current = useQuery(api.getMoods);
   const [mood, setMood] = useState<MoodKey | undefined>();
   const [note, setNote] = useState("");
@@ -27,3 +29,5 @@ export default function MoodScreen() {
     </Screen>
   );
 }
+
+export default withPartner(MoodScreen, { id: "S05", kicker: "Humeur", title: "Dis comment tu te sens", body: "Ton humeur s'affiche sur l'accueil de ton/ta partenaire, et la sienne sur le tien. Un coup d'œil suffit.", example: "🔥 D'humeur coquine", icon: SmileIcon });

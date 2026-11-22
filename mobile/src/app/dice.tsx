@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { Dices as DicesIcon } from "lucide-react-native";
 import { Text, View } from "react-native";
 import { router } from "expo-router";
 import * as Haptics from "expo-haptics";
@@ -12,7 +14,7 @@ import { color } from "@/theme";
 const pick = <T,>(a: readonly T[]) => a[Math.floor(Math.random() * a.length)];
 
 // S24 · Dés coquins : une action, une zone, une durée
-export default function DiceScreen() {
+function DiceScreen() {
   const status = useQuery(api.getSpiceStatus);
   const [roll, setRoll] = useState<{ action: string; zone: string; secs: number } | null>(null);
   const [left, setLeft] = useState<number | null>(null);
@@ -76,3 +78,5 @@ export default function DiceScreen() {
     </Screen>
   );
 }
+
+export default withPartner(DiceScreen, { id: "S24", kicker: "Dés coquins", title: "Lancez, puis laissez-vous faire", body: "Une action, une zone, un chrono, au niveau d'audace que vous avez choisi tous les deux.", example: "Embrasse · le cou · 60 secondes", icon: DicesIcon });

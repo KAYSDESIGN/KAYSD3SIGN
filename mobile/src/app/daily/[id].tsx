@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { MessageCircleHeart as MessageCircleHeartIcon } from "lucide-react-native";
 import { View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Screen, Skeleton } from "@/components/app/Screen";
@@ -10,7 +12,7 @@ import { SearchX } from "lucide-react-native";
 const MAX = 2000;
 
 // S08 · Question du jour (et S22, question coquine) : répondre, attendre, découvrir
-export default function Daily() {
+function Daily() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { partner } = useGate();
   const daily = useQuery(() => api.getDaily(id), [id]);
@@ -79,3 +81,5 @@ export default function Daily() {
     </Screen>
   );
 }
+
+export default withPartner(Daily, { id: "S08", kicker: "Question du jour", title: "Une question par jour, pour vous deux", body: "Tu réponds, puis tu découvres la réponse de l'autre. Pas avant.", icon: MessageCircleHeartIcon });

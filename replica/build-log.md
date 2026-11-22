@@ -35,3 +35,5 @@ Vérification : export web + parcours complet dans Chromium (Playwright) à 390 
 Notes :
 - Le mode démo (boutons « simuler le/la partenaire ») permet de tester la boucle à deux sur un seul téléphone. Il disparaîtra avec la vraie couche de données.
 - Le jour du couple est calculé dans le fuseau du couple, pas du téléphone, comme prévu dans l'architecture.
+
+| Visite avant d'inviter | 2026-11-22 | fait | - | les écrans « à deux » montrent ce qu'ils font + un exemple + « Inviter » ; si les deux ont généré un code, rejoindre annule sa propre invitation (migration 0005) ; le gabarit HTML web doit garder headNodes/bodyNodes en SDK 58 |

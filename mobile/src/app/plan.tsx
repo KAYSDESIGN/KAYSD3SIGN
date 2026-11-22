@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { CalendarClock as CalendarClockIcon } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 import { CalendarClock } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
@@ -22,7 +24,7 @@ function when(iso: string) {
 }
 
 // S27 · Proposer une soirée
-export default function Plan() {
+function Plan() {
   const { profile, partner } = useGate();
   const plans = useQuery(api.getDatePlans);
   const propose = useMutation(api.proposeDate);
@@ -101,3 +103,5 @@ function Chips({ label, options, value, onChange }: { label: string; options: { 
     </View>
   );
 }
+
+export default withPartner(Plan, { id: "S27", kicker: "Soirée à deux", title: "Réservez-vous une soirée", body: "L'un·e propose un jour, une heure et un thème, l'autre accepte. Un rappel vous attend le jour J.", example: "Samedi 20 h · dîner aux chandelles, tenue chic", icon: CalendarClockIcon });

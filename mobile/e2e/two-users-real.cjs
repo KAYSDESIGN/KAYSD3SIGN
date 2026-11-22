@@ -28,17 +28,33 @@ const log = (...a) => console.log(...a);
       await p.see("Comment veux-tu qu'on t'appelle ?");
       await p.getByLabel('Prénom ou surnom').fill(p.name);
       await p.click2('Continuer');
-      await p.see('Retrouvez-vous ici');
+      await p.see("Ton espace à deux t'attend");
+    });
+    await step('Kay visite l\'app en solo (Envies, Quiz)', async () => {
+      await A.getByRole('tab', { name: /Envies/ }).locator('visible=true').first().click();
+      await A.see("Cette partie s'ouvre dès que vous êtes deux.");
+      await A.getByRole('tab', { name: /Nous deux/ }).locator('visible=true').first().click();
+      await A.click2('Quiz');
+      await A.see("Cette partie s'ouvre dès que vous êtes deux.");
+      await A.goBack();
+      await A.see("Ton espace à deux t'attend");
     });
     let code;
+    await step('Sam génère aussi un code (cas des deux invitations)', async () => {
+      await B.click2('Inviter mon/ma partenaire');
+      await B.click2("J'invite mon/ma partenaire");
+      await B.click2('Générer mon code');
+      await B.see('En attente de ton/ta partenaire…');
+    });
     await step('Kay génère un code', async () => {
+      await A.click2('Inviter mon/ma partenaire');
       await A.click2("J'invite mon/ma partenaire");
       await A.click2('Générer mon code');
       const lbl = await A.getByLabel(/^Ton code/).locator('visible=true').first().getAttribute('aria-label');
       code = lbl.replace('Ton code : ', '').replace(/ /g, '');
     });
     await step(`Sam saisit le code ${code}`, async () => {
-      await B.click2("J'ai reçu un code");
+      await B.click2("J'ai plutôt reçu un code");
       await B.getByLabel('Code de ton/ta partenaire, 6 caractères').fill(code);
       await B.click2('Nous relier');
       await B.see('Toi et Kay');

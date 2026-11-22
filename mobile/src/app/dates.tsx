@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { withPartner } from "@/components/app/PairGate";
+import { CalendarHeart as CalendarHeartIcon } from "lucide-react-native";
 import { Text, View } from "react-native";
 import { CalendarHeart, Trash2 } from "lucide-react-native";
 import { DateFields, toIso, type DateParts } from "@/components/app/DateFields";
@@ -23,7 +25,7 @@ function countdown(days: number) {
 }
 
 // S15 · Nos dates : anniversaires et comptes à rebours
-export default function Dates() {
+function Dates() {
   const list = useQuery(api.getSpecialDates);
   const add = useMutation(api.addSpecialDate);
   const [title, setTitle] = useState("");
@@ -71,3 +73,5 @@ export default function Dates() {
     </Screen>
   );
 }
+
+export default withPartner(Dates, { id: "S15", kicker: "Nos dates", title: "Les dates qui comptent pour vous", body: "Votre rencontre, votre premier baiser, vos retrouvailles, avec un compte à rebours partagé.", example: "Notre rencontre · dans 11 jours", icon: CalendarHeartIcon });

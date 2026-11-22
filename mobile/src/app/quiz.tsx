@@ -1,4 +1,6 @@
 import { Pressable, Text, View } from "react-native";
+import { withPartner } from "@/components/app/PairGate";
+import { Smile as SmileIcon } from "lucide-react-native";
 import { router } from "expo-router";
 import { ChevronRight, Lock } from "lucide-react-native";
 import { Screen, Skeleton } from "@/components/app/Screen";
@@ -7,7 +9,7 @@ import { api, useMutation, useQuery } from "@/data";
 import { color } from "@/theme";
 
 // S10 · Quiz à deux (liste)
-export default function Quizzes() {
+function Quizzes() {
   const list = useQuery(api.getQuizzes);
   const start = useMutation(api.startQuiz);
 
@@ -51,3 +53,5 @@ export default function Quizzes() {
     </Screen>
   );
 }
+
+export default withPartner(Quizzes, { id: "S10", kicker: "Quiz à deux", title: "Êtes-vous sur la même longueur d'onde ?", body: "Vous répondez chacun de votre côté. À la fin, votre score de complicité et vos réponses côte à côte.", example: "Le dimanche idéal commence par… une grasse matinée ou un brunch dehors ?", icon: SmileIcon });
