@@ -1,19 +1,20 @@
 import { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { CircleCheck, Clock } from "lucide-react-native";
+import { DateFields, toIso, type DateParts } from "@/components/app/DateFields";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
 import { Body, Button, Caption, Card, Checkbox, Heading, Muted, SpiceBadge, SpiceSelector, Title, type Spice } from "@/components/ui";
 import { api, useMutation, useQuery } from "@/data";
-import { color, cx } from "@/theme";
+import { color } from "@/theme";
 
 // S20 · 18+ et niveau d'audace
 export default function AgeAndSpice() {
   const { partner } = useGate();
   const status = useQuery(api.getSpiceStatus);
   const save = useMutation(api.updateProfile);
-  const [d, setD] = useState(""); const [m, setM] = useState(""); const [y, setY] = useState("");
+  const [date, setDate] = useState<DateParts>({ d: "", m: "", y: "" });
   const [consent, setConsent] = useState(false);
   const [spice, setSpice] = useState<Spice | null>(null);
   const them = partner?.display_name ?? "ton/ta partenaire";
@@ -22,9 +23,7 @@ export default function AgeAndSpice() {
   const st = status.data!;
 
   if (!st.confirmed) {
-    const complete = d.length >= 1 && m.length >= 1 && y.length === 4;
-    const iso = complete ? `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}` : "";
-    const valid = complete && !isNaN(new Date(iso + "T00:00:00Z").getTime()) && new Date(iso + "T00:00:00Z").getUTCDate() === Number(d);
+    const iso = toIso(date);
     return (
       <Screen>
         <Caption>Contenu pour adultes</Caption>
@@ -32,22 +31,13 @@ export default function AgeAndSpice() {
         <Body className="text-text-muted">
           Les questions coquines, les défis et les envies secrètes sont réservés aux personnes majeures. Ta date de naissance reste privée : {them} ne la verra pas.
         </Body>
-        <View className="gap-2">
-          <Text className="font-sans-semibold text-sm text-text">Ta date de naissance</Text>
-          <View className="flex-row gap-2">
-            <DateBox label="Jour" placeholder="JJ" value={d} onChange={setD} max={2} />
-            <DateBox label="Mois" placeholder="MM" value={m} onChange={setM} max={2} />
-            <DateBox label="Année" placeholder="AAAA" value={y} onChange={setY} max={4} wide />
-          </View>
-          {complete && !valid ? <Text accessibilityLiveRegion="polite" className="font-sans-semibold text-sm text-danger">Cette date n'existe pas.</Text> : null}
-          {save.error ? <Text accessibilityLiveRegion="polite" className="font-sans-semibold text-sm text-danger">{save.error}</Text> : null}
-        </View>
+        <DateFields label="Ta date de naissance" value={date} onChange={(v) => { setDate(v); save.setError(null); }} error={save.error ?? undefined} />
         <Checkbox
           checked={consent}
           onChange={setConsent}
           label="J'ai 18 ans ou plus et j'accepte de voir du contenu suggestif entre adultes consentants. Je peux changer d'avis à tout moment dans les réglages."
         />
-        <Button size="lg" disabled={!valid || !consent} loading={save.pending} onPress={() => save.mutate({ birthdate: iso })}>Confirmer</Button>
+        <Button size="lg" disabled={!iso || !consent} loading={save.pending} onPress={() => iso && save.mutate({ birthdate: iso })}>Confirmer</Button>
       </Screen>
     );
   }
@@ -83,24 +73,5 @@ export default function AgeAndSpice() {
         router.canGoBack() ? router.back() : router.replace("/home");
       }}>Enregistrer</Button>
     </Screen>
-  );
-}
-
-function DateBox({ label, placeholder, value, onChange, max, wide }: { label: string; placeholder: string; value: string; onChange: (v: string) => void; max: number; wide?: boolean }) {
-  const [focus, setFocus] = useState(false);
-  return (
-    <TextInput
-      accessibilityLabel={label}
-      value={value}
-      onChangeText={(t) => onChange(t.replace(/\D/g, "").slice(0, max))}
-      keyboardType="number-pad"
-      placeholder={placeholder}
-      placeholderTextColor={color["text-subtle"]}
-      maxLength={max}
-      onFocus={() => setFocus(true)}
-      onBlur={() => setFocus(false)}
-      style={{ minWidth: 0, width: 0 }}
-      className={cx("h-[52px] rounded-md bg-bg text-center font-sans-bold text-lg text-text", wide ? "flex-[1.6]" : "flex-1", focus ? "border-2 border-focus" : "border border-border-input")}
-    />
   );
 }

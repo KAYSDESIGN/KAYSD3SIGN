@@ -19,15 +19,15 @@ Carte partagée en direct avec distance,map,should,yes,no,S07 partie difficile
 Bien rentré·e et célébration des retrouvailles,map,should,yes,no,S07
 Pause du partage de position,map,should,yes,no,S07
 Moments photo épinglés sur la carte,moments,should,yes,no,S09
-Quiz de compatibilité en simultané,quizzes,should,yes,no,S10
+Quiz de compatibilité en simultané,quizzes,should,yes,yes,"S10 : 3 quiz, révélation à la fin, score ; données factices"
 Bucket list partagée,lists,should,yes,yes,"S13 : ajout, catégories, cocher, supprimer ; données factices"
 Notes et messages entre partenaires,messages,should,yes,yes,S14 ; temps réel simulé
-Comptes à rebours des dates spéciales,dates,should,yes,no,S15
+Comptes à rebours des dates spéciales,dates,should,yes,yes,"S15 : ajout, annuel ou unique, compte à rebours"
 Widgets humeur / photo / distance,widgets,should,yes,no,S19 natif
 Jeu de trivia à deux,games,could,yes,no,S12
 Jeu de memory,games,could,yes,no,S12
-Morpion,games,could,yes,no,S12
-Jeu type puissance 4,games,could,yes,no,S12 sous un autre nom
+Morpion,games,could,yes,yes,"S12 « Morpion du cœur », coups validés côté données"
+Jeu type puissance 4,games,could,yes,yes,"S12 « Quatre d'affilée », gravité et victoire testées"
 Jeu de mots type Wordle,games,could,yes,no,S12 sous un autre nom
 Fléchettes / Sumo / Spot It,games,could,yes,no,S12 noms et règles à réinventer
 Trace du jour sur la carte,map,could,yes,no,S07
@@ -39,7 +39,8 @@ Question coquine du jour,hotcouple,should,no,yes,"S22 via S04/S08, au niveau du 
 Défis coquins avec bouton passer,hotcouple,should,no,yes,"S23 dans S06, texte uniquement"
 Mode discret (icône neutre / notifications génériques / PIN),hotcouple,should,no,partial,"S18 : réglage enregistré ; icône, notifications et PIN à faire"
 Coffre photo privé chiffré,hotcouple,could,no,no,S25 modération et signalement requis
-Dés et cartes coquines,hotcouple,could,no,no,S24
+Dés et cartes coquines,hotcouple,could,no,partial,S24 : dés + chrono ; cartes à faire
 Textes et questions de Space for Two,content,skip,yes,skip,leur propriété : tout réécrire
 Nom univers astronautes et illustrations,brand,skip,yes,skip,leur marque
 Utilisateurs et notes de l'original,network,skip,yes,skip,ne se clone pas
+Planificateur de soirée (proposer / accepter),hotcouple,should,no,partial,"S27 : proposer, accepter, refuser, annuler ; rappel push à brancher"

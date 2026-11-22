@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
-import { Camera, Gamepad2, Heart, ListChecks, MessageCircle, Smile, Sparkles, Target } from "lucide-react-native";
+import { CalendarClock, Camera, Heart, ListChecks, MessageCircle, Smile, Sparkles, Target } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
@@ -96,7 +96,7 @@ export default function Home() {
           <Shortcut icon={Target} label="Défi du jour" href="/challenge" />
           <Shortcut icon={Camera} label="Moments" href="/moments" />
           <Shortcut icon={Smile} label="Quiz" href="/quiz" />
-          <Shortcut icon={Gamepad2} label="Jeux" href="/play" />
+          <Shortcut icon={CalendarClock} label="Soirée à deux" href="/plan" />
           <Shortcut icon={ListChecks} label="Nos envies d'ailleurs" href="/bucket" />
           <Shortcut icon={MessageCircle} label="Petits mots" href="/notes" />
         </View>

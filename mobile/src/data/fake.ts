@@ -1,8 +1,8 @@
 // Couche de données factice, en mémoire. Mêmes signatures (async) que la future couche Supabase,
 // mêmes règles que replica/schema.sql : appairage, révélation, streak, audace = le plus bas des deux.
-import { SEED_CHALLENGES, SEED_DESIRES, SEED_PROMPTS } from "./seed";
+import { SEED_CHALLENGES, SEED_DESIRES, SEED_PROMPTS, SEED_QUIZZES } from "./seed";
 import {
-  DataError, type Assignment, type BucketItem, type Desire, type DesireAnswer, type Offer, type Couple, type DailyView, type Message, type Mood, type MoodKey,
+  DataError, type Assignment, type BucketItem, type DatePlan, type Game, type GameType, type Quiz, type QuizSession, type SpecialDate, type Desire, type DesireAnswer, type Offer, type Couple, type DailyView, type Message, type Mood, type MoodKey,
   type Profile, type Response, type Session, type Slot, type Spice,
 } from "./types";
 
@@ -18,6 +18,11 @@ type Store = {
   messages: Message[];
   desireAnswers: { couple_id: string; user_id: string; desire_id: string; answer: DesireAnswer; updated_at: string }[];
   bucket: (BucketItem & { couple_id: string })[];
+  quizSessions: { id: string; couple_id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string }[];
+  quizAnswers: { session_id: string; user_id: string; question_id: string; choice: number }[];
+  games: (Game & { couple_id: string })[];
+  specialDates: (SpecialDate & { couple_id: string })[];
+  datePlans: (DatePlan & { couple_id: string })[];
 };
 
 const PARTNER_ID = "dev-partner";
@@ -28,6 +33,7 @@ const LATENCY = 120;
 const s: Store = {
   session: null, emails: {}, profiles: {}, couples: {}, members: [],
   assignments: [], responses: [], moods: [], messages: [], desireAnswers: [], bucket: [],
+  quizSessions: [], quizAnswers: [], games: [], specialDates: [], datePlans: [],
 };
 
 // --- temps réel simulé ---------------------------------------------------
@@ -158,6 +164,12 @@ export async function unpair(): Promise<void> {
   s.messages = s.messages.filter((m) => !users.has(m.sender_id));
   s.desireAnswers = s.desireAnswers.filter((d) => d.couple_id !== c);
   s.bucket = s.bucket.filter((b) => b.couple_id !== c);
+  const qs = new Set(s.quizSessions.filter((q) => q.couple_id === c).map((q) => q.id));
+  s.quizAnswers = s.quizAnswers.filter((a) => !qs.has(a.session_id));
+  s.quizSessions = s.quizSessions.filter((q) => q.couple_id !== c);
+  s.games = s.games.filter((g) => g.couple_id !== c);
+  s.specialDates = s.specialDates.filter((d) => d.couple_id !== c);
+  s.datePlans = s.datePlans.filter((d) => d.couple_id !== c);
   s.members = s.members.filter((m) => m.couple_id !== c);
   delete s.couples[c];
   emit();
@@ -450,4 +462,216 @@ Object.assign(dev, {
     const c = coupleOf(PARTNER_ID); if (!c) return;
     s.bucket.push({ id: uid(), couple_id: c, title, category: "trip", done_at: null, created_by: PARTNER_ID, created_at: now() }); emit();
   },
+});
+
+// --- quiz de compatibilité (S10) ---------------------------------------------
+export type QuizRow = { quiz: Quiz; locked: boolean; lastSession: QuizSession | null };
+
+function sessionView(q: Store["quizSessions"][number], userId: string): QuizSession {
+  const ans = s.quizAnswers.filter((a) => a.session_id === q.id);
+  const mine = Object.fromEntries(ans.filter((a) => a.user_id === userId).map((a) => [a.question_id, a.choice]));
+  const theirsArr = ans.filter((a) => a.user_id !== userId);
+  const total = SEED_QUIZZES.find((z) => z.id === q.quiz_id)?.questions.length ?? 0;
+  return {
+    ...q, mine,
+    // même règle que la policy qans_read : visible seulement après révélation
+    theirs: q.status === "revealed" ? Object.fromEntries(theirsArr.map((a) => [a.question_id, a.choice])) : null,
+    partnerDone: theirsArr.length >= total,
+  };
+}
+
+export async function getQuizzes(): Promise<QuizRow[]> {
+  await wait();
+  const u = me(); const c = coupleOf(u); if (!c) return [];
+  const spice = coupleSpice(c) ?? "soft"; const prem = premium(c);
+  return SEED_QUIZZES.filter((z) => z.spice_level === "soft" || (coupleSpice(c) && SPICE_RANK[z.spice_level] <= SPICE_RANK[spice])).map((quiz) => {
+    const last = [...s.quizSessions].reverse().find((q) => q.couple_id === c && q.quiz_id === quiz.id);
+    return { quiz, locked: quiz.is_premium && !prem, lastSession: last ? sessionView(last, u) : null };
+  });
+}
+
+export async function startQuiz(quizId: string): Promise<string> {
+  await wait();
+  const c = coupleOf(me()); if (!c) throw new DataError("not_paired");
+  const quiz = SEED_QUIZZES.find((z) => z.id === quizId); if (!quiz) throw new DataError("invalid_move");
+  if (quiz.is_premium && !premium(c)) throw new DataError("premium_required");
+  const open = s.quizSessions.find((q) => q.couple_id === c && q.quiz_id === quizId && q.status === "open");
+  if (open) return open.id;
+  const id = uid();
+  s.quizSessions.push({ id, couple_id: c, quiz_id: quizId, status: "open", match_score: null, created_at: now() });
+  emit();
+  return id;
+}
+
+export async function getQuizSession(id: string): Promise<{ quiz: Quiz; session: QuizSession } | null> {
+  await wait();
+  const u = me(); const q = s.quizSessions.find((x) => x.id === id && x.couple_id === coupleOf(u)); if (!q) return null;
+  return { quiz: SEED_QUIZZES.find((z) => z.id === q.quiz_id)!, session: sessionView(q, u) };
+}
+
+function answerQuizAs(userId: string, sessionId: string, questionId: string, choice: number) {
+  const q = s.quizSessions.find((x) => x.id === sessionId && x.couple_id === coupleOf(userId));
+  if (!q || q.status !== "open") throw new DataError("invalid_move");
+  if (s.quizAnswers.some((a) => a.session_id === sessionId && a.user_id === userId && a.question_id === questionId)) throw new DataError("already_answered");
+  s.quizAnswers.push({ session_id: sessionId, user_id: userId, question_id: questionId, choice });
+  // même logique que le trigger reveal_quiz
+  const quiz = SEED_QUIZZES.find((z) => z.id === q.quiz_id)!;
+  const ans = s.quizAnswers.filter((a) => a.session_id === sessionId);
+  if (ans.length >= quiz.questions.length * 2) {
+    const same = quiz.questions.filter((qq) => {
+      const pair = ans.filter((a) => a.question_id === qq.id);
+      return pair.length === 2 && pair[0].choice === pair[1].choice;
+    }).length;
+    q.status = "revealed"; q.match_score = Math.round((100 * same) / quiz.questions.length);
+  }
+  emit();
+}
+export async function answerQuiz(sessionId: string, questionId: string, choice: number): Promise<void> {
+  await wait(); answerQuizAs(me(), sessionId, questionId, choice);
+}
+
+// --- jeux tour par tour (S11, S12) : en vrai, l'Edge Function game-move ----
+const GAME_SHAPE: Record<GameType, { cols: number; rows: number; need: number }> = {
+  tic_tac_toe: { cols: 3, rows: 3, need: 3 },
+  four_in_row: { cols: 7, rows: 6, need: 4 },
+};
+
+function winnerOf(board: (string | null)[], cols: number, rows: number, need: number): string | null {
+  const at = (c: number, r: number) => (c >= 0 && c < cols && r >= 0 && r < rows ? board[r * cols + c] : null);
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const v = at(c, r); if (!v) continue;
+    for (const [dc, dr] of [[1, 0], [0, 1], [1, 1], [1, -1]]) {
+      let k = 1; while (k < need && at(c + dc * k, r + dr * k) === v) k++;
+      if (k === need) return v;
+    }
+  }
+  return null;
+}
+
+function strip(g: Store["games"][number]): Game { const { couple_id, ...rest } = g; return { ...rest, board: [...g.board] }; }
+
+export async function getGames(): Promise<Game[]> {
+  await wait();
+  const c = coupleOf(me()); if (!c) return [];
+  return s.games.filter((g) => g.couple_id === c).map(strip).sort((a, b) => b.updated_at.localeCompare(a.updated_at));
+}
+export async function getGame(id: string): Promise<Game | null> {
+  await wait();
+  const g = s.games.find((x) => x.id === id && x.couple_id === coupleOf(me()));
+  return g ? strip(g) : null;
+}
+export async function createGame(type: GameType): Promise<string> {
+  await wait();
+  const u = me(); const c = coupleOf(u); const p = partnerOf(u); if (!c || !p) throw new DataError("not_paired");
+  const { cols, rows } = GAME_SHAPE[type];
+  const id = uid();
+  s.games.push({ id, couple_id: c, game_type: type, board: Array(cols * rows).fill(null), cols, rows,
+    turn_user_id: u, status: "active", winner_id: null, draw: false, version: 0, players: [u, p], updated_at: now() });
+  emit();
+  return id;
+}
+
+function playAs(userId: string, gameId: string, index: number, version: number) {
+  const g = s.games.find((x) => x.id === gameId && x.couple_id === coupleOf(userId));
+  if (!g || g.status !== "active") throw new DataError("invalid_move");
+  if (g.version !== version) throw new DataError("stale_game");
+  if (g.turn_user_id !== userId) throw new DataError("not_your_turn");
+  let cell = index;
+  if (g.game_type === "four_in_row") { // index = colonne, le pion tombe
+    cell = -1;
+    for (let r = g.rows - 1; r >= 0; r--) if (!g.board[r * g.cols + index]) { cell = r * g.cols + index; break; }
+  }
+  if (cell < 0 || cell >= g.board.length || g.board[cell]) throw new DataError("invalid_move");
+  g.board[cell] = userId;
+  const { need } = GAME_SHAPE[g.game_type];
+  const w = winnerOf(g.board, g.cols, g.rows, need);
+  if (w) { g.status = "finished"; g.winner_id = w; g.turn_user_id = null; }
+  else if (g.board.every(Boolean)) { g.status = "finished"; g.draw = true; g.turn_user_id = null; }
+  else g.turn_user_id = g.players.find((x) => x !== userId)!;
+  g.version++; g.updated_at = now();
+  emit();
+}
+export async function playMove(gameId: string, index: number, version: number): Promise<void> {
+  await wait(); playAs(me(), gameId, index, version);
+}
+
+// --- dates spéciales (S15) ----------------------------------------------------
+export async function getSpecialDates(): Promise<SpecialDate[]> {
+  await wait();
+  const c = coupleOf(me()); if (!c) return [];
+  return s.specialDates.filter((d) => d.couple_id === c).map(({ couple_id, ...d }) => d);
+}
+export async function addSpecialDate(title: string, date: string, repeats_yearly: boolean): Promise<void> {
+  await wait();
+  const c = coupleOf(me()); if (!c) throw new DataError("not_paired");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || isNaN(new Date(date + "T00:00:00Z").getTime())) throw new DataError("invalid_date");
+  s.specialDates.push({ id: uid(), couple_id: c, title: title.trim().slice(0, 100), date, repeats_yearly });
+  emit();
+}
+export async function deleteSpecialDate(id: string): Promise<void> {
+  await wait();
+  const c = coupleOf(me()); s.specialDates = s.specialDates.filter((d) => !(d.id === id && d.couple_id === c)); emit();
+}
+
+// --- soirées (S27) --------------------------------------------------------------
+export async function getDatePlans(): Promise<DatePlan[]> {
+  await wait();
+  const c = coupleOf(me()); if (!c) return [];
+  return s.datePlans.filter((d) => d.couple_id === c).map(({ couple_id, ...d }) => d).sort((a, b) => a.starts_at.localeCompare(b.starts_at));
+}
+export async function proposeDate(starts_at: string, theme: string): Promise<void> {
+  await wait();
+  const c = coupleOf(me()); if (!c) throw new DataError("not_paired");
+  if (new Date(starts_at) <= new Date()) throw new DataError("invalid_date");
+  s.datePlans.push({ id: uid(), couple_id: c, proposed_by: me(), starts_at, theme: theme.trim().slice(0, 200) || null, status: "proposed", created_at: now() });
+  emit();
+}
+function setPlanStatus(userId: string, id: string, status: DatePlan["status"]) {
+  const d = s.datePlans.find((x) => x.id === id && x.couple_id === coupleOf(userId)); if (!d) throw new DataError("invalid_move");
+  // seul l'autre peut accepter ou refuser ; l'auteur peut annuler
+  if ((status === "accepted" || status === "declined") && d.proposed_by === userId) throw new DataError("not_your_turn");
+  d.status = status; emit();
+}
+export async function respondToDate(id: string, status: "accepted" | "declined" | "cancelled"): Promise<void> {
+  await wait(); setPlanStatus(me(), id, status);
+}
+
+// --- outils de dev pour ces écrans -----------------------------------------
+Object.assign(dev, {
+  async partnerAnswersQuiz(sessionId: string) {
+    await wait();
+    const q = s.quizSessions.find((x) => x.id === sessionId); if (!q) return;
+    const quiz = SEED_QUIZZES.find((z) => z.id === q.quiz_id)!;
+    quiz.questions.forEach((qq, i) => {
+      if (s.quizAnswers.some((a) => a.session_id === sessionId && a.user_id === PARTNER_ID && a.question_id === qq.id)) return;
+      answerQuizAs(PARTNER_ID, sessionId, qq.id, i % 2 === 0 ? 0 : 1);
+    });
+  },
+  /** Joue comme Sam : gagne si possible, sinon bloque, sinon vise le centre. */
+  async partnerPlays(gameId: string) {
+    await wait();
+    const g = s.games.find((x) => x.id === gameId); if (!g || g.turn_user_id !== PARTNER_ID) return;
+    const { need } = GAME_SHAPE[g.game_type];
+    const moves = g.game_type === "four_in_row"
+      ? Array.from({ length: g.cols }, (_, c) => c).filter((c) => !g.board[c])
+      : g.board.map((v, i) => (v ? -1 : i)).filter((i) => i >= 0);
+    const landing = (m: number) => {
+      if (g.game_type !== "four_in_row") return m;
+      for (let r = g.rows - 1; r >= 0; r--) if (!g.board[r * g.cols + m]) return r * g.cols + m;
+      return -1;
+    };
+    const tryWith = (who: string) => moves.find((m) => { const b = [...g.board]; b[landing(m)] = who; return winnerOf(b, g.cols, g.rows, need) === who; });
+    const other = g.players.find((p) => p !== PARTNER_ID)!;
+    const center = Math.floor(g.cols / 2) + (g.game_type === "tic_tac_toe" ? g.cols : 0);
+    const pick = tryWith(PARTNER_ID) ?? tryWith(other) ?? (moves.includes(center) ? center : moves[0]);
+    if (pick !== undefined) playAs(PARTNER_ID, gameId, pick, g.version);
+  },
+  async partnerProposesDate() {
+    await wait();
+    const c = coupleOf(PARTNER_ID); if (!c) return;
+    const d = new Date(); d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7)); d.setHours(20, 30, 0, 0);
+    s.datePlans.push({ id: uid(), couple_id: c, proposed_by: PARTNER_ID, starts_at: d.toISOString(), theme: "Dîner aux chandelles, tenue chic exigée", status: "proposed", created_at: now() });
+    emit();
+  },
+  async partnerAnswersDate(id: string, status: "accepted" | "declined" = "accepted") { await wait(); setPlanStatus(PARTNER_ID, id, status); },
 });

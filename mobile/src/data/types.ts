@@ -66,7 +66,12 @@ export type DataErrorCode =
   | "not_signed_in"
   | "invalid_email"
   | "underage"
-  | "already_answered";
+  | "already_answered"
+  | "not_your_turn"
+  | "invalid_move"
+  | "stale_game"
+  | "premium_required"
+  | "invalid_date";
 
 export class DataError extends Error {
   constructor(public code: DataErrorCode) {
@@ -79,3 +84,22 @@ export type DesireAnswer = "yes" | "maybe" | "no";
 export type Desire = { id: string; category: string; spice_level: Spice; body: string; is_premium: boolean };
 export type BucketItem = { id: string; title: string; category: "trip" | "date" | "adventure" | "spicy"; done_at: string | null; created_by: string | null; created_at: string };
 export type Offer = { product: "monthly" | "yearly" | "lifetime"; title: string; price: string; detail: string; badge?: string };
+
+export type Quiz = { id: string; title: string; blurb: string; spice_level: Spice; is_premium: boolean; questions: { id: string; body: string; choices: string[] }[] };
+export type QuizSession = {
+  id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string;
+  mine: Record<string, number>;          // question_id -> choix
+  theirs: Record<string, number> | null; // visible seulement une fois révélé
+  partnerDone: boolean;
+};
+export type GameType = "tic_tac_toe" | "four_in_row";
+export type Game = {
+  id: string; game_type: GameType; board: (string | null)[]; cols: number; rows: number;
+  turn_user_id: string | null; status: "active" | "finished"; winner_id: string | null; draw: boolean;
+  version: number; players: [string, string]; updated_at: string;
+};
+export type SpecialDate = { id: string; title: string; date: string; repeats_yearly: boolean };
+export type DatePlan = {
+  id: string; proposed_by: string | null; starts_at: string; theme: string | null;
+  status: "proposed" | "accepted" | "declined" | "done" | "cancelled"; created_at: string;
+};

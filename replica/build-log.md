@@ -24,7 +24,13 @@ Vérification : export web + parcours complet dans Chromium (Playwright) à 390 
 | S26 Mode discret | 2026-11-22 | partiel | icône neutre, notifications neutres côté serveur, code PIN | - |
 | S13 Bucket list | 2026-11-22 | fait | réordonner | - |
 | S14 Petits mots | 2026-11-22 | fait | lu / non lu, pagination | - |
-| restent en attente (S07, S09–S12, S15, S19, S24, S25, S27) | - | route en place | contenu | - |
+| S10 Quiz | 2026-11-22 | fait | plus de quiz | « Retour aux quiz » empilait une 2e liste au lieu de revenir |
+| S11 Jouer | 2026-11-22 | fait | autres jeux (mots, mémoire, trivia, fléchettes) | - |
+| S12 Parties | 2026-11-22 | partiel | 2 jeux sur 8 | - |
+| S15 Nos dates | 2026-11-22 | fait | date d'anniversaire du couple sur S17 | - |
+| S24 Dés coquins | 2026-11-22 | partiel | cartes | - |
+| S27 Soirée à deux | 2026-11-22 | partiel | rappel push le jour J, choix d'une date libre | - |
+| restent en attente (S07, S09, S19, S25) | - | route en place | contenu | demandent des modules natifs : position, appareil photo, widgets, chiffrement |
 
 Notes :
 - Le mode démo (boutons « simuler le/la partenaire ») permet de tester la boucle à deux sur un seul téléphone. Il disparaîtra avec la vraie couche de données.

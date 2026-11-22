@@ -50,6 +50,11 @@ const MESSAGES: Record<string, string> = {
   invalid_email: "Cet email n'a pas l'air complet.",
   underage: "HotCouple est réservé aux personnes majeures.",
   already_answered: "Tu as déjà répondu à celle-ci.",
+  not_your_turn: "Ce n'est pas encore ton tour.",
+  invalid_move: "Ce coup n'est pas possible.",
+  stale_game: "La partie a bougé entre-temps. Regarde le plateau et rejoue.",
+  premium_required: "Réservé à Premium.",
+  invalid_date: "Cette date n'est pas valide.",
 };
 
 export function errorMessage(e: unknown) {

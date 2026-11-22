@@ -1,4 +1,4 @@
-import type { Desire, Prompt } from "./types";
+import type { Desire, Prompt, Quiz } from "./types";
 
 // Contenu écrit pour HotCouple. Rien n'est repris de Space for Two.
 const q = (id: string, body: string): Prompt => ({ id, kind: "question", spice_level: "soft", body });
@@ -48,3 +48,33 @@ export const SEED_DESIRES: Desire[] = [
   { id: "d09", category: "Audace", spice_level: "hot", body: "Se filmer, pour nous seuls, puis tout effacer", is_premium: true },
   { id: "d10", category: "Audace", spice_level: "hot", body: "Une soirée où l'un·e décide de tout", is_premium: true },
 ];
+
+
+export const SEED_QUIZZES: Quiz[] = [
+  { id: "z1", title: "Nos petites habitudes", blurb: "Le quotidien à deux, sans filtre.", spice_level: "soft", is_premium: false, questions: [
+    { id: "z1q1", body: "Le dimanche idéal commence par…", choices: ["Une grasse matinée", "Un café au lit", "Un footing", "Un brunch dehors"] },
+    { id: "z1q2", body: "En cas de dispute, on…", choices: ["En parle tout de suite", "Laisse retomber", "Rigole pour désamorcer", "S'écrit un message"] },
+    { id: "z1q3", body: "Le cadeau qui touche le plus :", choices: ["Fait main", "Une expérience", "Une surprise", "Un mot écrit"] },
+    { id: "z1q4", body: "En vacances, on préfère…", choices: ["La plage", "La ville", "La montagne", "Partir à l'aventure"] },
+    { id: "z1q5", body: "Le soir, en semaine :", choices: ["Série sous la couette", "Dîner cuisiné ensemble", "Sortie improvisée", "Chacun son truc, côte à côte"] },
+  ]},
+  { id: "z2", title: "Ce qui nous fait vibrer", blurb: "Séduction et envies, juste pour voir.", spice_level: "spicy", is_premium: false, questions: [
+    { id: "z2q1", body: "Le moment le plus sexy de la journée :", choices: ["Le matin", "La pause de midi", "Le soir", "Au milieu de la nuit"] },
+    { id: "z2q2", body: "Ce qui allume la mèche :", choices: ["Un regard", "Un message osé", "Un compliment", "Un geste tendre"] },
+    { id: "z2q3", body: "La tenue qui fait craquer :", choices: ["Chemise ouverte", "Lingerie", "Rien du tout", "Pyjama, et alors ?"] },
+    { id: "z2q4", body: "L'endroit dont on rêve :", choices: ["Une chambre d'hôtel", "La salle de bain", "Une plage déserte", "Le canapé"] },
+  ]},
+  { id: "z3", title: "Jusqu'où on ose", blurb: "Le quiz Brûlant, réservé Premium.", spice_level: "hot", is_premium: true, questions: [
+    { id: "z3q1", body: "Prendre les commandes, c'est…", choices: ["Mon truc", "Son truc", "Chacun son tour", "Jamais essayé"] },
+    { id: "z3q2", body: "Un jouet à deux ?", choices: ["Oui, vite", "Pourquoi pas", "Plus tard", "Non merci"] },
+    { id: "z3q3", body: "Dire ses envies à voix haute :", choices: ["Facile", "Gênant mais excitant", "Plutôt par écrit", "Très difficile"] },
+  ]},
+];
+
+/** Dés coquins : texte non explicite, du plus doux au plus osé. */
+export const DICE = {
+  soft: { actions: ["Embrasse", "Caresse", "Souffle sur", "Masse"], zones: ["la nuque", "les mains", "le dos", "les épaules", "le front", "le creux du poignet"] },
+  spicy: { actions: ["Embrasse", "Mordille", "Caresse", "Effleure du bout des lèvres"], zones: ["le cou", "l'oreille", "le ventre", "l'intérieur du poignet", "le bas du dos", "les lèvres"] },
+  hot: { actions: ["Embrasse", "Mordille", "Déshabille lentement", "Explore", "Taquine"], zones: ["le cou", "le ventre", "les cuisses", "le creux des reins", "où tu veux", "là où l'autre te guide"] },
+  timers: [30, 60, 90, 120],
+} as const;
