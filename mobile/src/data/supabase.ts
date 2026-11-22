@@ -139,8 +139,8 @@ export async function getCouple(): Promise<Couple | null> {
 
 export async function getPartner(): Promise<Profile | null> {
   const u = await uidOrThrow();
-  const rows = await must(sb().from("profiles").select("id, display_name, timezone, locale").neq("id", u));
-  const p = (rows as Pick<Profile, "id" | "display_name" | "timezone" | "locale">[])[0];
+  const rows = await must(sb().from("profiles").select("id, display_name, avatar_path, timezone, locale").neq("id", u));
+  const p = (rows as Pick<Profile, "id" | "display_name" | "avatar_path" | "timezone" | "locale">[])[0];
   // Les champs privés du partenaire (âge, audace…) ne sont jamais lus : valeurs neutres
   return p ? { ...p, birthdate: null, age_confirmed_at: null, spice_level: "soft", discreet_mode: false } : null;
 }
@@ -256,7 +256,8 @@ export async function sendNote(body: string): Promise<void> {
 
 // --- compte (S18) -----------------------------------------------------------------------------
 export async function deleteAccount(): Promise<void> {
-  await uidOrThrow();
+  const u = await uidOrThrow();
+  await sb().storage.from("avatars").remove([`${u}/avatar.jpg`]).catch(() => {});
   await must(sb().rpc("delete_my_account"));
   await sb().auth.signOut({ scope: "local" });
   emit();
@@ -272,9 +273,9 @@ function toQuiz(q: QuizDb): Quiz {
     questions: [...q.quiz_questions].sort((a, b) => a.position - b.position).map(({ id, body, choices }) => ({ id, body, choices })) };
 }
 async function sessionView(sess: SessionDb, u: string): Promise<QuizSession> {
-  const ans = (await must(sb().from("quiz_answers").select("user_id, question_id, choice").eq("session_id", sess.id))) as { user_id: string; question_id: string; choice: number }[];
-  const mine = Object.fromEntries(ans.filter((a) => a.user_id === u).map((a) => [a.question_id, a.choice]));
-  const theirs = sess.status === "revealed" ? Object.fromEntries(ans.filter((a) => a.user_id !== u).map((a) => [a.question_id, a.choice])) : null;
+  const ans = (await must(sb().from("quiz_answers").select("user_id, question_id, choices").eq("session_id", sess.id))) as { user_id: string; question_id: string; choices: number[] }[];
+  const mine = Object.fromEntries(ans.filter((a) => a.user_id === u).map((a) => [a.question_id, a.choices]));
+  const theirs = sess.status === "revealed" ? Object.fromEntries(ans.filter((a) => a.user_id !== u).map((a) => [a.question_id, a.choices])) : null;
   const partnerDone = !!(await must(sb().rpc("quiz_partner_done", { p_session: sess.id })));
   return { ...sess, mine, theirs, partnerDone };
 }
@@ -300,9 +301,10 @@ export async function getQuizSession(id: string): Promise<{ quiz: Quiz; session:
   const quiz = (await allQuizzes()).find((z) => z.id === rows[0].quiz_id);
   return quiz ? { quiz, session: await sessionView(rows[0], u) } : null;
 }
-export async function answerQuiz(sessionId: string, questionId: string, choice: number): Promise<void> {
+export async function answerQuiz(sessionId: string, questionId: string, choices: number[]): Promise<void> {
+  if (!choices.length) throw new DataError("invalid_move");
   const [u, c] = [await uidOrThrow(), await myCoupleId()];
-  await must(sb().from("quiz_answers").insert({ session_id: sessionId, couple_id: c, question_id: questionId, user_id: u, choice }));
+  await must(sb().from("quiz_answers").insert({ session_id: sessionId, couple_id: c, question_id: questionId, user_id: u, choices: [...new Set(choices)].sort() }));
   emit();
 }
 
@@ -357,3 +359,40 @@ export async function respondToDate(id: string, status: "accepted" | "declined" 
 
 // Pas de simulation du/de la partenaire avec la vraie base
 export const dev: Record<string, any> & { enabled: boolean } = { enabled: false };
+
+// --- photo de profil (bucket privé « avatars ») ---------------------------------
+function b64ToBytes(b64: string) {
+  const bin = globalThis.atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+export async function setAvatar(jpegBase64: string): Promise<void> {
+  const u = await uidOrThrow();
+  const path = `${u}/avatar.jpg`;
+  await must(sb().storage.from("avatars").upload(path, b64ToBytes(jpegBase64), { contentType: "image/jpeg", upsert: true }));
+  await must(sb().from("profiles").update({ avatar_path: `${path}?v=${Date.now()}` }).eq("id", u));
+  emit();
+}
+export async function removeAvatar(): Promise<void> {
+  const u = await uidOrThrow();
+  await sb().storage.from("avatars").remove([`${u}/avatar.jpg`]);
+  await must(sb().from("profiles").update({ avatar_path: null }).eq("id", u));
+  emit();
+}
+const signed = new Map<string, { url: string; exp: number }>();
+async function signedAvatar(path: string | null | undefined) {
+  if (!path) return null;
+  const hit = signed.get(path);
+  if (hit && hit.exp > Date.now()) return hit.url;
+  const { data } = await sb().storage.from("avatars").createSignedUrl(path.split("?")[0], 3600);
+  if (!data?.signedUrl) return null;
+  signed.set(path, { url: data.signedUrl, exp: Date.now() + 50 * 60 * 1000 });
+  return data.signedUrl;
+}
+export async function getAvatars(): Promise<{ mine: string | null; partner: string | null }> {
+  const u = await uidOrThrow();
+  const rows = (await must(sb().from("profiles").select("id, avatar_path"))) as { id: string; avatar_path: string | null }[];
+  const mine = rows.find((r) => r.id === u)?.avatar_path; const partner = rows.find((r) => r.id !== u)?.avatar_path;
+  return { mine: await signedAvatar(mine), partner: await signedAvatar(partner) };
+}

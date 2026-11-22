@@ -17,7 +17,7 @@ export default function Welcome() {
   const submit = async () => { if (await auth.mutate(email, password, mode)) router.replace("/"); };
 
   return (
-    <Screen className="flex-1 justify-between">
+    <Screen back={false} className="flex-1 justify-between">
       <View className="gap-4 pt-10">
         <Caption>HotCouple · 18+</Caption>
         <Display>Rien que vous deux.</Display>

@@ -22,11 +22,11 @@ module.exports = {
     fontSize,
     // Sur mobile, chaque graisse est un fichier : une famille par graisse.
     fontFamily: {
-      display: ["Fraunces_600SemiBold"],
-      "display-italic": ["Fraunces_600SemiBold_Italic"],
-      sans: ["Manrope_500Medium"],
-      "sans-semibold": ["Manrope_600SemiBold"],
-      "sans-bold": ["Manrope_700Bold"],
+      display: ["PlusJakartaSans_800ExtraBold"],
+      "display-italic": ["PlusJakartaSans_800ExtraBold_Italic"],
+      sans: ["PlusJakartaSans_500Medium"],
+      "sans-semibold": ["PlusJakartaSans_600SemiBold"],
+      "sans-bold": ["PlusJakartaSans_700Bold"],
     },
     extend: {},
   },

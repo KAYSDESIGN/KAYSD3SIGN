@@ -2,16 +2,30 @@ import { useId } from "react";
 import { StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from "react-native-svg";
-import { tokens } from "@/theme";
+import { activeScheme, tokens } from "@/theme";
 
 export type ArtName = "rose" | "ember" | "violet" | "night";
+
+/** Couleurs de texte sur une illustration : prune foncé en clair, blanc en sombre. */
+export function artInk() {
+  const dark = activeScheme() === "dark";
+  const ink = dark ? tokens.art.ink.dark : tokens.art.ink.light;
+  return {
+    dark,
+    title: ink.title,
+    body: ink.body,
+    soft: dark ? "rgba(255,255,255,0.88)" : "rgba(42,21,48,0.78)",
+    plateTone: (dark ? "smoke" : "bright") as "smoke" | "bright",
+  };
+}
 
 /**
  * Illustration abstraite des grandes cartes : dégradé profond, halos de couleur, reflet doux.
  * Un voile sombre en haut garde le texte blanc lisible (4.5:1 sur chaque teinte du dégradé).
  */
 export function Art({ name = "rose" }: { name?: ArtName }) {
-  const [a, b, c] = tokens.art[name] as string[];
+  const dark = activeScheme() === "dark";
+  const [a, b, c] = (dark ? tokens.art.dark : tokens.art.light)[name] as string[];
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
@@ -26,7 +40,7 @@ export function Art({ name = "rose" }: { name?: ArtName }) {
         <Ellipse cx="20%" cy="92%" rx="65%" ry="40%" fill={`url(#o2-${uid})`} />
         <Ellipse cx="82%" cy="62%" rx="26%" ry="22%" fill={`url(#o3-${uid})`} />
       </Svg>
-      <LinearGradient colors={["rgba(25,0,20,0.38)", "rgba(25,0,20,0)"]} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.6 }} style={StyleSheet.absoluteFill} />
+      {dark ? <LinearGradient colors={["rgba(25,0,20,0.30)", "rgba(25,0,20,0)"]} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.6 }} style={StyleSheet.absoluteFill} /> : null}
     </View>
   );
 }

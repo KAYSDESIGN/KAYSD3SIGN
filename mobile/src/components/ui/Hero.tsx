@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { Art, type ArtName } from "./Art";
+import { Art, artInk, type ArtName } from "./Art";
 import { Glass } from "./Glass";
 import { activeScheme, cx } from "@/theme";
 
@@ -10,6 +10,7 @@ export function HeroCard({
   art = "rose", kicker, title, badge, children, minHeight = 340,
 }: { art?: ArtName; kicker: string; title: string; badge?: ReactNode; children?: ReactNode; minHeight?: number }) {
   const dark = activeScheme() === "dark";
+  const ink = artInk();
   return (
     <View
       className="overflow-hidden rounded-[30px]"
@@ -18,10 +19,10 @@ export function HeroCard({
       <Art name={art} />
       <View className="gap-2 px-5 pt-5">
         <View className="flex-row items-center justify-between">
-          <Text className="font-sans-bold text-xs uppercase tracking-wider text-white/90" style={{ color: "rgba(255,255,255,0.9)" }}>{kicker}</Text>
+          <Text className="font-sans-bold text-xs uppercase tracking-wider" style={{ color: ink.soft }}>{kicker}</Text>
           {badge}
         </View>
-        <Text accessibilityRole="header" className="font-display text-[28px] leading-[32px]" style={{ color: "#FFFFFF" }}>{title}</Text>
+        <Text accessibilityRole="header" className="font-display text-[27px] leading-[32px] tracking-tight" style={{ color: ink.title }}>{title}</Text>
       </View>
       <View className="flex-1" />
       {children ? <View className="gap-2 p-[10px]">{children}</View> : null}
@@ -31,14 +32,15 @@ export function HeroCard({
 
 /** Panneau de verre fumé posé sur une illustration (texte blanc). */
 export function Plate({ children, className }: { children: ReactNode; className?: string }) {
-  return <Glass tone="smoke" radius={22} shadow={false} className={cx("px-4 py-3", className)}>{children}</Glass>;
+  return <Glass tone={artInk().plateTone} radius={22} shadow={false} className={cx("px-4 py-3", className)}>{children}</Glass>;
 }
 
 export function PlateText({ title, body }: { title: string; body?: string }) {
+  const ink = artInk();
   return (
     <View className="flex-1 gap-[2px]">
-      <Text className="font-sans-bold text-[15px]" style={{ color: "#FFFFFF" }}>{title}</Text>
-      {body ? <Text className="font-sans text-[13px]" style={{ color: "rgba(255,255,255,0.88)" }}>{body}</Text> : null}
+      <Text className="font-sans-bold text-[15px]" style={{ color: ink.title }}>{title}</Text>
+      {body ? <Text className="font-sans text-[13px]" style={{ color: ink.body }}>{body}</Text> : null}
     </View>
   );
 }

@@ -28,8 +28,8 @@
   --grad-0: #D63A45;
   --grad-1: #CF2470;
   --grad-2: #8338EC;
-  --font-display: Fraunces, Georgia, serif;
-  --font-sans: Manrope, system-ui, -apple-system, Roboto, sans-serif;
+  --font-display: Plus Jakarta Sans ExtraBold, system-ui, sans-serif;
+  --font-sans: Plus Jakarta Sans, system-ui, -apple-system, Roboto, sans-serif;
   --font-mono: ui-monospace, Menlo, monospace;
   --radius-sm: 10px;
   --radius-md: 18px;

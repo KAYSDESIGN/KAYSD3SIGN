@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import { Lock } from "lucide-react-native";
-import type { ArtName } from "./Art";
+import { artInk, type ArtName } from "./Art";
 import { HeroCard, Plate, PlateText, WhitePill } from "./Hero";
 import { SpiceBadge, type Spice } from "./Spice";
 
@@ -29,8 +29,8 @@ export function DailyCard({
       {state !== "todo" ? <Answer who="Toi" text={mine} /> : null}
       {state === "waiting" ? (
         <Plate className="flex-row items-center gap-3">
-          <Lock size={16} color="#FFFFFF" />
-          <Text className="flex-1 font-sans text-[13px]" style={{ color: "rgba(255,255,255,0.92)" }}>
+          <Lock size={16} color={artInk().title} />
+          <Text className="flex-1 font-sans text-[13px]" style={{ color: artInk().body }}>
             La réponse de {partnerName} s'affichera quand vous aurez répondu tous les deux.
           </Text>
         </Plate>
@@ -44,8 +44,8 @@ function Answer({ who, text }: { who: string; text?: string }) {
   return (
     <Plate>
       <View className="gap-1">
-        <Text className="font-sans-bold text-xs uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.85)" }}>{who}</Text>
-        <Text className="font-sans text-base" style={{ color: "#FFFFFF" }}>{text}</Text>
+        <Text className="font-sans-bold text-xs uppercase tracking-wider" style={{ color: artInk().soft }}>{who}</Text>
+        <Text className="font-sans text-base" style={{ color: artInk().title }}>{text}</Text>
       </View>
     </Plate>
   );

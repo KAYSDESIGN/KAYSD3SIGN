@@ -1,8 +1,8 @@
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import { cx } from "@/theme";
 import { GradientFill } from "./Glass";
 
-type Person = { name: string; mood?: string };
+type Person = { name: string; mood?: string; photo?: string | null };
 
 /** Deux pastilles qui se chevauchent, avec l'humeur en petit badge. */
 export function CoupleAvatars({ me, partner, size = 64 }: { me: Person; partner: Person; size?: number }) {
@@ -21,8 +21,9 @@ function Bubble({ person, size, tone }: { person: Person; size: number; tone: st
   return (
     <View style={{ width: size, height: size, padding: 3 }} className="rounded-pill">
       <GradientFill radius={size / 2} />
-      <View className={cx("flex-1 items-center justify-center rounded-pill border-2 border-glass-edge bg-bg", tone)}>
-        <Text className="font-display text-xl text-text">{person.name.slice(0, 1).toUpperCase()}</Text>
+      <View className={cx("flex-1 items-center justify-center overflow-hidden rounded-pill border-2 border-glass-edge bg-bg", tone)}>
+        {person.photo ? <Image source={{ uri: person.photo }} style={{ width: "100%", height: "100%", borderRadius: size }} accessibilityIgnoresInvertColors />
+          : <Text className="font-display text-xl text-text">{person.name.slice(0, 1).toUpperCase()}</Text>}
       </View>
       {person.mood ? (
         <View className="absolute -bottom-1 -right-1 h-[26px] w-[26px] items-center justify-center rounded-pill border-2 border-glass-edge bg-bg">

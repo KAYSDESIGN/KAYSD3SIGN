@@ -6,6 +6,7 @@ export type Slot = "question" | "challenge" | "spicy_question" | "spicy_challeng
 export type Profile = {
   id: string;
   display_name: string;
+  avatar_path?: string | null;
   timezone: string;
   birthdate: string | null;
   age_confirmed_at: string | null;
@@ -93,8 +94,8 @@ export type Offer = { product: "monthly" | "yearly" | "lifetime"; title: string;
 export type Quiz = { id: string; title: string; blurb: string; spice_level: Spice; is_premium: boolean; questions: { id: string; body: string; choices: string[] }[] };
 export type QuizSession = {
   id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string;
-  mine: Record<string, number>;          // question_id -> choix
-  theirs: Record<string, number> | null; // visible seulement une fois révélé
+  mine: Record<string, number[]>;          // question_id -> choix (plusieurs réponses possibles)
+  theirs: Record<string, number[]> | null; // visible seulement une fois révélé
   partnerDone: boolean;
 };
 export type GameType = "tic_tac_toe" | "four_in_row";

@@ -3,6 +3,7 @@ import { Platform, useColorScheme, View } from "react-native";
 import { vars } from "nativewind";
 import { StatusBar } from "expo-status-bar";
 import { color, setActiveScheme, themeVars, type Scheme } from "@/theme";
+import { useThemePref } from "@/theme/preference";
 
 /** Réglage clair/sombre du téléphone. Sur le web, on lit directement le navigateur (après l'hydratation). */
 function useScheme(): Scheme {
@@ -22,7 +23,9 @@ function useScheme(): Scheme {
 
 /** Thème clair le jour, sombre le soir : on suit le téléphone. Changer de thème remonte l'arbre. */
 export function ThemeRoot({ children }: { children: ReactNode }) {
-  const scheme = useScheme();
+  const system = useScheme();
+  const pref = useThemePref();
+  const scheme: Scheme = pref === "auto" ? system : pref;
   setActiveScheme(scheme);
   return (
     <View key={scheme} style={[{ flex: 1, backgroundColor: color.bg }, vars(themeVars(scheme))]}>

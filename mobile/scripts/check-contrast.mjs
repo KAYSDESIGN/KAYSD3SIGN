@@ -38,5 +38,14 @@ for (const name of ["light", "dark"]) {
     console.log(`  ${ok ? "OK  " : "FAIL"} ${r.toFixed(2).padStart(5)}:1  ${fg} on ${bg}${size !== "normal" ? ` (${size})` : ""}`);
   }
 }
+for (const name of ["light", "dark"]) {
+  const ink = t.art.ink[name];
+  for (const [art, stops] of Object.entries(t.art[name])) for (const c of stops) {
+    for (const [role, need] of [["title", 3], ["body", 4.5]]) {
+      const r = ratio(ink[role], c); const ok = r >= need; if (!ok) fails++;
+      if (!ok) console.log(`  FAIL ${r.toFixed(2)}:1  carte ${name}/${art} ${role} sur ${c}`);
+    }
+  }
+}
 console.log(`\n${fails} échec(s)`);
 process.exit(fails ? 1 : 0);

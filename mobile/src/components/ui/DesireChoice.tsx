@@ -3,7 +3,7 @@ import { Lock } from "lucide-react-native";
 import { cx } from "@/theme";
 import { Glass } from "./Glass";
 import { HeroCard } from "./Hero";
-import type { ArtName } from "./Art";
+import { artInk, type ArtName } from "./Art";
 
 export type DesireAnswer = "yes" | "maybe" | "no";
 const OPTIONS: { key: DesireAnswer; label: string }[] = [
@@ -14,17 +14,18 @@ const OPTIONS: { key: DesireAnswer; label: string }[] = [
 export function DesireCard({
   text, value, onChange, kicker = "Envie secrète", art = "violet",
 }: { text: string; value?: DesireAnswer; onChange: (a: DesireAnswer) => void; kicker?: string; art?: ArtName }) {
+  const ink = artInk();
   return (
     <HeroCard art={art} kicker={kicker} title={text} minHeight={260}>
       <View className="flex-row items-center gap-2 px-2 pb-1">
-        <Lock size={13} color="#FFFFFF" />
-        <Text className="font-sans text-xs" style={{ color: "rgba(255,255,255,0.9)" }}>Secret : seuls vos « oui » communs sont révélés.</Text>
+        <Lock size={13} color={ink.title} />
+        <Text className="font-sans text-xs" style={{ color: ink.body }}>Secret : seuls vos « oui » communs sont révélés.</Text>
       </View>
       <View accessibilityRole="radiogroup" accessibilityLabel="Ta réponse, gardée secrète" className="flex-row gap-2">
         {OPTIONS.map((o) => {
           const on = value === o.key;
           const label = (
-            <Text className="font-sans-bold text-[15px]" style={{ color: on ? (o.key === "yes" ? "#B0185A" : "#2A1530") : "#FFFFFF" }}>{o.label}</Text>
+            <Text className="font-sans-bold text-[15px]" style={{ color: on ? (o.key === "yes" ? "#B0185A" : "#2A1530") : ink.title }}>{o.label}</Text>
           );
           return on ? (
             <Pressable key={o.key} accessibilityRole="radio" accessibilityState={{ checked: true }} onPress={() => onChange(o.key)}
@@ -32,7 +33,7 @@ export function DesireCard({
               {label}
             </Pressable>
           ) : (
-            <Glass key={o.key} tone="smoke" radius={999} shadow={false} className="h-[48px] flex-1">
+            <Glass key={o.key} tone={ink.plateTone} radius={999} shadow={false} className="h-[48px] flex-1">
               <Pressable accessibilityRole="radio" accessibilityState={{ checked: false }} onPress={() => onChange(o.key)}
                 className={cx("flex-1 items-center justify-center active:opacity-70")}>
                 {label}

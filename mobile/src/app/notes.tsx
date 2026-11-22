@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Heart, MessageCircle, Send } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Skeleton } from "@/components/app/Screen";
+import { BackButton, EdgeSwipeBack } from "@/components/app/BackNav";
 import { useGate } from "@/components/app/useGate";
 import { Caption, EmptyState, GlassBackground, Heading, IconButton } from "@/components/ui";
 import { api, useMutation, useQuery } from "@/data";
@@ -29,9 +30,11 @@ function Notes() {
   return (
     <SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-bg">
       <GlassBackground />
+      <EdgeSwipeBack />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} className="flex-1">
         <View className="w-full max-w-[560px] flex-1 self-center">
-          <View className="gap-1 px-5 pb-3 pt-6">
+          <View className="gap-1 px-5 pb-3 pt-4">
+            <View className="mb-2 flex-row"><BackButton /></View>
             <Caption>Petits mots</Caption>
             <Heading>{`Toi et ${them}`}</Heading>
           </View>

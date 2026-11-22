@@ -3,7 +3,7 @@ import { cx } from "@/theme";
 
 type Props = TextProps & { className?: string };
 
-/** Grand titre éditorial (Fraunces). Rôle d'en-tête pour les lecteurs d'écran. */
+/** Grand titre (Plus Jakarta Sans ExtraBold). Rôle d'en-tête pour les lecteurs d'écran. */
 export function Display({ className, ...p }: Props) {
   return <RNText accessibilityRole="header" className={cx("font-display text-display text-text", className)} {...p} />;
 }

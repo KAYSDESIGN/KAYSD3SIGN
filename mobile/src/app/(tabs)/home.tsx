@@ -1,4 +1,5 @@
-import { Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
+import { useAvatars } from "@/components/app/AvatarPicker";
 import { router } from "expo-router";
 import { CalendarClock, Camera, Heart, ListChecks, MapPin, MessageCircle, Smile, Sparkles, Target } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
@@ -6,7 +7,7 @@ import { Screen, Skeleton } from "@/components/app/Screen";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { useGate } from "@/components/app/useGate";
 import {
-  DailyCard, Glass, GlassList, HeroCard, ListRow, MOODS, NudgeButton, Plate, PlateText, SectionTitle, StreakBadge, Toast, WhitePill,
+  artInk, DailyCard, Glass, GlassList, HeroCard, ListRow, MOODS, Plate, PlateText, SectionTitle, StreakBadge, Toast, WhitePill,
   type DailyState,
 } from "@/components/ui";
 import { api, useQuery, type DailyView } from "@/data";
@@ -21,16 +22,18 @@ function stateOf(v: DailyView): DailyState {
 
 /** Bouton rond en verre avec les deux initiales (comme le bouton de compte de l'App Store). */
 function CoupleButton({ me, them }: { me: string; them?: string }) {
-  const bubble = (l: string, c: string, shift = 0) => (
-    <View className="h-[34px] w-[34px] items-center justify-center rounded-pill" style={{ backgroundColor: c, marginLeft: shift, borderWidth: 2, borderColor: "rgba(255,255,255,0.9)" }}>
-      <Text className="font-display text-base" style={{ color: "#FFFFFF" }}>{l.slice(0, 1).toUpperCase()}</Text>
+  const photos = useAvatars();
+  const bubble = (l: string, c: string, shift = 0, photo?: string | null) => (
+    <View className="h-[34px] w-[34px] items-center justify-center overflow-hidden rounded-pill" style={{ backgroundColor: c, marginLeft: shift, borderWidth: 2, borderColor: "rgba(255,255,255,0.9)" }}>
+      {photo ? <Image source={{ uri: photo }} style={{ width: "100%", height: "100%" }} accessibilityIgnoresInvertColors />
+        : <Text className="font-display text-base" style={{ color: "#FFFFFF" }}>{l.slice(0, 1).toUpperCase()}</Text>}
     </View>
   );
   return (
     <Glass radius={999} className="flex-row px-[6px] py-[5px]">
       <Pressable accessibilityRole="button" accessibilityLabel="Profil du couple" onPress={() => router.push("/us")} className="flex-row">
-        {bubble(me || "?", gradient[0])}
-        {bubble(them || "+", them ? gradient[2] : "rgba(120,100,130,0.6)", -10)}
+        {bubble(me || "?", gradient[0], 0, photos.mine)}
+        {bubble(them || "+", them ? gradient[2] : "rgba(120,100,130,0.6)", -10, them ? photos.partner : null)}
       </Pressable>
     </Glass>
   );
@@ -78,7 +81,7 @@ function SoloHome({ name }: { name: string }) {
             <WhitePill label="Partager" onPress={() => router.push("/onboarding/pair")} />
           </Plate>
           <Pressable accessibilityRole="button" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })} className="items-center py-1">
-            <Text className="font-sans-bold text-sm" style={{ color: "#FFFFFF" }}>J'ai plutôt reçu un code</Text>
+            <Text className="font-sans-bold text-sm" style={{ color: artInk().title }}>J'ai plutôt reçu un code</Text>
           </Pressable>
         </HeroCard>
       ) : (
@@ -88,7 +91,7 @@ function SoloHome({ name }: { name: string }) {
             <WhitePill label="Inviter" onPress={() => router.push("/onboarding/pair")} />
           </Plate>
           <Pressable accessibilityRole="button" onPress={() => router.push({ pathname: "/onboarding/pair", params: { mode: "join" } })} className="items-center py-1">
-            <Text className="font-sans-bold text-sm" style={{ color: "#FFFFFF" }}>J'ai reçu un code</Text>
+            <Text className="font-sans-bold text-sm" style={{ color: artInk().title }}>J'ai reçu un code</Text>
           </Pressable>
         </HeroCard>
       )}
@@ -168,11 +171,6 @@ function PairedHome() {
           <ListRow first icon={Sparkles} tone="rose" title="Questions coquines" subtitle="Confirmez tous les deux votre âge et votre niveau d'audace" action="Débloquer" onPress={() => router.push("/age")} />
         </GlassList>
       ) : null}
-
-      <View className="flex-row flex-wrap gap-2">
-        <NudgeButton icon={Heart} label="Tu me manques" onSend={() => api.sendNudge("Tu me manques")} />
-        <NudgeButton icon={Sparkles} label="Je pense à toi" onSend={() => api.sendNudge("Je pense à toi")} />
-      </View>
 
       <SectionTitle title="Pour vous deux" />
       <Shortcuts />

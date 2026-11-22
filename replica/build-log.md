@@ -37,3 +37,4 @@ Notes :
 - Le jour du couple est calculé dans le fuseau du couple, pas du téléphone, comme prévu dans l'architecture.
 
 | Visite avant d'inviter | 2026-11-22 | fait | - | les écrans « à deux » montrent ce qu'ils font + un exemple + « Inviter » ; si les deux ont généré un code, rejoindre annule sa propre invitation (migration 0005) ; le gabarit HTML web doit garder headNodes/bodyNodes en SDK 58 |
+| v5 · retours du 22/11 | 2026-11-22 | fait | - | police Plus Jakarta Sans ; illustrations plus claires (pastel + texte prune en clair) ; retour par bouton et par glissement du bord gauche (sur le web, le navigateur annule les « pointer » au doigt : il faut écouter les événements tactiles) ; petits mots express sur le ❤ de la barre (doublons retirés) ; quiz à réponses multiples, 5 questions par catégorie (migration 0006) ; photo de profil (bucket privé, migration 0007) ; apparence Automatique / Jour / Nuit |

@@ -18,7 +18,7 @@ export default function ProfileSetup() {
   };
 
   return (
-    <Screen>
+    <Screen back={false}>
       <Caption>Bienvenue</Caption>
       <Heading>Comment veux-tu qu'on t'appelle ?</Heading>
       <Body className="text-text-muted">Seul·e ton/ta partenaire verra ce prénom.</Body>

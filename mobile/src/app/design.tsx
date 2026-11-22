@@ -24,7 +24,7 @@ export default function DesignSystem() {
         <View className="gap-2">
           <Caption>HotCouple · design system</Caption>
           <Display>Rien que vous deux.</Display>
-          <Muted>Thème sombre, Fraunces pour les titres, Manrope pour le texte, icônes Lucide.</Muted>
+          <Muted>Plus Jakarta Sans, verre liquide, icônes Lucide.</Muted>
         </View>
 
         <Section title="Couleurs">
@@ -41,8 +41,8 @@ export default function DesignSystem() {
 
         <Section title="Typographie">
           <Display>Display 40</Display>
-          <Heading>Titre 28 en Fraunces</Heading>
-          <Title>Sous-titre 20 Manrope gras</Title>
+          <Heading>Titre 28 ExtraBold</Heading>
+          <Title>Sous-titre 20 gras</Title>
           <Body>Texte 16 : c'est ici que se racontent les petites choses du quotidien.</Body>
           <Muted>Texte secondaire 14</Muted>
           <Caption>Légende 12</Caption>

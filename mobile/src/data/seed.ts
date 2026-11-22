@@ -51,23 +51,26 @@ export const SEED_DESIRES: Desire[] = [
 
 
 export const SEED_QUIZZES: Quiz[] = [
-  { id: "z1", title: "Nos petites habitudes", blurb: "Le quotidien à deux, sans filtre.", spice_level: "soft", is_premium: false, questions: [
+  { id: "z1", title: "Nos petites habitudes", blurb: "Le quotidien à deux, plusieurs réponses possibles.", spice_level: "soft", is_premium: false, questions: [
     { id: "z1q1", body: "Le dimanche idéal commence par…", choices: ["Une grasse matinée", "Un café au lit", "Un footing", "Un brunch dehors"] },
     { id: "z1q2", body: "En cas de dispute, on…", choices: ["En parle tout de suite", "Laisse retomber", "Rigole pour désamorcer", "S'écrit un message"] },
     { id: "z1q3", body: "Le cadeau qui touche le plus :", choices: ["Fait main", "Une expérience", "Une surprise", "Un mot écrit"] },
     { id: "z1q4", body: "En vacances, on préfère…", choices: ["La plage", "La ville", "La montagne", "Partir à l'aventure"] },
     { id: "z1q5", body: "Le soir, en semaine :", choices: ["Série sous la couette", "Dîner cuisiné ensemble", "Sortie improvisée", "Chacun son truc, côte à côte"] },
   ]},
-  { id: "z2", title: "Ce qui nous fait vibrer", blurb: "Séduction et envies, juste pour voir.", spice_level: "spicy", is_premium: false, questions: [
-    { id: "z2q1", body: "Le moment le plus sexy de la journée :", choices: ["Le matin", "La pause de midi", "Le soir", "Au milieu de la nuit"] },
-    { id: "z2q2", body: "Ce qui allume la mèche :", choices: ["Un regard", "Un message osé", "Un compliment", "Un geste tendre"] },
-    { id: "z2q3", body: "La tenue qui fait craquer :", choices: ["Chemise ouverte", "Lingerie", "Rien du tout", "Pyjama, et alors ?"] },
-    { id: "z2q4", body: "L'endroit dont on rêve :", choices: ["Une chambre d'hôtel", "La salle de bain", "Une plage déserte", "Le canapé"] },
+  { id: "z2", title: "Ce qui nous fait vibrer", blurb: "Séduction et envies, plusieurs réponses possibles.", spice_level: "spicy", is_premium: false, questions: [
+    { id: "z2q1", body: "Les moments qui me mettent dans l'ambiance :", choices: ["Le matin au réveil", "La pause de midi", "En fin de soirée", "Au milieu de la nuit", "Sous la douche"] },
+    { id: "z2q2", body: "Ce qui allume la mèche chez moi :", choices: ["Un regard appuyé", "Un message osé", "Un compliment", "Un geste tendre", "Un baiser dans le cou"] },
+    { id: "z2q3", body: "Les tenues qui me font craquer :", choices: ["Chemise entrouverte", "Lingerie", "Rien du tout", "Un pyjama tout doux", "Une tenue de soirée"] },
+    { id: "z2q4", body: "Les endroits dont je rêve avec toi :", choices: ["Une chambre d'hôtel", "La salle de bain", "Une plage déserte", "Le canapé", "La voiture"] },
+    { id: "z2q5", body: "Pour faire monter la température, j'aime :", choices: ["Les préliminaires qui durent", "Les mots doux à l'oreille", "La musique d'ambiance", "Les massages", "L'effet de surprise"] },
   ]},
-  { id: "z3", title: "Jusqu'où on ose", blurb: "Le quiz Brûlant, réservé Premium.", spice_level: "hot", is_premium: true, questions: [
-    { id: "z3q1", body: "Prendre les commandes, c'est…", choices: ["Mon truc", "Son truc", "Chacun son tour", "Jamais essayé"] },
-    { id: "z3q2", body: "Un jouet à deux ?", choices: ["Oui, vite", "Pourquoi pas", "Plus tard", "Non merci"] },
-    { id: "z3q3", body: "Dire ses envies à voix haute :", choices: ["Facile", "Gênant mais excitant", "Plutôt par écrit", "Très difficile"] },
+  { id: "z3", title: "Jusqu'où on ose", blurb: "Le quiz Brûlant, plusieurs réponses possibles.", spice_level: "hot", is_premium: true, questions: [
+    { id: "z3q1", body: "Prendre les commandes, pour moi c'est :", choices: ["Mon truc", "Ton truc", "Chacun son tour", "Jamais essayé", "À tester"] },
+    { id: "z3q2", body: "Les jouets à deux :", choices: ["Oui, vite", "Pourquoi pas", "Plus tard", "Non merci", "Déjà conquis·e"] },
+    { id: "z3q3", body: "Dire ses envies à voix haute :", choices: ["Facile", "Gênant mais excitant", "Plutôt par écrit", "Très difficile", "Seulement dans le feu de l'action"] },
+    { id: "z3q4", body: "Ce que j'aimerais essayer :", choices: ["Les yeux bandés", "Les liens doux", "Le jeu de rôle", "Un lieu inattendu", "Prendre notre temps toute une nuit"] },
+    { id: "z3q5", body: "Mon fantasme du moment tient plutôt de :", choices: ["La surprise totale", "Le scénario préparé", "La domination douce", "La lenteur extrême", "L'improvisation"] },
   ]},
 ];
 

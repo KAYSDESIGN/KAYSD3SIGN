@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { CalendarHeart, ChevronRight, Flame, MessageCircle, Settings, Sparkles } from "lucide-react-native";
 import { InviteButtons } from "@/components/app/PairGate";
 import { Screen } from "@/components/app/Screen";
+import { AvatarPicker, useAvatars } from "@/components/app/AvatarPicker";
 import { useGate } from "@/components/app/useGate";
 import { Caption, Card, CoupleAvatars, Heading, IconButton, Muted, SpiceBadge, StreakBadge } from "@/components/ui";
 import { api, useQuery } from "@/data";
@@ -11,6 +12,7 @@ import { color } from "@/theme";
 // S17 · Profil du couple
 export default function Us() {
   const { profile, partner, paired } = useGate();
+  const photos = useAvatars();
   const couple = useQuery(api.getCouple);
   const premium = useQuery(api.isPremium);
   const spice = useQuery(api.getSpiceStatus);
@@ -23,7 +25,8 @@ export default function Us() {
         <IconButton icon={Settings} label="Réglages" onPress={() => router.push("/settings")} />
       </View>
       <View className="items-center gap-3">
-        <CoupleAvatars me={{ name: me || "?" }} partner={{ name: them || "?" }} size={88} />
+        {paired ? <CoupleAvatars me={{ name: me || "?", photo: photos.mine }} partner={{ name: them || "?", photo: photos.partner }} size={88} /> : null}
+        <AvatarPicker name={me} />
         {!paired ? <Muted className="text-center">Ton/ta partenaire n'a pas encore rejoint ton espace.</Muted> : null}
         <Heading className="text-center">{paired ? `${me} & ${them}` : `${me} & …`}</Heading>
         <View className="flex-row items-center gap-2">
@@ -36,7 +39,6 @@ export default function Us() {
       <Card className="gap-0 px-4 py-1">
         <Row icon={Sparkles} label={premium.data ? "Premium actif pour vous deux" : "Passer à Premium"} onPress={() => router.push("/premium")} tint={color.gold} />
         <Row icon={Flame} label="Niveau d'audace et 18+" onPress={() => router.push("/age")} />
-        <Row icon={MessageCircle} label="Petits mots" onPress={() => router.push("/notes")} />
         <Row icon={CalendarHeart} label="Nos dates" onPress={() => router.push("/dates")} last />
       </Card>
       <Muted className="text-center">{"Tout ce que vous partagez ici reste entre vous deux."}</Muted>

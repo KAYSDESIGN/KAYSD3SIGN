@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Switch, Text, View } from "react-native";
+import { Pressable, Switch, Text, View } from "react-native";
+import { setThemePref, useThemePref } from "@/theme/preference";
 import { router } from "expo-router";
 import { Screen } from "@/components/app/Screen";
+import { AvatarPicker } from "@/components/app/AvatarPicker";
 import { useGate } from "@/components/app/useGate";
 import { Body, Button, Caption, Card, Heading, Muted, TextField, Title, Toast } from "@/components/ui";
 import { api, useMutation } from "@/data";
@@ -16,6 +18,7 @@ export default function SettingsScreen() {
   const del = useMutation(api.deleteAccount);
   const [confirm, setConfirm] = useState<null | "unpair" | "delete" | "delete2">(null);
   const [saved, setSaved] = useState(false);
+  const pref = useThemePref();
   const them = partner?.display_name ?? "ton/ta partenaire";
   const value = name ?? profile?.display_name ?? "";
 
@@ -23,6 +26,10 @@ export default function SettingsScreen() {
     <Screen>
       <Caption>Réglages</Caption>
       <Heading>Ton compte</Heading>
+
+      <Card className="items-center gap-3">
+        <AvatarPicker name={profile?.display_name ?? ""} />
+      </Card>
 
       <Card className="gap-3">
         <TextField label="Ton prénom" value={value} onChangeText={setName} maxLength={60}
@@ -32,6 +39,19 @@ export default function SettingsScreen() {
           Enregistrer
         </Button>
         {saved ? <Toast>Prénom enregistré.</Toast> : null}
+      </Card>
+
+      <Card className="gap-3">
+        <Title>Apparence</Title>
+        <View accessibilityRole="radiogroup" accessibilityLabel="Apparence" className="flex-row rounded-pill border border-glass-edge bg-surface p-1">
+          {([["auto", "Automatique"], ["light", "Jour"], ["dark", "Nuit"]] as const).map(([k, l]) => (
+            <Pressable key={k} accessibilityRole="radio" accessibilityState={{ checked: pref === k }} onPress={() => setThemePref(k)}
+              className={pref === k ? "h-[40px] flex-1 items-center justify-center rounded-pill border border-glass-edge bg-surface-raised" : "h-[40px] flex-1 items-center justify-center rounded-pill"}>
+              <Text className={pref === k ? "font-sans-bold text-sm text-text" : "font-sans-semibold text-sm text-text-muted"}>{l}</Text>
+            </Pressable>
+          ))}
+        </View>
+        <Muted>Automatique suit le réglage jour/nuit de ton téléphone.</Muted>
       </Card>
 
       <Card className="gap-3">

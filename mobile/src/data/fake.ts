@@ -19,7 +19,7 @@ type Store = {
   desireAnswers: { couple_id: string; user_id: string; desire_id: string; answer: DesireAnswer; updated_at: string }[];
   bucket: (BucketItem & { couple_id: string })[];
   quizSessions: { id: string; couple_id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string }[];
-  quizAnswers: { session_id: string; user_id: string; question_id: string; choice: number }[];
+  quizAnswers: { session_id: string; user_id: string; question_id: string; choices: number[] }[];
   games: (Game & { couple_id: string })[];
   specialDates: (SpecialDate & { couple_id: string })[];
   datePlans: (DatePlan & { couple_id: string })[];
@@ -67,7 +67,7 @@ function partnerOf(userId: string) {
   return membersOf(c).find((u) => u !== userId) ?? null;
 }
 function newProfile(id: string, name = ""): Profile {
-  return { id, display_name: name, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Paris",
+  return { id, display_name: name, avatar_path: null, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Paris",
     birthdate: null, age_confirmed_at: null, spice_level: "soft", discreet_mode: false, locale: "fr" };
 }
 function isAdult(birthdate: string) {
@@ -306,7 +306,7 @@ export const dev: Record<string, any> & { enabled: boolean } = {
   async partnerMood(mood: MoodKey) {
     await wait(); s.moods.push({ id: uid(), user_id: PARTNER_ID, mood, note: null, created_at: now() }); emit();
   },
-  async partnerNudge(body = "Je pense à toi") {
+  async partnerNudge(body = "😘 Je pense à toi") {
     await wait(); s.messages.push({ id: uid(), sender_id: PARTNER_ID, kind: "nudge", body, created_at: now() }); emit();
   },
   /** Crée un couple en attente auquel « je » peux me joindre avec le code renvoyé (test de la saisie). */
@@ -480,13 +480,13 @@ export type QuizRow = { quiz: Quiz; locked: boolean; lastSession: QuizSession | 
 
 function sessionView(q: Store["quizSessions"][number], userId: string): QuizSession {
   const ans = s.quizAnswers.filter((a) => a.session_id === q.id);
-  const mine = Object.fromEntries(ans.filter((a) => a.user_id === userId).map((a) => [a.question_id, a.choice]));
+  const mine = Object.fromEntries(ans.filter((a) => a.user_id === userId).map((a) => [a.question_id, a.choices]));
   const theirsArr = ans.filter((a) => a.user_id !== userId);
   const total = SEED_QUIZZES.find((z) => z.id === q.quiz_id)?.questions.length ?? 0;
   return {
     ...q, mine,
     // même règle que la policy qans_read : visible seulement après révélation
-    theirs: q.status === "revealed" ? Object.fromEntries(theirsArr.map((a) => [a.question_id, a.choice])) : null,
+    theirs: q.status === "revealed" ? Object.fromEntries(theirsArr.map((a) => [a.question_id, a.choices])) : null,
     partnerDone: theirsArr.length >= total,
   };
 }
@@ -520,25 +520,34 @@ export async function getQuizSession(id: string): Promise<{ quiz: Quiz; session:
   return { quiz: SEED_QUIZZES.find((z) => z.id === q.quiz_id)!, session: sessionView(q, u) };
 }
 
-function answerQuizAs(userId: string, sessionId: string, questionId: string, choice: number) {
+/** Score d'une question à réponses multiples : réponses communes / réponses données (indice de Jaccard). */
+function overlapScore(a: number[], b: number[]) {
+  const A = new Set(a), B = new Set(b);
+  const inter = [...A].filter((x) => B.has(x)).length;
+  const union = new Set([...A, ...B]).size;
+  return union ? inter / union : 0;
+}
+
+function answerQuizAs(userId: string, sessionId: string, questionId: string, choices: number[]) {
   const q = s.quizSessions.find((x) => x.id === sessionId && x.couple_id === coupleOf(userId));
   if (!q || q.status !== "open") throw new DataError("invalid_move");
+  if (!choices.length) throw new DataError("invalid_move");
   if (s.quizAnswers.some((a) => a.session_id === sessionId && a.user_id === userId && a.question_id === questionId)) throw new DataError("already_answered");
-  s.quizAnswers.push({ session_id: sessionId, user_id: userId, question_id: questionId, choice });
+  s.quizAnswers.push({ session_id: sessionId, user_id: userId, question_id: questionId, choices: [...new Set(choices)].sort() });
   // même logique que le trigger reveal_quiz
   const quiz = SEED_QUIZZES.find((z) => z.id === q.quiz_id)!;
   const ans = s.quizAnswers.filter((a) => a.session_id === sessionId);
   if (ans.length >= quiz.questions.length * 2) {
-    const same = quiz.questions.filter((qq) => {
+    const total = quiz.questions.reduce((acc, qq) => {
       const pair = ans.filter((a) => a.question_id === qq.id);
-      return pair.length === 2 && pair[0].choice === pair[1].choice;
-    }).length;
-    q.status = "revealed"; q.match_score = Math.round((100 * same) / quiz.questions.length);
+      return acc + (pair.length === 2 ? overlapScore(pair[0].choices, pair[1].choices) : 0);
+    }, 0);
+    q.status = "revealed"; q.match_score = Math.round((100 * total) / quiz.questions.length);
   }
   emit();
 }
-export async function answerQuiz(sessionId: string, questionId: string, choice: number): Promise<void> {
-  await wait(); answerQuizAs(me(), sessionId, questionId, choice);
+export async function answerQuiz(sessionId: string, questionId: string, choices: number[]): Promise<void> {
+  await wait(); answerQuizAs(me(), sessionId, questionId, choices);
 }
 
 // --- jeux tour par tour (S11, S12) : en vrai, l'Edge Function game-move ----
@@ -655,7 +664,7 @@ Object.assign(dev, {
     const quiz = SEED_QUIZZES.find((z) => z.id === q.quiz_id)!;
     quiz.questions.forEach((qq, i) => {
       if (s.quizAnswers.some((a) => a.session_id === sessionId && a.user_id === PARTNER_ID && a.question_id === qq.id)) return;
-      answerQuizAs(PARTNER_ID, sessionId, qq.id, i % 2 === 0 ? 0 : 1);
+      answerQuizAs(PARTNER_ID, sessionId, qq.id, i % 2 === 0 ? [0, 2] : [1]);
     });
   },
   /** Joue comme Sam : gagne si possible, sinon bloque, sinon vise le centre. */
@@ -686,3 +695,16 @@ Object.assign(dev, {
   },
   async partnerAnswersDate(id: string, status: "accepted" | "declined" = "accepted") { await wait(); setPlanStatus(PARTNER_ID, id, status); },
 });
+
+// --- photo de profil -----------------------------------------------------------
+export async function setAvatar(jpegBase64: string): Promise<void> {
+  await wait();
+  s.profiles[me()].avatar_path = `data:image/jpeg;base64,${jpegBase64}`;
+  emit();
+}
+export async function removeAvatar(): Promise<void> { await wait(); s.profiles[me()].avatar_path = null; emit(); }
+export async function getAvatars(): Promise<{ mine: string | null; partner: string | null }> {
+  await wait();
+  const u = me(); const p = partnerOf(u);
+  return { mine: s.profiles[u]?.avatar_path ?? null, partner: p ? s.profiles[p]?.avatar_path ?? null : null };
+}
