@@ -27,3 +27,6 @@ export function themeVars(s: Scheme) {
 export function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
+
+/** Couleur « flamme » : orange vif, contour orange profond (≥ 3:1 sur les cases claires et sombres). */
+export const FLAME = { fill: "#FF8A1E", stroke: "#E8590C" } as const;

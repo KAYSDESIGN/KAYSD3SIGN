@@ -9,7 +9,7 @@ import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
 import { Button, Caption, EmptyState, Heading, Toast } from "@/components/ui";
 import { api, useMutation, useQuery, type Game } from "@/data";
-import { color, cx } from "@/theme";
+import { color, cx, FLAME } from "@/theme";
 import { GAME_NAMES } from "@/components/app/games";
 
 // S12 · Partie (morpion et quatre d'affilée). Les coups sont validés côté données (Edge Function game-move en vrai).
@@ -37,7 +37,7 @@ function GameScreen() {
       <Heading accessibilityLiveRegion="polite">{headline}</Heading>
       <View className="flex-row items-center gap-4">
         <Legend icon={<Heart size={16} color={color.accent} fill={color.accent} />} label="Toi" />
-        <Legend icon={<Flame size={16} color={color.gold} fill={color.gold} />} label={them} />
+        <Legend icon={<Flame size={16} color={FLAME.stroke} fill={FLAME.fill} strokeWidth={1.8} />} label={them} />
       </View>
       {g.game_type === "tic_tac_toe" ? <TicTacToe g={g} me={profile?.id} onPlay={play} enabled={myTurn} /> : <FourInRow g={g} me={profile?.id} onPlay={play} enabled={myTurn} />}
       {move.error ? <Toast tone="error">{move.error}</Toast> : null}
@@ -55,7 +55,7 @@ function Legend({ icon, label }: { icon: React.ReactNode; label: string }) {
 
 function Piece({ owner, me, size }: { owner: string | null; me?: string; size: number }) {
   if (!owner) return null;
-  return owner === me ? <Heart size={size} color={color.accent} fill={color.accent} /> : <Flame size={size} color={color.gold} fill={color.gold} />;
+  return owner === me ? <Heart size={size} color={color.accent} fill={color.accent} /> : <Flame size={size} color={FLAME.stroke} fill={FLAME.fill} strokeWidth={1.8} />;
 }
 
 type BoardProps = { g: Game; me?: string; onPlay: (i: number) => void; enabled: boolean };
