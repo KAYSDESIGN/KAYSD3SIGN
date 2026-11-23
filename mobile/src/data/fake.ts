@@ -209,7 +209,9 @@ function ensureAssignment(coupleId: string, day: string, slot: Slot, spice: Spic
   const exact = SEED_ALL.filter((p) => p.kind === slot && p.spice_level === spice);
   const pool = exact.length ? exact : SEED_ALL.filter((p) => p.kind === slot && SPICE_RANK[p.spice_level] <= SPICE_RANK[spice]);
   if (!pool.length) return null;
-  const prompt = pool[hash(coupleId + day + slot) % pool.length];
+  // Jamais vue d'abord, sinon celle vue il y a le plus longtemps ; ordre propre à chaque couple.
+  const lastSeen = (id: string) => s.assignments.filter((x) => x.couple_id === coupleId && x.prompt.id === id && x.day !== day).reduce((m, x) => (x.day > m ? x.day : m), "");
+  const prompt = [...pool].sort((p1, p2) => lastSeen(p1.id).localeCompare(lastSeen(p2.id)) || hash(coupleId + day + slot + p1.id) - hash(coupleId + day + slot + p2.id))[0];
   a = { id: uid(), couple_id: coupleId, day, slot, prompt };
   s.assignments.push(a);
   return a;
