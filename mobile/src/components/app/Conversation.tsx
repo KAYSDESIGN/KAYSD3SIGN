@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/app/Screen";
 import { BackButton, EdgeSwipeBack } from "@/components/app/BackNav";
 import { useAvatars } from "@/components/app/AvatarPicker";
 import { useGate } from "@/components/app/useGate";
-import { Emoji, EmojiText, GlassBackground, MOODS } from "@/components/ui";
+import { Emoji, EmojiText, Glass, GlassBackground, MOODS } from "@/components/ui";
 import { api, useMutation, useQuery, type Message } from "@/data";
 import { AVATAR_COLORS, color, cx, HEART } from "@/theme";
 
@@ -72,7 +72,7 @@ function Bubble({ m, mine, last }: { m: Message; mine: boolean; last: boolean })
     // Émojis seuls : en grand, sans bulle (comme sur iOS)
     return (
       <View className={cx("max-w-[80%] items-end gap-1 px-1", mine ? "self-end" : "self-start")}>
-        <EmojiText size={40} className="font-sans text-[38px] leading-[46px]">{body}</EmojiText>
+        <EmojiText size={34} className="font-sans text-[32px] leading-[40px]">{body}</EmojiText>
         <Stamp iso={m.created_at} mine={false} />
       </View>
     );
@@ -80,7 +80,7 @@ function Bubble({ m, mine, last }: { m: Message; mine: boolean; last: boolean })
   return (
     <View className={cx("max-w-[80%] flex-row flex-wrap items-end gap-x-2 gap-y-[2px] px-[14px] py-[8px]", mine ? "self-end" : "self-start")}
       style={{ backgroundColor: mine ? color.accent : color["card-rose"], ...bubbleShape(mine, last) }}>
-      <EmojiText size={19} className="shrink font-sans text-[16px] leading-[22px]" style={{ color: mine ? color.bg : color.text }}>{body}</EmojiText>
+      <EmojiText size={17} className="shrink font-sans text-[15px] leading-[20px]" style={{ color: mine ? color.bg : color.text }}>{body}</EmojiText>
       <Stamp iso={m.created_at} mine={mine} />
     </View>
   );
@@ -88,18 +88,22 @@ function Bubble({ m, mine, last }: { m: Message; mine: boolean; last: boolean })
 
 /** Mot express (❤ du dock) : une bulle comme les autres, avec le grand émoji. */
 function NudgeBubble({ m, mine, last }: { m: Message; mine: boolean; last: boolean }) {
-  const [emoji, ...rest] = (m.body ?? "").split(" ");
+  // Anciens mots express sans émoji (« Tu me manques ») : on ne prend le 1er mot que si c'est bien un émoji.
+  const words = (m.body ?? "").split(" ");
+  const hasEmoji = !!words[0] && emojiOnly(words[0]);
+  const emoji = hasEmoji ? words[0] : "❤️";
+  const rest = hasEmoji ? words.slice(1) : words;
   const fg = mine ? color.bg : color.text;
   return (
     <View className={cx("max-w-[80%] gap-1 px-[14px] py-[10px]", mine ? "self-end" : "self-start")}
       style={{ backgroundColor: mine ? color.accent : color["card-rose"], ...bubbleShape(mine, last) }}>
       <View className="flex-row items-center gap-[6px]">
         <Heart size={12} color={mine ? color["on-wine-muted"] : HEART} fill={mine ? color["on-wine-muted"] : HEART} />
-        <Text className="font-sans-semibold text-[11px] tracking-[0.6px]" style={{ color: mine ? color["on-wine-muted"] : color["text-muted"] }}>MOT EXPRESS</Text>
+        <Text className="font-sans-semibold text-[10px] tracking-[0.6px]" style={{ color: mine ? color["on-wine-muted"] : color["text-muted"] }}>MOT EXPRESS</Text>
       </View>
-      <View className="flex-row items-end gap-3">
-        <Emoji char={emoji} size={30} />
-        <Text className="shrink font-sans-semibold text-[17px] leading-[24px]" style={{ color: fg }}>{rest.join(" ")}</Text>
+      <View className="flex-row items-center gap-2">
+        <Emoji char={emoji} size={22} />
+        <Text className="shrink font-sans-semibold text-[15px] leading-[20px]" style={{ color: fg }}>{rest.join(" ")}</Text>
         <Stamp iso={m.created_at} mine={mine} />
       </View>
     </View>
@@ -159,7 +163,7 @@ export function Conversation({ tab }: { tab?: boolean }) {
         <View className="w-full max-w-[560px] flex-1 self-center">
           <Header tab={tab} name={them} photo={photos.partner} mood={mood} streak={couple.data?.streak_count ?? 0} />
 
-          <ScrollView ref={scroll} className="flex-1" contentContainerClassName="px-4 pb-4 pt-2">
+          <ScrollView ref={scroll} className="flex-1" contentContainerClassName="px-4 pt-2" contentContainerStyle={{ paddingBottom: 76 }}>
             {msgs.loading && !msgs.data ? <Skeleton className="h-[120px]" /> : null}
             {msgs.data && list.length === 0 ? (
               <View className="items-center gap-3 px-8 py-16">
@@ -187,7 +191,8 @@ export function Conversation({ tab }: { tab?: boolean }) {
             {api.dev.enabled ? <DevPanel actions={[{ label: "Sam écrit un mot", onPress: () => api.dev.partnerNote() }]} /> : null}
           </ScrollView>
 
-          <View className="flex-row items-end gap-2 border-t border-border bg-bg px-3 py-3">
+          {/* Barre de saisie flottante : les messages défilent dessous, à travers le verre */}
+          <View pointerEvents="box-none" className="absolute left-0 right-0 flex-row items-end gap-2 px-3 pb-3 pt-2" style={{ bottom: tab ? DOCK_SPACE : 0 }}>
             <Pressable accessibilityRole="button" accessibilityLabel="Envoyer une photo" disabled={sendPhoto.pending} onPress={() => sendPhoto.mutate()}
               className="h-[44px] w-[36px] items-center justify-center active:opacity-60" style={{ opacity: sendPhoto.pending ? 0.4 : 1 }}>
               <Camera size={23} color={color.accent} strokeWidth={1.8} />
@@ -196,6 +201,7 @@ export function Conversation({ tab }: { tab?: boolean }) {
               className="h-[44px] w-[32px] items-center justify-center active:opacity-60">
               <Sparkles size={22} color={color.accent} strokeWidth={1.8} />
             </Pressable>
+            <Glass float radius={22} className="flex-1" style={{ minHeight: 44 }}>
             <TextInput
               accessibilityLabel={`Message pour ${them}`}
               value={text}
@@ -207,18 +213,21 @@ export function Conversation({ tab }: { tab?: boolean }) {
               maxLength={2000}
               onSubmitEditing={submit}
               blurOnSubmit={false}
-              className="flex-1 rounded-[22px] px-[16px] font-sans text-[16px] text-text"
-              style={{ backgroundColor: color["card-rose"], minHeight: 44, maxHeight: 120, paddingTop: 11, paddingBottom: 11, lineHeight: 22 }}
+              className="px-[16px] font-sans text-[16px] text-text"
+              style={{ backgroundColor: "transparent", minHeight: 44, maxHeight: 120, paddingTop: 11, paddingBottom: 11, lineHeight: 22, outlineStyle: "none" } as object}
             />
-            <Pressable accessibilityRole="button" accessibilityLabel="Envoyer" accessibilityState={{ disabled: !text.trim() }} onPress={submit}
-              className="h-[44px] w-[44px] items-center justify-center rounded-pill active:opacity-80"
-              style={{ backgroundColor: color.accent, opacity: text.trim() ? 1 : 0.45 }}>
-              <ArrowUp size={22} color={color.bg} strokeWidth={2.4} />
-            </Pressable>
+            </Glass>
+            {/* Bouton d'envoi en verre, comme le dock ; légèrement teinté quand il y a un message */}
+            <Glass float tone={text.trim() ? "tinted" : "clear"} radius={999} style={{ width: 44, height: 44 }}>
+              <Pressable accessibilityRole="button" accessibilityLabel="Envoyer" accessibilityState={{ disabled: !text.trim() }} onPress={submit}
+                className="flex-1 items-center justify-center active:opacity-70">
+                <ArrowUp size={22} color={color.accent} strokeWidth={2.4} style={{ opacity: text.trim() ? 1 : 0.4 }} />
+              </Pressable>
+            </Glass>
           </View>
           {sendPhoto.error ? <Text className="px-5 pb-2 font-sans-semibold text-sm text-danger">{sendPhoto.error}</Text> : null}
           {send.error ? <Text className="px-5 pb-2 font-sans-semibold text-sm text-danger">{send.error}</Text> : null}
-          {tab ? <View style={{ height: DOCK_SPACE }} /> : null}
+          {tab ? <View style={{ height: DOCK_SPACE }} /> : null /* garde la zone du dock libre */}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
