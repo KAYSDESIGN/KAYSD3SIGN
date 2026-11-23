@@ -236,10 +236,25 @@ export async function toggleBucketItem(id: string): Promise<void> {
 export async function deleteBucketItem(id: string): Promise<void> { await must(sb().from("bucket_items").delete().eq("id", id)); emit(); }
 
 // --- petits mots (S14) ----------------------------------------------------------------------
+const signedMedia = new Map<string, { url: string; exp: number }>();
 export async function getMessages(): Promise<Message[]> {
   await uidOrThrow();
-  const rows = (await must(sb().from("messages").select("id, sender_id, kind, body, created_at").order("created_at", { ascending: false }).limit(200))) as Message[];
-  return rows.reverse();
+  const rows = (await must(sb().from("messages").select("id, sender_id, kind, body, created_at, media_path").order("created_at", { ascending: false }).limit(200))) as (Message & { media_path: string | null })[];
+  // Photos : liens signés (1 h), mis en cache pour ne pas les redemander à chaque rafraîchissement
+  const need = rows.filter((r) => r.media_path && (signedMedia.get(r.media_path)?.exp ?? 0) <= Date.now()).map((r) => r.media_path!);
+  if (need.length) {
+    const { data } = await sb().storage.from("couple-media").createSignedUrls(need, 3600);
+    data?.forEach((d) => { if (d.signedUrl && d.path) signedMedia.set(d.path, { url: d.signedUrl, exp: Date.now() + 50 * 60 * 1000 }); });
+  }
+  return rows.reverse().map(({ media_path, ...m }) => ({ ...m, photo_url: media_path ? signedMedia.get(media_path)?.url ?? null : null }));
+}
+/** Envoie une photo dans le chat (JPEG déjà redimensionné). */
+export async function sendPhoto(jpegBase64: string, width: number, height: number): Promise<void> {
+  const [u, c] = [await uidOrThrow(), await myCoupleId()];
+  const path = `${c}/chat/${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+  await must(sb().storage.from("couple-media").upload(path, b64ToBytes(jpegBase64), { contentType: "image/jpeg" }));
+  await must(sb().from("messages").insert({ couple_id: c, sender_id: u, kind: "photo", body: `${width}x${height}`, media_path: path }));
+  emit();
 }
 export async function sendNote(body: string): Promise<void> {
   const b = body.trim(); if (!b) return;

@@ -457,6 +457,12 @@ export async function getMessages(): Promise<Message[]> {
   const ids = new Set([u, p].filter(Boolean) as string[]);
   return s.messages.filter((m) => ids.has(m.sender_id));
 }
+export async function sendPhoto(jpegBase64: string, width: number, height: number): Promise<void> {
+  await wait();
+  if (!coupleOf(me())) throw new DataError("not_paired");
+  s.messages.push({ id: uid(), sender_id: me(), kind: "photo", body: `${width}x${height}`, photo_url: `data:image/jpeg;base64,${jpegBase64}`, created_at: now() });
+  emit();
+}
 export async function sendNote(body: string): Promise<void> {
   await wait();
   if (!coupleOf(me())) throw new DataError("not_paired");
@@ -612,7 +618,7 @@ export async function getGame(id: string): Promise<Game | null> {
 export async function createGame(type: GameType): Promise<string> {
   await wait();
   const u = me(); const c = coupleOf(u); const p = partnerOf(u); if (!c || !p) throw new DataError("not_paired");
-  if (s.games.some((g) => g.couple_id === c && g.status === "active")) throw new DataError("game_in_progress");
+  if (s.games.some((g) => g.couple_id === c && g.game_type === type && g.status === "active")) throw new DataError("game_in_progress");
   const { cols, rows } = GAME_SHAPE[type];
   const id = uid();
   s.games.push({ id, couple_id: c, game_type: type, board: Array(cols * rows).fill(null), cols, rows,

@@ -135,9 +135,11 @@ const log = (...a) => console.log(...a);
       await B.see('Au tour de Kay');
     });
     await step('Kay reçoit le coup de Sam', async () => { await A.see('À toi de jouer', 25000); });
-    await step('Une seule partie à la fois : Quatre d\'affilée bloqué pour Sam', async () => {
+    await step('Une partie par jeu : morpion en cours, Sam peut lancer un Quatre d\'affilée', async () => {
       await B.goto(URL + 'play', { waitUntil: 'networkidle' });
-      await B.getByRole('button', { name: /Quatre d'affilée\. Finissez d'abord la partie en cours/ }).locator('visible=true').first().waitFor({ timeout: 15000 });
+      await B.getByRole('button', { name: /Morpion du cœur\. Partie en cours/ }).locator('visible=true').first().waitFor({ timeout: 15000 });
+      await B.getByRole('button', { name: /Quatre d'affilée\. 4 pions/ }).locator('visible=true').first().click();
+      await B.see('À toi de jouer', 20000);
     });
     await B.screenshot({ path: 'real-B-game.png' });
     for (const p of [A, B]) await step(`${p.name} supprime son compte`, async () => {

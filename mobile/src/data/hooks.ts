@@ -58,7 +58,7 @@ const MESSAGES: Record<string, string> = {
   stale_game: "La partie a bougé entre-temps. Regarde le plateau et rejoue.",
   premium_required: "Réservé à Premium.",
   quiz_closed: "Ce quiz est terminé. De nouvelles questions arrivent demain.",
-  game_in_progress: "Une partie est déjà en cours. Finissez-la avant d'en lancer une autre.",
+  game_in_progress: "Une partie de ce jeu est déjà en cours. Finissez-la avant d'en lancer une autre.",
   invalid_date: "Cette date n'est pas valide.",
   invalid_credentials: "Email ou mot de passe incorrect.",
   weak_password: "8 caractères minimum pour le mot de passe.",

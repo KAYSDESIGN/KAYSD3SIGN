@@ -44,9 +44,10 @@ export type Mood = { id: string; user_id: string; mood: MoodKey; note: string | 
 export type Message = {
   id: string;
   sender_id: string;
-  kind: "text" | "nudge" | "affection";
-  body: string | null;
+  kind: "text" | "nudge" | "affection" | "photo";
+  body: string | null;                 // photo : dimensions « largeur x hauteur »
   created_at: string;
+  photo_url?: string | null;           // photo : lien temporaire signé
 };
 
 export type Session = { user_id: string; email: string } | null;
