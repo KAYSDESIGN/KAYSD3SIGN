@@ -9,6 +9,7 @@ import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
 import { Body, Button, Card, DesireCard, EmojiText, EmptyState, Muted, SPICE, Toast } from "@/components/ui";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
+import { BackButton } from "@/components/app/BackNav";
 import { api, useMutation, useQuery } from "@/data";
 import { untilTomorrow } from "@/lib/day";
 import { color, cx } from "@/theme";
@@ -28,6 +29,7 @@ function Desires() {
   if (!status.data?.effective) {
     return (
       <Screen edges={["top"]}>
+        <View className="-mb-2 flex-row"><BackButton /></View>
         <ScreenHeader kicker="PIMENT · ENVIES SECRÈTES" title="Ce que vous n'osez pas…" />
         <EmptyState
           icon={Lock}
@@ -54,6 +56,7 @@ function Desires() {
   return (
     <Screen edges={["top"]}>
       <View className="flex-row items-center justify-between">
+        <View className="-mb-2 flex-row"><BackButton /></View>
         <ScreenHeader kicker="PIMENT · ENVIES SECRÈTES" title="Ce que vous n'osez pas…" />
       </View>
       <Body className="text-text-muted">

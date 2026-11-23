@@ -6,7 +6,7 @@ import { Pressable, Text } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Emoji, Glass, LensGlass } from "@/components/ui";
-import { Flame, Gamepad2, Heart, House, MessageCircle, X } from "lucide-react-native";
+import { Gamepad2, Heart, House, MapPin, MessageCircle, X } from "lucide-react-native";
 import { View } from "react-native";
 import { GATE_HREF, useGate } from "@/components/app/useGate";
 import { color, cx, HEART } from "@/theme";
@@ -20,16 +20,16 @@ export default function TabsLayout() {
     <Tabs tabBar={(props) => <FloatingTabBar {...props} />} screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: color.bg } }}>
       <Tabs.Screen name="home" options={{ title: "Accueil" }} />
       <Tabs.Screen name="play" options={{ title: "Jeux" }} />
-      <Tabs.Screen name="desires" options={{ title: "Piment" }} />
-      <Tabs.Screen name="chat" options={{ title: "Chat" }} />
-      <Tabs.Screen name="us" options={{ title: "Profil" }} />
       <Tabs.Screen name="map" options={{ title: "Carte" }} />
+      <Tabs.Screen name="chat" options={{ title: "Chat" }} />
+      <Tabs.Screen name="desires" options={{ title: "Piment" }} />
+      <Tabs.Screen name="us" options={{ title: "Profil" }} />
     </Tabs>
   );
 }
 
-const TAB_ICONS: Record<string, typeof House> = { home: House, play: Gamepad2, desires: Flame, chat: MessageCircle };
-const SHOWN = Object.keys(TAB_ICONS); // profil (avatars de l'accueil) et carte restent accessibles hors du dock
+const TAB_ICONS: Record<string, typeof House> = { home: House, play: Gamepad2, map: MapPin, chat: MessageCircle };
+const SHOWN = Object.keys(TAB_ICONS); // piment (page Aujourd'hui) et profil (avatars de l'accueil) restent accessibles hors du dock
 
 export const QUICK_NOTES = [
   { emoji: "❤️", label: "Je t'aime" },
@@ -78,7 +78,7 @@ function FloatingTabBar({ state, descriptors, emitter, navigateToTab }: BottomTa
           </View>
         ) : null}
         <View className="w-[92%] max-w-[460px] flex-row items-center gap-[10px]">
-          <Glass float radius={999} className="flex-1 flex-row items-center justify-around px-[6px]" style={{ height: 64 }}>
+          <Glass float radius={999} className="flex-1 flex-row items-center px-[7px]" style={{ height: 64 }}>
             {state.routes.filter((r) => SHOWN.includes(r.name)).map((route) => {
               const focused = state.routes[state.index]?.key === route.key;
               const { options } = descriptors[route.key];
@@ -90,22 +90,20 @@ function FloatingTabBar({ state, descriptors, emitter, navigateToTab }: BottomTa
                 if (!focused && !e.defaultPrevented) navigateToTab(route.key);
               };
               const tint = focused ? color.accent : color["text-muted"];
-              const content = (
-                <View className="items-center gap-[2px]">
-                  <Icon size={22} color={tint} strokeWidth={focused ? 2.2 : 1.8} />
-                  <Text className={cx("text-[11px]", focused ? "font-sans-semibold" : "font-sans")} style={{ color: tint }}>{label}</Text>
+              const icon = <Icon size={24} color={tint} strokeWidth={focused ? 2.2 : 1.8} />;
+              // Chaque onglet occupe une case égale ; l'icône (et la bulle active) y est centrée.
+              return (
+                <View key={route.key} className="flex-1 items-center justify-center">
+                  {focused ? (
+                    <LensGlass tinted radius={999} style={{ width: 62, height: 50 }}>
+                      <Pressable accessibilityRole="tab" accessibilityState={{ selected: true }} accessibilityLabel={label} onPress={press}
+                        className="flex-1 items-center justify-center">{icon}</Pressable>
+                    </LensGlass>
+                  ) : (
+                    <Pressable accessibilityRole="tab" accessibilityState={{ selected: false }} accessibilityLabel={label} onPress={press}
+                      className="h-[50px] w-[62px] items-center justify-center rounded-pill active:opacity-60">{icon}</Pressable>
+                  )}
                 </View>
-              );
-              return focused ? (
-                <LensGlass key={route.key} tinted radius={999} style={{ width: 80, height: 54 }}>
-                  <Pressable accessibilityRole="tab" accessibilityState={{ selected: true }} accessibilityLabel={label} onPress={press}
-                    className="flex-1 items-center justify-center">{content}</Pressable>
-                </LensGlass>
-              ) : (
-                <Pressable key={route.key} accessibilityRole="tab" accessibilityState={{ selected: false }} accessibilityLabel={label} onPress={press}
-                  className="h-[54px] w-[68px] items-center justify-center rounded-pill active:opacity-60">
-                  {content}
-                </Pressable>
               );
             })}
           </Glass>

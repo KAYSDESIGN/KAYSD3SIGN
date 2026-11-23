@@ -36,7 +36,7 @@ const log = (...a) => console.log(...a);
       await p.see("Ton espace à deux t'attend");
     });
     await step('Kay visite l\'app en solo (Envies, Quiz)', async () => {
-      await A.getByRole('tab', { name: /^Piment$/ }).locator('visible=true').first().click();
+      await A.goto(URL + 'desires', { waitUntil: 'networkidle' });
       await A.see("Cette partie s'ouvre dès que vous êtes deux.");
       await A.getByRole('tab', { name: /^Accueil$/ }).locator('visible=true').first().click();
       await A.see("Ton espace à deux t'attend");
@@ -106,7 +106,7 @@ const log = (...a) => console.log(...a);
     // Envies du jour : même tirage pour les deux, on dit oui à la première.
     const fresh = (p) => p.locator('[role="radiogroup"]:not(:has([aria-checked="true"]))').locator('visible=true');
     for (const p of [A, B]) await step(`${p.name} dit oui à la première envie du jour`, async () => {
-      await p.getByRole('tab', { name: /^Piment$/ }).locator('visible=true').first().click();
+      await p.goto(URL + 'desires', { waitUntil: 'networkidle' });
       await p.getByRole('tab', { name: /Du jour · 0\/5/ }).locator('visible=true').first().waitFor({ timeout: 60000 });
       await fresh(p).first().getByRole('radio', { name: 'Oui' }).click();
       await p.getByRole('tab', { name: /Du jour · 1\/5/ }).locator('visible=true').first().waitFor({ timeout: 15000 });
