@@ -99,14 +99,25 @@ const log = (...a) => console.log(...a);
       await B.see('Question coquine', 25000);
       await B.getByLabel('Niveau Épicé').locator('visible=true').first().waitFor({ timeout: 10000 });
     });
-    const desire = 'Un massage aux huiles, sans se presser';
-    for (const p of [A, B]) await step(`${p.name} dit oui à une envie`, async () => {
+    // Envies du jour : même tirage pour les deux, on dit oui à la première.
+    const fresh = (p) => p.locator('[role="radiogroup"]:not(:has([aria-checked="true"]))').locator('visible=true');
+    for (const p of [A, B]) await step(`${p.name} dit oui à la première envie du jour`, async () => {
       await p.getByRole('tab', { name: /Envies/ }).locator('visible=true').first().click();
-      await p.see(desire, 20000);
-      await p.getByText(desire).locator('visible=true').first().locator('xpath=ancestor::div[.//*[@role="radio"]][1]').getByRole('radio', { name: 'Oui' }).click();
+      await p.getByRole('tab', { name: /Du jour · 0\/5/ }).locator('visible=true').first().waitFor({ timeout: 20000 });
+      await fresh(p).first().getByRole('radio', { name: 'Oui' }).click();
+      await p.getByRole('tab', { name: /Du jour · 1\/5/ }).locator('visible=true').first().waitFor({ timeout: 15000 });
     });
     await step('Le match apparaît chez Kay', async () => {
       await A.getByRole('tab', { name: /Nos matchs · 1/ }).locator('visible=true').first().waitFor({ timeout: 25000 });
+    });
+    await step('Kay finit ses 5 envies du jour, puis en demande 5 de plus', async () => {
+      for (let i = 2; i <= 5; i++) {
+        await fresh(A).first().getByRole('radio', { name: 'Peut-être' }).click();
+        await A.getByRole('tab', { name: new RegExp(`Du jour · ${i}/5`) }).locator('visible=true').first().waitFor({ timeout: 15000 });
+      }
+      await A.see("C'est tout pour aujourd'hui", 15000);
+      await A.getByRole('button', { name: /Voir 5 envies de plus/ }).locator('visible=true').first().click();
+      await A.getByRole('tab', { name: /Du jour · 5\/10/ }).locator('visible=true').first().waitFor({ timeout: 15000 });
     });
     await step('Kay lance un morpion et joue', async () => {
       await A.getByRole('tab', { name: /Jouer/ }).locator('visible=true').first().click();

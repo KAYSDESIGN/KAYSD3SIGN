@@ -197,18 +197,18 @@ export async function getOffers(): Promise<Offer[]> { return []; } // version pr
 export async function purchase(_product: Offer["product"]): Promise<void> { emit(); }
 
 // --- envies secrètes (S21) ------------------------------------------------------------
-export type DesireRow = { desire: Desire; answer: DesireAnswer | null; locked: boolean };
+export type DesireRow = { desire: Desire; answer: DesireAnswer | null; answeredAt: string | null; locked: boolean };
 export async function getDesires(): Promise<DesireRow[]> {
   const u = await uidOrThrow();
   const status = await getSpiceStatus();
   if (!status.effective) return [];
   const prem = await isPremium();
   const desires = (await must(sb().from("desires").select("id, category, spice_level, body, is_premium").eq("active", true).order("id"))) as Desire[];
-  const mine = (await must(sb().from("desire_answers").select("desire_id, answer").eq("user_id", u))) as { desire_id: string; answer: DesireAnswer }[];
+  const mine = (await must(sb().from("desire_answers").select("desire_id, answer, created_at").eq("user_id", u))) as { desire_id: string; answer: DesireAnswer; created_at: string }[];
   return desires
     .filter((d) => SPICE_RANK[d.spice_level] <= SPICE_RANK[status.effective!])
     .sort((a, b) => SPICE_RANK[a.spice_level] - SPICE_RANK[b.spice_level])
-    .map((d) => ({ desire: d, answer: mine.find((m) => m.desire_id === d.id)?.answer ?? null, locked: d.is_premium && !prem }));
+    .map((d) => { const m = mine.find((x) => x.desire_id === d.id); return { desire: d, answer: m?.answer ?? null, answeredAt: m?.created_at ?? null, locked: d.is_premium && !prem }; });
 }
 export async function answerDesire(desireId: string, answerValue: DesireAnswer): Promise<void> {
   const [u, c] = [await uidOrThrow(), await myCoupleId()];

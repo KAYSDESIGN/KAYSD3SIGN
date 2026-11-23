@@ -16,7 +16,7 @@ type Store = {
   responses: Response[];
   moods: Mood[];
   messages: Message[];
-  desireAnswers: { couple_id: string; user_id: string; desire_id: string; answer: DesireAnswer; updated_at: string }[];
+  desireAnswers: { couple_id: string; user_id: string; desire_id: string; answer: DesireAnswer; created_at?: string; updated_at: string }[];
   bucket: (BucketItem & { couple_id: string })[];
   quizSessions: { id: string; couple_id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string }[];
   quizAnswers: { session_id: string; user_id: string; question_id: string; choices: number[] }[];
@@ -377,7 +377,8 @@ export async function purchase(product: Offer["product"]): Promise<void> {
 }
 
 // --- envies secrètes (S21) --------------------------------------------------
-export type DesireRow = { desire: Desire; answer: DesireAnswer | null; locked: boolean };
+/** answeredAt : date de la première réponse (sert au tirage des envies du jour). */
+export type DesireRow = { desire: Desire; answer: DesireAnswer | null; answeredAt: string | null; locked: boolean };
 
 export async function getDesires(): Promise<DesireRow[]> {
   await wait();
@@ -388,6 +389,7 @@ export async function getDesires(): Promise<DesireRow[]> {
     desire: d,
     // RLS : on ne lit que SES réponses
     answer: s.desireAnswers.find((a) => a.user_id === u && a.desire_id === d.id)?.answer ?? null,
+    answeredAt: (() => { const a = s.desireAnswers.find((x) => x.user_id === u && x.desire_id === d.id); return a ? a.created_at ?? a.updated_at : null; })(),
     locked: d.is_premium && !prem,
   }));
 }
@@ -396,7 +398,7 @@ function answerDesireAs(userId: string, desireId: string, answer: DesireAnswer) 
   const c = coupleOf(userId); if (!c) throw new DataError("not_paired");
   const ex = s.desireAnswers.find((a) => a.user_id === userId && a.desire_id === desireId);
   if (ex) { ex.answer = answer; ex.updated_at = now(); }
-  else s.desireAnswers.push({ couple_id: c, user_id: userId, desire_id: desireId, answer, updated_at: now() });
+  else s.desireAnswers.push({ couple_id: c, user_id: userId, desire_id: desireId, answer, created_at: now(), updated_at: now() });
   emit();
 }
 export async function answerDesire(desireId: string, answer: DesireAnswer): Promise<void> {
