@@ -49,7 +49,8 @@ function Greeting() {
   return (
     <View className="flex-row items-center gap-2">
       <Text accessibilityRole="header" className="font-sans-semibold text-[26px] leading-[32px] text-text">Bonjour, mon amour</Text>
-      <Heart size={22} color={color.text} strokeWidth={1.8} />
+      {/* léger décalage : l'icône s'aligne sur les lettres, pas sur la hauteur de ligne */}
+      <Heart size={22} color={color.text} strokeWidth={1.8} style={{ marginTop: 5 }} />
     </View>
   );
 }

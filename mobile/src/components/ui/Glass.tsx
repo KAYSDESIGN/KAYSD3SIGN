@@ -161,7 +161,7 @@ export function LensGlass({
   return (
     <Glass float interactive radius={radius} tone={tinted ? "tinted" : "clear"} style={style} className={className}>
       <View ref={ref} onLayout={measure} pointerEvents="none" style={[fill, { borderRadius: radius, overflow: "hidden" }]}>
-        {pos ? (
+        {pos && !isEditorial() ? (
           <View style={{
             position: "absolute", left: -pos.x, top: -pos.y, width: win.width, height: win.height,
             transform: [{ scale }], transformOrigin: `${pos.x + pos.w / 2}px ${pos.y + pos.h / 2}px`,
