@@ -3,6 +3,7 @@ import { Image, type ImageSourcePropType, Pressable, Text, View } from "react-na
 import { LinearGradient } from "expo-linear-gradient";
 import { ArrowRight, type LucideIcon } from "lucide-react-native";
 import { color, cx } from "@/theme";
+import { Glass } from "./Glass";
 
 /**
  * Briques du design « éditorial » (palette Bordeaux) : cartes pleines et douces, photos d'ambiance,
@@ -64,7 +65,15 @@ export function PhotoCard({ photo, chip, title, action, onPress, width, height =
         </View>
         <View className="gap-3">
           <Text numberOfLines={3} className="font-sans-semibold text-[21px] leading-[27px]" style={{ color: "#FFFFFF" }}>{title}</Text>
-          <View pointerEvents="none"><PillButton tone="light">{action}</PillButton></View>
+          {/* Bouton en verre liquide posé sur la photo (comme le dock) */}
+          <View pointerEvents="none" className="self-start">
+            <Glass float radius={14} style={{ backgroundColor: "rgba(255,255,255,0.16)" }}>
+              <View className="h-[40px] flex-row items-center gap-2 px-4">
+                <Text className="font-sans-semibold text-[14px]" style={{ color: "#FFFFFF" }}>{action}</Text>
+                <ArrowRight size={16} color="#FFFFFF" strokeWidth={2.2} />
+              </View>
+            </Glass>
+          </View>
         </View>
       </View>
     </Pressable>
