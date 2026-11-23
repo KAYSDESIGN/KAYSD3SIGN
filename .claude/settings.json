@@ -1,0 +1,20 @@
+{
+  "extraKnownMarketplaces": {
+    "replica-skill": {
+      "source": {
+        "source": "github",
+        "repo": "Jakeschincariol/replica-skill"
+      }
+    },
+    "liquid-glass-skills": {
+      "source": {
+        "source": "github",
+        "repo": "haider-nawaz/liquid-glass-skill"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "replica-skill@replica-skill": true,
+    "liquid-glass@liquid-glass-skills": true
+  }
+}

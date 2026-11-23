@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "HotCouple",
+    "slug": "hotcouple",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F3E1FA",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "resizeMode": "contain",
+          "backgroundColor": "#F8F1F8",
+          "dark": {
+            "image": "./assets/splash-icon.png",
+            "backgroundColor": "#120818"
+          }
+        }
+      ]
+    ],
+    "scheme": "hotcouple",
+    "backgroundColor": "#F8F1F8",
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

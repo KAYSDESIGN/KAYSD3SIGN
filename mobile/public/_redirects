@@ -1,0 +1,3 @@
+/daily/*  /daily/[id]  200
+/quiz/*  /quiz/[id]  200
+/game/*  /game/[id]  200
