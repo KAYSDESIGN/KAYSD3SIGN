@@ -20,8 +20,8 @@ const stamp = Date.now().toString(36);
     await step('appairage', async () => {
       await A.btn('Inviter').click(); await A.btn("J'invite mon/ma partenaire").click(); await A.btn('Générer mon code').click();
       code = (await A.getByLabel(/^Ton code/).locator('visible=true').first().getAttribute('aria-label')).replace('Ton code : ', '').replace(/ /g, '');
-      await B.btn("J'ai reçu un code").click(); await B.getByLabel('Code de ton/ta partenaire, 6 caractères').fill(code); await B.btn('Nous relier').click(); await B.see('Toi & Kay');
-      await A.see('Toi & Sam');
+      await B.btn("J'ai reçu un code").click(); await B.getByLabel('Code de ton/ta partenaire, 6 caractères').fill(code); await B.btn('Nous relier').click(); await B.see('Bonjour, mon amour', 25000);
+      await A.see('Bonjour, mon amour', 25000);
     });
     const play = async (p, picks) => {
       await p.goto(URL + 'quiz', { waitUntil: 'networkidle' }); await p.see("Sur la même longueur d'onde ?");
@@ -42,7 +42,7 @@ const stamp = Date.now().toString(36);
       await A.goto(URL + 'quiz', { waitUntil: 'networkidle' }); await A.see(/terminé/);
     });
     if (process.env.S) await step('capture de l\'accueil', async () => {
-      await A.goto(URL + 'home', { waitUntil: 'networkidle' }); await A.see(/Aujourd'hui · /, 60000); await A.waitForTimeout(1500);
+      await A.goto(URL + 'home', { waitUntil: 'networkidle' }); await A.see('À explorer', 60000); await A.waitForTimeout(1500);
       await A.screenshot({ path: `${process.env.S}/home-today.png`, fullPage: true });
     });
   } catch {}

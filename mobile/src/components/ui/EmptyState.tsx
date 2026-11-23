@@ -1,3 +1,4 @@
+import { cx, displayFont } from "@/theme";
 import { Text, View } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
 import { color } from "@/theme";
@@ -12,7 +13,7 @@ export function EmptyState({
       <View className="h-[56px] w-[56px] items-center justify-center rounded-pill bg-accent-soft">
         <Icon size={26} color={color["on-accent-soft"]} />
       </View>
-      <Text accessibilityRole="header" className="text-center font-display text-xl text-text">{title}</Text>
+      <Text accessibilityRole="header" className={cx(displayFont(), "text-center text-xl text-text")}>{title}</Text>
       <Text className="text-center font-sans text-base text-text-muted">{body}</Text>
       {action ? <Button variant="secondary" onPress={onAction}>{action}</Button> : null}
     </Glass>

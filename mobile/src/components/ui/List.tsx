@@ -1,3 +1,4 @@
+import { displayFont } from "@/theme";
 import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
@@ -47,7 +48,7 @@ export function ListRow({
 export function SectionTitle({ title, link, onLink }: { title: string; link?: string; onLink?: () => void }) {
   return (
     <View className="mt-2 flex-row items-baseline justify-between px-[2px]">
-      <Text accessibilityRole="header" className="font-display text-[22px] text-text">{title}</Text>
+      <Text accessibilityRole="header" className={cx(displayFont(), "text-[22px] text-text")}>{title}</Text>
       {link ? <Pressable accessibilityRole="link" onPress={onLink}><Text className="font-sans-bold text-sm text-accent">{link}</Text></Pressable> : null}
     </View>
   );

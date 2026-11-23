@@ -1,3 +1,4 @@
+import { displayFont } from "@/theme";
 import { Text as RNText, type TextProps } from "react-native";
 import { cx } from "@/theme";
 
@@ -5,11 +6,11 @@ type Props = TextProps & { className?: string };
 
 /** Grand titre (Plus Jakarta Sans ExtraBold). Rôle d'en-tête pour les lecteurs d'écran. */
 export function Display({ className, ...p }: Props) {
-  return <RNText accessibilityRole="header" className={cx("font-display text-display text-text", className)} {...p} />;
+  return <RNText accessibilityRole="header" className={cx(displayFont(), "text-display text-text", className)} {...p} />;
 }
 
 export function Heading({ className, ...p }: Props) {
-  return <RNText accessibilityRole="header" className={cx("font-display text-xl text-text", className)} {...p} />;
+  return <RNText accessibilityRole="header" className={cx(displayFont(), "text-xl text-text", className)} {...p} />;
 }
 
 export function Title({ className, ...p }: Props) {

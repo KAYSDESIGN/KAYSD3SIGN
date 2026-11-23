@@ -1,3 +1,4 @@
+import { displayFont } from "@/theme";
 import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
@@ -18,7 +19,7 @@ export function HeroCard({
         </View>
         {badge}
       </View>
-      <Text accessibilityRole="header" className="font-display text-[25px] leading-[30px] tracking-tight text-text">{title}</Text>
+      <Text accessibilityRole="header" className={cx(displayFont(), "text-[25px] leading-[30px] tracking-tight text-text")}>{title}</Text>
       {children ? <View className="gap-3">{children}</View> : null}
     </Glass>
   );

@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Platform, useColorScheme, View } from "react-native";
 import { vars } from "nativewind";
 import { StatusBar } from "expo-status-bar";
-import { color, setActivePalette, setActiveScheme, themeVars, type Scheme } from "@/theme";
+import { activePalette, color, setActivePalette, setActiveScheme, themeVars, type Scheme } from "@/theme";
 import { usePalettePref, useThemePref } from "@/theme/preference";
 
 /** Réglage clair/sombre du téléphone. Sur le web, on lit directement le navigateur (après l'hydratation). */
@@ -31,8 +31,8 @@ export function ThemeRoot({ children }: { children: ReactNode }) {
   setActivePalette(palette);
   // web : la feuille de style du verre suit le thème choisi (et pas seulement celui du téléphone)
   useEffect(() => {
-    if (Platform.OS === "web" && typeof document !== "undefined") document.documentElement.dataset.scheme = scheme;
-  }, [scheme]);
+    if (Platform.OS === "web" && typeof document !== "undefined") { document.documentElement.dataset.scheme = scheme; document.documentElement.dataset.palette = activePalette(); }
+  }, [scheme, palette]);
   return (
     <View key={`${scheme}-${palette}`} style={[{ flex: 1, backgroundColor: color.bg }, vars(themeVars(scheme))]}>
       <StatusBar style={scheme === "dark" ? "light" : "dark"} />

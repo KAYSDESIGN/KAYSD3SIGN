@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
-import { CalendarHeart, ChevronRight, Flame, MessageCircle, Settings, Sparkles } from "lucide-react-native";
+import { CalendarHeart, Camera, ChevronRight, Flame, MapPin, Settings, Smile, Sparkles } from "lucide-react-native";
 import { InviteButtons } from "@/components/app/PairGate";
 import { Screen } from "@/components/app/Screen";
 import { AvatarPicker, useAvatars } from "@/components/app/AvatarPicker";
@@ -41,6 +41,13 @@ export default function Us() {
         <Row icon={Flame} label="Niveau d'audace et 18+" onPress={() => router.push("/age")} />
         <Row icon={CalendarHeart} label="Nos dates" onPress={() => router.push("/dates")} last />
       </Card>
+      {paired ? (
+        <Card className="gap-0 px-4 py-1">
+          <Row icon={Smile} label="Mon humeur du moment" onPress={() => router.push("/mood")} />
+          <Row icon={Camera} label="Nos moments" onPress={() => router.push("/moments")} />
+          <Row icon={MapPin} label="Carte à deux" onPress={() => router.push("/map")} last />
+        </Card>
+      ) : null}
       <Muted className="text-center">{"Tout ce que vous partagez ici reste entre vous deux."}</Muted>
     </Screen>
   );

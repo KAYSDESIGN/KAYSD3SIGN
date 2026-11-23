@@ -5,7 +5,7 @@ import { router } from "expo-router";
 import { ChevronRight, Dices, Grid3x3, Smile, Columns3 } from "lucide-react-native";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Body, Caption, Glass, GlassList, GradientFill, ListRow, Muted, SectionTitle, Toast } from "@/components/ui";
+import { Caption, Glass, GlassList, GradientFill, ListRow, Muted, SectionTitle, SoftCard, Toast } from "@/components/ui";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { api, useMutation, useQuery, type Game, type GameType } from "@/data";
 import { color, cx } from "@/theme";
@@ -37,8 +37,17 @@ function Play() {
 
   return (
     <Screen edges={["top"]}>
-      <ScreenHeader kicker="JOUER" title="À deux, même à distance" />
-      {finished.length ? <Body className="text-text-muted">{`Score : toi ${wins} · ${them} ${losses}`}</Body> : null}
+      <ScreenHeader kicker="JEUX" title="À deux, même à distance" />
+      <View className="flex-row gap-3" accessible accessibilityLabel={`Score : toi ${wins}, ${them} ${losses}`}>
+        <SoftCard tone="rose" className="flex-1 items-center gap-1 py-4">
+          <Text className="font-sans-semibold text-[28px] text-accent">{wins}</Text>
+          <Text className="font-sans text-[13px] text-text-muted">Toi</Text>
+        </SoftCard>
+        <SoftCard tone="sand" className="flex-1 items-center gap-1 py-4">
+          <Text className="font-sans-semibold text-[28px] text-accent">{losses}</Text>
+          <Text numberOfLines={1} className="font-sans text-[13px] text-text-muted">{them}</Text>
+        </SoftCard>
+      </View>
       {create.error ? <Toast tone="error">{create.error}</Toast> : null}
 
       {games.loading && !games.data ? <Skeleton className="h-[80px]" /> : active.length ? (

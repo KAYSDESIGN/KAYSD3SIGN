@@ -7,7 +7,7 @@ import { Flame, Lock, Sparkles } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Body, Button, Card, DesireCard, EmojiText, EmptyState, Muted, SPICE, SpiceBadge, Toast } from "@/components/ui";
+import { Body, Button, Card, DesireCard, EmojiText, EmptyState, Muted, SPICE, Toast } from "@/components/ui";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { api, useMutation, useQuery } from "@/data";
 import { untilTomorrow } from "@/lib/day";
@@ -28,7 +28,7 @@ function Desires() {
   if (!status.data?.effective) {
     return (
       <Screen edges={["top"]}>
-        <ScreenHeader kicker="ENVIES SECRÈTES" title="Ce que vous n'osez pas dire" />
+        <ScreenHeader kicker="PIMENT · ENVIES SECRÈTES" title="Ce que vous n'osez pas…" />
         <EmptyState
           icon={Lock}
           title="À débloquer à deux"
@@ -54,7 +54,7 @@ function Desires() {
   return (
     <Screen edges={["top"]}>
       <View className="flex-row items-center justify-between">
-        <ScreenHeader kicker="ENVIES SECRÈTES" title="Ce que vous n'osez pas dire" right={<SpiceBadge level={status.data.effective} />} />
+        <ScreenHeader kicker="PIMENT · ENVIES SECRÈTES" title="Ce que vous n'osez pas…" />
       </View>
       <Body className="text-text-muted">
         {`Chaque jour, 5 nouvelles envies épicées et brûlantes. Réponds oui, peut-être ou non. ${them} ne verra jamais tes réponses, seulement ce que vous voulez tous les deux.`}

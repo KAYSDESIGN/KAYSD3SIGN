@@ -27,7 +27,7 @@ function worstCases(theme) {
 }
 let fails = 0;
 const base = JSON.parse(JSON.stringify(t));
-for (const pal of ["coral", "neon", "lilas"]) {
+for (const pal of ["coral", "neon", "lilas", "bordeaux"]) {
 const P = pal === "coral" ? null : base.palettes[pal];
 for (const k of ["light", "dark"]) {
   t.themes[k] = { ...base.themes[k], color: { ...base.themes[k].color, ...(P?.[k]?.color ?? {}) }, blobs: P?.[k]?.blobs ?? base.themes[k].blobs };
@@ -39,7 +39,12 @@ for (const name of ["light", "dark"]) {
   const cols = { ...t.themes[name].color, ...worstCases(t.themes[name]) };
   console.log(`\n${name} — pires fonds : ${JSON.stringify(worstCases(t.themes[name]))}`);
   t.gradient.brand.forEach((c, i) => (cols[`grad-${i}`] = c));
-  for (const [fg, bg, size = "normal"] of [...t.pairs.both, ...(t.pairs[name] ?? [])]) {
+  // Palette éditoriale : textes posés sur les cartes pleines (rose, sable, bordeaux)
+  const editorial = pal === "bordeaux" ? [
+    ["text", "card-rose"], ["text-muted", "card-rose"], ["accent", "card-rose"], ["text", "card-sand"], ["text-muted", "card-sand"], ["accent", "card-sand"],
+    ["on-wine", "card-wine"], ["on-wine-muted", "card-wine"], ["accent", "bg"], ["text-muted", "bg"], ["bg", "accent"], ["accent", "accent-soft"], ["text-muted", "accent-soft"],
+  ] : [];
+  for (const [fg, bg, size = "normal"] of [...t.pairs.both, ...(t.pairs[name] ?? []), ...editorial]) {
     const a = cols[fg], b = cols[bg];
     if (!a?.startsWith("#") || !b?.startsWith("#")) { console.log(`  ??   ${fg} on ${bg}`); fails++; continue; }
     const r = ratio(a, b); const ok = r >= NEED[size];

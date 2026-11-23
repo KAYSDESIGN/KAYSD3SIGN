@@ -55,7 +55,7 @@ export default function SettingsScreen() {
         <Muted>Automatique suit le réglage jour/nuit de ton téléphone.</Muted>
         <Title>Couleurs</Title>
         <View accessibilityRole="radiogroup" accessibilityLabel="Couleurs" className="flex-row rounded-pill border border-glass-edge bg-surface p-1">
-          {([["lilas", "Lilas"], ["neon", "Néon"], ["coral", "Corail"]] as const).map(([k, l]) => (
+          {([["bordeaux", "Bordeaux"], ["lilas", "Lilas"], ["neon", "Néon"], ["coral", "Corail"]] as const).map(([k, l]) => (
             <Pressable key={k} accessibilityRole="radio" accessibilityState={{ checked: palettePref === k }} onPress={() => setPalettePref(k)}
               className={palettePref === k ? "h-[40px] flex-1 items-center justify-center rounded-pill border border-glass-edge bg-surface-raised" : "h-[40px] flex-1 items-center justify-center rounded-pill"}>
               <Text className={palettePref === k ? "font-sans-bold text-sm text-text" : "font-sans-semibold text-sm text-text-muted"}>{l}</Text>

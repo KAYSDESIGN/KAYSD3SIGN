@@ -26,6 +26,11 @@
   --c-focus: #7C3AED;
   --c-tab-bar: rgba(255,255,255,0.20);
   --c-brand-ink: #B0185A;
+  --c-card-rose: rgba(255,255,255,0.10);
+  --c-card-sand: rgba(255,255,255,0.14);
+  --c-card-wine: #1D1B20;
+  --c-on-wine: #FFFFFF;
+  --c-on-wine-muted: #E9E4EE;
   --grad-0: #D63A45;
   --grad-1: #CF2470;
   --grad-2: #8338EC;
@@ -65,5 +70,10 @@
     --c-focus: #E9D5FF;
     --c-tab-bar: rgba(255,255,255,0.07);
     --c-brand-ink: #B0185A;
+    --c-card-rose: rgba(255,255,255,0.05);
+    --c-card-sand: rgba(255,255,255,0.08);
+    --c-card-wine: #F6F2F8;
+    --c-on-wine: #1D1B20;
+    --c-on-wine-muted: #3A3540;
   }
 }

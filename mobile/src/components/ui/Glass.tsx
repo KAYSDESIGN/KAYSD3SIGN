@@ -4,7 +4,7 @@ import { Image, Platform, StyleSheet, useWindowDimensions, View, type ViewProps 
 import { BlurView } from "expo-blur";
 import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 import { LinearGradient } from "expo-linear-gradient";
-import { activePalette, activeScheme, blobs, blur, color, cx, gradient } from "@/theme";
+import { activePalette, activeScheme, blobs, blur, color, cx, gradient, isEditorial } from "@/theme";
 
 const fill = StyleSheet.absoluteFill;
 const IOS_LIQUID = Platform.OS === "ios" && (() => { try { return isLiquidGlassAvailable(); } catch { return false; } })();
@@ -38,10 +38,22 @@ function toneTint(tone: GlassTone, strong?: boolean) {
  * - Ailleurs : expo-blur léger (Android : translucide sans flou).
  */
 export function Glass({
-  children, className, strong, tone = "clear", radius = 28, shadow = true, style, ...p
-}: ViewProps & { children?: ReactNode; className?: string; strong?: boolean; tone?: GlassTone; radius?: number; shadow?: boolean }) {
+  children, className, strong, tone = "clear", radius = 28, shadow = true, float, style, ...p
+}: ViewProps & { children?: ReactNode; className?: string; strong?: boolean; tone?: GlassTone; radius?: number; shadow?: boolean;
+  /** Élément flottant (dock, bouton cœur, bouton retour, menus) : toujours en verre, même en palette éditoriale. */
+  float?: boolean }) {
   const b = blur();
   const tint = toneTint(tone, strong);
+
+  // Palette Bordeaux : cartes pleines et douces, sans ombre ni verre ; le verre est gardé pour ce qui flotte.
+  if (isEditorial() && !float) {
+    const bg = tone === "tinted" ? color["accent-soft"] : tone === "bright" || strong ? color["card-sand"] : color["card-rose"];
+    return (
+      <View className={cx("overflow-hidden", className)} style={[{ borderRadius: radius, backgroundColor: bg }, style]} {...p}>
+        {children}
+      </View>
+    );
+  }
 
   if (IOS_LIQUID) {
     return (
@@ -53,7 +65,7 @@ export function Glass({
 
   if (Platform.OS === "web") {
     return (
-      <View className={cx("lg overflow-hidden", !shadow && "lg-flat", className)} style={[{ borderRadius: radius, backgroundColor: tint }, style]} {...p}>
+      <View className={cx("lg overflow-hidden", !shadow && "lg-flat", float && "lg-float", className)} style={[{ borderRadius: radius, backgroundColor: isEditorial() ? (activeScheme() === "dark" ? "rgba(38,25,32,0.55)" : "rgba(252,248,247,0.55)") : tint }, style]} {...p}>
         {children}
       </View>
     );
@@ -81,7 +93,7 @@ export function LensGlass({
   const win = useWindowDimensions();
   const measure = () => ref.current?.measureInWindow((x: number, y: number, w: number, h: number) => { if (w && h) setPos({ x, y, w, h }); });
   return (
-    <Glass radius={radius} tone={tinted ? "tinted" : "clear"} style={style} className={className}>
+    <Glass float radius={radius} tone={tinted ? "tinted" : "clear"} style={style} className={className}>
       <View ref={ref} onLayout={measure} pointerEvents="none" style={[fill, { borderRadius: radius, overflow: "hidden" }]}>
         {pos ? (
           <View style={{
@@ -91,7 +103,7 @@ export function LensGlass({
             <GlassBackground />
           </View>
         ) : null}
-        {tinted ? <View style={[fill, { backgroundColor: color["accent-soft"] }]} /> : null}
+        {tinted ? <View style={[fill, { backgroundColor: color["accent-soft"], opacity: isEditorial() ? 0.85 : 1 }]} /> : null}
       </View>
       {children}
     </Glass>
@@ -116,6 +128,7 @@ const FROSTED = { light: require("../../../assets/bg/frosted-light.jpg"), dark: 
 /** Fond de chaque écran : dégradé de couleurs givré (palette Lilas) ou dégradé simple (autres palettes). */
 export function GlassBackground() {
   const scheme = activeScheme();
+  if (isEditorial()) return <View pointerEvents="none" style={[fill, { backgroundColor: color.bg }]} />;
   if (activePalette() === "lilas") {
     return (
       <View pointerEvents="none" style={[fill, { backgroundColor: color.bg }]}>

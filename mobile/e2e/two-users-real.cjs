@@ -36,9 +36,9 @@ const log = (...a) => console.log(...a);
       await p.see("Ton espace à deux t'attend");
     });
     await step('Kay visite l\'app en solo (Envies, Quiz)', async () => {
-      await A.getByRole('tab', { name: /Envies/ }).locator('visible=true').first().click();
+      await A.getByRole('tab', { name: /^Piment$/ }).locator('visible=true').first().click();
       await A.see("Cette partie s'ouvre dès que vous êtes deux.");
-      await A.getByRole('tab', { name: /^Nous$/ }).locator('visible=true').first().click();
+      await A.getByRole('tab', { name: /^Accueil$/ }).locator('visible=true').first().click();
       await A.see("Ton espace à deux t'attend");
       await A.waitForURL(/\/home$/);
       await A.getByRole('button', { name: /^Quiz à deux/ }).locator('visible=true').first().click();
@@ -65,17 +65,17 @@ const log = (...a) => console.log(...a);
       await B.click2("J'ai plutôt reçu un code");
       await B.getByLabel('Code de ton/ta partenaire, 6 caractères').fill(code);
       await B.click2('Nous relier');
-      await B.see('Toi & Kay');
+      await B.see('Bonjour, mon amour', 25000);
     });
-    await step("Kay voit l'appairage arriver tout seul", async () => { await A.see('Toi & Sam', 25000); });
+    await step("Kay voit l'appairage arriver tout seul", async () => { await A.see('Bonjour, mon amour', 25000); });
     await step('Kay répond à la question du jour', async () => {
-      await A.click2('Répondre');
+      await A.getByRole('button', { name: /^Question du jour\..*Répondre à deux/ }).locator('visible=true').first().click();
       await A.getByRole('textbox', { name: 'Ta réponse' }).locator('visible=true').fill('Réponse de Kay, test e2e');
       await A.click2('Envoyer ma réponse');
       await A.see("s'affichera quand vous aurez répondu tous les deux");
     });
     await step('Sam répond', async () => {
-      await B.click2('Répondre');
+      await B.getByRole('button', { name: /^Question du jour\..*Répondre à deux/ }).locator('visible=true').first().click();
       await B.getByRole('textbox', { name: 'Ta réponse' }).locator('visible=true').fill('Réponse de Sam, test e2e');
       await B.click2('Envoyer ma réponse');
       await B.see('Réponse de Kay, test e2e');
@@ -90,7 +90,7 @@ const log = (...a) => console.log(...a);
       await A.see(/Sam : .*Tu me manques/, 25000);
     });
     for (const [p, lvl, bd] of [[A, 'Brûlant', '14'], [B, 'Épicé', '20']]) await step(`${p.name} confirme son âge (${lvl})`, async () => {
-      await p.getByRole('button', { name: /^Questions coquines/ }).locator('visible=true').first().click();
+      await p.getByRole('button', { name: /^Question coquine\..*Débloquer/ }).locator('visible=true').first().click();
       await p.getByLabel('Jour', { exact: true }).locator('visible=true').fill(bd);
       await p.getByLabel('Mois', { exact: true }).locator('visible=true').fill('03');
       await p.getByLabel('Année', { exact: true }).locator('visible=true').fill('1992');
@@ -101,13 +101,12 @@ const log = (...a) => console.log(...a);
       await p.click2('Enregistrer');
     });
     await step('La question coquine apparaît au niveau Épicé', async () => {
-      await B.see('Question coquine', 25000);
-      await B.getByLabel('Niveau Épicé').locator('visible=true').first().waitFor({ timeout: 10000 });
+      await B.getByRole('button', { name: /^Question coquine\..*Répondre à deux/ }).locator('visible=true').first().waitFor({ timeout: 25000 });
     });
     // Envies du jour : même tirage pour les deux, on dit oui à la première.
     const fresh = (p) => p.locator('[role="radiogroup"]:not(:has([aria-checked="true"]))').locator('visible=true');
     for (const p of [A, B]) await step(`${p.name} dit oui à la première envie du jour`, async () => {
-      await p.getByRole('tab', { name: /Envies/ }).locator('visible=true').first().click();
+      await p.getByRole('tab', { name: /^Piment$/ }).locator('visible=true').first().click();
       await p.getByRole('tab', { name: /Du jour · 0\/5/ }).locator('visible=true').first().waitFor({ timeout: 60000 });
       await fresh(p).first().getByRole('radio', { name: 'Oui' }).click();
       await p.getByRole('tab', { name: /Du jour · 1\/5/ }).locator('visible=true').first().waitFor({ timeout: 15000 });
@@ -123,14 +122,14 @@ const log = (...a) => console.log(...a);
       await A.see("C'est tout pour aujourd'hui", 15000);
     });
     await step('Kay lance un morpion et joue', async () => {
-      await A.getByRole('tab', { name: /Jouer/ }).locator('visible=true').first().click();
+      await A.getByRole('tab', { name: /^Jeux$/ }).locator('visible=true').first().click();
       await A.getByRole('button', { name: /^Morpion du cœur/ }).locator('visible=true').click();
       await A.see('À toi de jouer');
       await A.getByRole('button', { name: /^Ligne 1, colonne 1,/ }).locator('visible=true').click();
       await A.see('Au tour de Sam');
     });
     await step('Sam voit la partie et joue au centre', async () => {
-      await B.getByRole('tab', { name: /Jouer/ }).locator('visible=true').first().click();
+      await B.getByRole('tab', { name: /^Jeux$/ }).locator('visible=true').first().click();
       await B.getByRole('button', { name: /^Morpion du cœur, À toi de jouer/ }).locator('visible=true').first().click({ timeout: 25000 });
       await B.getByRole('button', { name: /^Ligne 2, colonne 2,/ }).locator('visible=true').click();
       await B.see('Au tour de Kay');

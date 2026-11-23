@@ -1,6 +1,6 @@
 import { ActivityIndicator, Pressable, Text, View, type PressableProps } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { color, cx } from "@/theme";
+import { color, cx, isEditorial } from "@/theme";
 import { glassLight, GradientFill } from "./Glass";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger";
@@ -48,7 +48,10 @@ export function Button({
         "flex-row items-center justify-center rounded-pill",
         box[variant], height[size], block && "self-stretch", off && "opacity-50", className
       )}
-      style={variant === "primary" ? { backgroundColor: color.text, boxShadow: "0 8px 20px rgba(29,27,32,0.22)" } : variant === "secondary" ? glassLight({ lift: false }) : undefined}
+      style={variant === "primary"
+        ? isEditorial() ? { backgroundColor: color.accent, borderRadius: 16 } : { backgroundColor: color.text, boxShadow: "0 8px 20px rgba(29,27,32,0.22)" }
+        : variant === "secondary" ? (isEditorial() ? { backgroundColor: color["card-sand"], borderWidth: 0, borderRadius: 16 } : glassLight({ lift: false }))
+        : isEditorial() ? { borderRadius: 16 } : undefined}
       {...p}
     >
       {loading ? (
@@ -56,7 +59,7 @@ export function Button({
       ) : (
         <View className="flex-row items-center gap-2">
           {Icon ? <Icon size={size === "sm" ? 16 : 18} color={iconColor(variant)} strokeWidth={2.2} /> : null}
-          <Text className={cx("font-sans-bold", text[size], label[variant])}>{children}</Text>
+          <Text className={cx(isEditorial() ? "font-sans-semibold" : "font-sans-bold", text[size], label[variant])}>{children}</Text>
         </View>
       )}
     </Pressable>

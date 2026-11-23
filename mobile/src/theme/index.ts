@@ -2,11 +2,15 @@ import tokens from "./tokens.json";
 
 export { tokens };
 export type Scheme = "light" | "dark";
-export type Palette = "lilas" | "neon" | "coral";
+export type Palette = "bordeaux" | "lilas" | "neon" | "coral";
 export type ColorRole = keyof typeof tokens.themes.light.color;
 
 let active: Scheme = "light";
-let palette: Palette = (tokens.palettes.default as Palette) ?? "lilas";
+let palette: Palette = (tokens.palettes.default as Palette) ?? "bordeaux";
+/** Palette « éditoriale » : cartes pleines et douces, verre réservé au dock et aux boutons flottants. */
+export const isEditorial = () => palette === "bordeaux";
+/** Police des titres : très grasse par défaut, demi-grasse et plus élégante en palette éditoriale. */
+export const displayFont = () => (palette === "bordeaux" ? "font-sans-semibold" : "font-display");
 /** Appelé par ThemeRoot à chaque changement (l'arbre est remonté dans la foulée). */
 export function setActiveScheme(s: Scheme) { active = s; }
 export function setActivePalette(p: Palette) { palette = p; }
