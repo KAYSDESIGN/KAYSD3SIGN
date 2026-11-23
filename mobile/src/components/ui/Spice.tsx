@@ -9,12 +9,15 @@ export const SPICE: Record<Spice, { label: string; peppers: string; hint: string
   hot: { label: "Brûlant", peppers: "🌶️🌶️🌶️", hint: "Sans filtre, entre adultes consentants", bg: "bg-spice-hot" },
 };
 
+/** Texte des badges : boîte de ligne fixe et centrée, pour que tous les badges alignent leur texte pareil. */
+export const BADGE_TEXT = { lineHeight: 18, includeFontPadding: false, textAlignVertical: "center" } as const;
+
 export function SpiceBadge({ level, size = "sm" }: { level: Spice; size?: "sm" | "md" }) {
   const s = SPICE[level];
   // « md » : même hauteur et même texte que la pastille de série (flamme), pour les aligner côte à côte
   return (
     <View accessible accessibilityLabel={`Niveau ${s.label}`} className={cx("flex-row items-center rounded-pill px-3", size === "md" ? "h-[34px] self-center" : "h-[26px] self-start", s.bg)}>
-      <Text className={cx("font-sans-bold text-on-spice", size === "md" ? "text-sm" : "text-xs")}>{s.label}</Text>
+      <Text className={cx("font-sans-bold text-on-spice", size === "md" ? "text-sm" : "text-xs")} style={BADGE_TEXT}>{s.label}</Text>
     </View>
   );
 }
