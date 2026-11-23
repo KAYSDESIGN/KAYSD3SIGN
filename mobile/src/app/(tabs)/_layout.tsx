@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Pressable, Text } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Emoji, Glass, LensGlass } from "@/components/ui";
+import { Emoji, Glass, GlassGroup, LensGlass } from "@/components/ui";
 import { Gamepad2, Heart, House, MapPin, MessageCircle, X } from "lucide-react-native";
 import { View } from "react-native";
 import { GATE_HREF, useGate } from "@/components/app/useGate";
@@ -69,7 +69,7 @@ function FloatingTabBar({ state, descriptors, emitter, navigateToTab }: BottomTa
               <Text className="px-3 pb-1 pt-2 font-sans-bold text-xs uppercase tracking-wider text-text-muted">{`Envoyer à ${them}`}</Text>
               {QUICK_NOTES.map((n) => (
                 <Pressable key={n.label} accessibilityRole="button" accessibilityLabel={`Envoyer : ${n.label}`} onPress={() => send(n)}
-                  className="h-[48px] flex-row items-center gap-3 rounded-pill px-3 active:bg-surface-raised">
+                  className="h-[48px] flex-row items-center gap-3 rounded-pill px-3 active:bg-accent-soft">
                   <Emoji char={n.emoji} size={26} />
                   <Text className="font-sans-bold text-[15px] text-text">{n.label}</Text>
                 </Pressable>
@@ -77,7 +77,8 @@ function FloatingTabBar({ state, descriptors, emitter, navigateToTab }: BottomTa
             </Glass>
           </View>
         ) : null}
-        <View className="w-[92%] max-w-[460px] flex-row items-center gap-[10px]">
+        {/* Dock + bouton cœur : un seul groupe de verre (GlassEffectContainer sur iOS 26) */}
+        <GlassGroup spacing={10} style={{ width: "92%", maxWidth: 460, flexDirection: "row", alignItems: "center", gap: 10 }}>
           <Glass float radius={999} className="flex-1 flex-row items-center px-[7px]" style={{ height: 64 }}>
             {state.routes.filter((r) => SHOWN.includes(r.name)).map((route) => {
               const focused = state.routes[state.index]?.key === route.key;
@@ -118,7 +119,7 @@ function FloatingTabBar({ state, descriptors, emitter, navigateToTab }: BottomTa
               </View>
             </Pressable>
           </LensGlass>
-        </View>
+        </GlassGroup>
       </View>
     </View>
   );

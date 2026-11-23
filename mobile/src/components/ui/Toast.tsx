@@ -13,6 +13,7 @@ export function Toast({ tone = "info", children }: { tone?: Tone; children: stri
   const Icon = icons[tone];
   return (
     <Glass
+      float
       strong
       radius={20}
       accessibilityRole="alert"

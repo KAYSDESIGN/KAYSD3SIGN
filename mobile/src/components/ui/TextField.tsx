@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Text, TextInput, View, type TextInputProps } from "react-native";
 import { color, cx } from "@/theme";
+import { Glass } from "./Glass";
 
 type Props = TextInputProps & { label: string; hint?: string; error?: string; className?: string };
 
@@ -10,6 +11,7 @@ export function TextField({ label, hint, error, className, editable = true, ...p
   return (
     <View className={cx("gap-2", className)}>
       <Text className="font-sans-semibold text-sm text-text">{label}</Text>
+      <Glass float radius={14}>
       <TextInput
         accessibilityLabel={label}
         accessibilityHint={error ?? hint}
@@ -19,12 +21,13 @@ export function TextField({ label, hint, error, className, editable = true, ...p
         onFocus={(e) => { setFocused(true); p.onFocus?.(e); }}
         onBlur={(e) => { setFocused(false); p.onBlur?.(e); }}
         className={cx(
-          "h-[48px] rounded-md border bg-surface-raised px-4 font-sans text-base text-text",
+          "h-[48px] rounded-[14px] border bg-transparent px-4 font-sans text-base text-text",
           error ? "border-danger" : focused ? "border-focus border-2" : "border-border-input",
           !editable && "opacity-50"
         )}
         {...p}
       />
+      </Glass>
       {error ? (
         <Text accessibilityLiveRegion="polite" className="font-sans-semibold text-sm text-danger">{error}</Text>
       ) : hint ? (

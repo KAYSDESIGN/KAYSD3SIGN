@@ -14,8 +14,8 @@ function goBack() {
 /** Bouton retour : rond, en verre, en haut à gauche. */
 export function BackButton() {
   return (
-    <Glass radius={999} shadow={false} style={{ width: 40, height: 40 }}>
-      <Pressable accessibilityRole="button" accessibilityLabel="Retour" onPress={goBack} className="flex-1 items-center justify-center active:opacity-70">
+    <Glass float interactive radius={999} style={{ width: 40, height: 40 }}>
+      <Pressable accessibilityRole="button" accessibilityLabel="Retour" onPress={goBack} className="flex-1 items-center justify-center">
         <View><ChevronLeft size={24} color={color.text} strokeWidth={2.4} /></View>
       </Pressable>
     </Glass>

@@ -5,7 +5,7 @@ import { router } from "expo-router";
 import { Screen } from "@/components/app/Screen";
 import { AvatarPicker } from "@/components/app/AvatarPicker";
 import { useGate } from "@/components/app/useGate";
-import { Body, Button, Caption, Card, Heading, Muted, TextField, Title, Toast } from "@/components/ui";
+import { Body, Button, Caption, Card, Glass, Heading, Muted, TextField, Title, Toast } from "@/components/ui";
 import { api, useMutation } from "@/data";
 import { color } from "@/theme";
 
@@ -44,24 +44,24 @@ export default function SettingsScreen() {
 
       <Card className="gap-3">
         <Title>Apparence</Title>
-        <View accessibilityRole="radiogroup" accessibilityLabel="Apparence" className="flex-row rounded-pill border border-glass-edge bg-surface p-1">
+        <Glass float radius={999} accessibilityRole="radiogroup" accessibilityLabel="Apparence" className="flex-row p-1">
           {([["auto", "Automatique"], ["light", "Jour"], ["dark", "Nuit"]] as const).map(([k, l]) => (
             <Pressable key={k} accessibilityRole="radio" accessibilityState={{ checked: pref === k }} onPress={() => setThemePref(k)}
-              className={pref === k ? "h-[40px] flex-1 items-center justify-center rounded-pill border border-glass-edge bg-surface-raised" : "h-[40px] flex-1 items-center justify-center rounded-pill"}>
+              className="h-[40px] flex-1 items-center justify-center rounded-pill" style={{ backgroundColor: pref === k ? color["accent-soft"] : "transparent" }}>
               <Text className={pref === k ? "font-sans-bold text-sm text-text" : "font-sans-semibold text-sm text-text-muted"}>{l}</Text>
             </Pressable>
           ))}
-        </View>
+        </Glass>
         <Muted>Automatique suit le réglage jour/nuit de ton téléphone.</Muted>
         <Title>Couleurs</Title>
-        <View accessibilityRole="radiogroup" accessibilityLabel="Couleurs" className="flex-row rounded-pill border border-glass-edge bg-surface p-1">
+        <Glass float radius={999} accessibilityRole="radiogroup" accessibilityLabel="Couleurs" className="flex-row p-1">
           {([["bordeaux", "Bordeaux"], ["lilas", "Lilas"], ["neon", "Néon"], ["coral", "Corail"]] as const).map(([k, l]) => (
             <Pressable key={k} accessibilityRole="radio" accessibilityState={{ checked: palettePref === k }} onPress={() => setPalettePref(k)}
-              className={palettePref === k ? "h-[40px] flex-1 items-center justify-center rounded-pill border border-glass-edge bg-surface-raised" : "h-[40px] flex-1 items-center justify-center rounded-pill"}>
+              className="h-[40px] flex-1 items-center justify-center rounded-pill" style={{ backgroundColor: palettePref === k ? color["accent-soft"] : "transparent" }}>
               <Text className={palettePref === k ? "font-sans-bold text-sm text-text" : "font-sans-semibold text-sm text-text-muted"}>{l}</Text>
             </Pressable>
           ))}
-        </View>
+        </Glass>
       </Card>
 
       <Card className="gap-3">

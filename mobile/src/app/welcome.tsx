@@ -3,8 +3,9 @@ import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Screen } from "@/components/app/Screen";
 import { Body, Button, Caption, Display, Muted, TextField } from "@/components/ui";
+import { Glass } from "@/components/ui";
 import { api, useMutation, USING_SUPABASE } from "@/data";
-import { cx } from "@/theme";
+import { color, cx } from "@/theme";
 
 // S01 · Bienvenue : créer un compte ou se connecter (email + mot de passe)
 export default function Welcome() {
@@ -27,14 +28,14 @@ export default function Welcome() {
       </View>
 
       <View className="gap-3">
-        <View accessibilityRole="tablist" className="flex-row rounded-pill bg-surface p-1">
+        <Glass float radius={999} accessibilityRole="tablist" className="flex-row p-1">
           {([["signup", "Créer un compte"], ["signin", "Me connecter"]] as const).map(([k, l]) => (
             <Pressable key={k} accessibilityRole="tab" accessibilityState={{ selected: mode === k }} onPress={() => { setMode(k); auth.setError(null); }}
-              className={cx("h-[40px] flex-1 items-center justify-center rounded-pill", mode === k ? "bg-surface-raised" : "")}>
+              className="h-[40px] flex-1 items-center justify-center rounded-pill" style={{ backgroundColor: mode === k ? color["accent-soft"] : "transparent" }}>
               <Text className={cx("font-sans-bold text-sm", mode === k ? "text-text" : "text-text-muted")}>{l}</Text>
             </Pressable>
           ))}
-        </View>
+        </Glass>
         <TextField label="Email" value={email} onChangeText={(t) => { setEmail(t); auth.setError(null); }}
           keyboardType="email-address" autoCapitalize="none" autoComplete="email" textContentType="emailAddress" placeholder="toi@exemple.fr" />
         <TextField label="Mot de passe" value={password} onChangeText={(t) => { setPassword(t); auth.setError(null); }}

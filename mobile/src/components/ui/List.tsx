@@ -37,9 +37,11 @@ export function ListRow({
         <Text numberOfLines={1} className="font-sans-bold text-[15.5px] text-text">{title}</Text>
         {subtitle ? <Text numberOfLines={2} className="font-sans text-[13px] text-text-muted">{subtitle}</Text> : null}
       </View>
-      <View className="h-[32px] items-center justify-center rounded-pill border border-glass-edge bg-surface-raised px-4">
-        <Text className="font-sans-bold text-[13px] uppercase tracking-wider" style={{ color: color.accent }}>{action}</Text>
-      </View>
+      <Glass float radius={999} shadow={false} style={{ height: 32 }}>
+        <View className="h-[32px] items-center justify-center px-4">
+          <Text className="font-sans-bold text-[13px] uppercase tracking-wider" style={{ color: color.accent }}>{action}</Text>
+        </View>
+      </Glass>
     </Pressable>
   );
 }

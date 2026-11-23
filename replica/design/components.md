@@ -140,3 +140,18 @@ EmptyState
 ## Reste à construire pendant replica-build
 
 Ces composants dépendent des écrans et seront faits avec eux : barre d'onglets (S04–S17), carte partagée avec deux marqueurs (S07, `react-native-maps`), plateaux de jeux (S12), lecteur et enregistreur vocal (S06), toile de dessin (S06), widgets natifs (S19), écran de verrouillage PIN (S26).
+
+## Liquid Glass (skill `liquid-glass`, adapté à Expo / React Native)
+
+Composant unique : `Glass` (`mobile/src/components/ui/Glass.tsx`).
+
+| Règle Apple | Dans HotCouple |
+| --- | --- |
+| Verre réservé à la navigation et aux contrôles, jamais au contenu | `float` sur dock, bouton cœur, boutons, retour, segmentés, choix Oui/Peut-être/Non, choix du quiz, champs de saisie, bandeaux, menu des mots express. Les cartes de contenu restent pleines (palette Bordeaux). |
+| `.regular` / `.clear` | `variant="regular"` (défaut des contrôles), `variant="clear"` sur les photos (carrousel). |
+| `.glassProminent` | `prominent={couleur}` : bouton principal en verre teinté bordeaux. |
+| `.interactive()` | `interactive` : léger enfoncement et reflet plus vif au toucher. |
+| `GlassEffectContainer` | `GlassGroup` autour du dock et du bouton cœur (natif sur iOS 26). |
+| Accessibilité | « Réduire la transparence » → surface opaque ; contraste élevé → liseré marqué ; animations réduites → pas d'enfoncement. |
+
+Rendu : iOS 26+ = vrai Liquid Glass (`expo-glass-effect`, `GlassView`) ; web = classes CSS `lg`, `lg-float`, `lg-clear`, `lg-prominent`, `lg-interactive` (`+html.tsx`) ; autres = `expo-blur`.

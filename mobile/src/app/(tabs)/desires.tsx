@@ -10,6 +10,7 @@ import { useGate } from "@/components/app/useGate";
 import { Body, Button, Card, DesireCard, EmojiText, EmptyState, Muted, SPICE, Toast } from "@/components/ui";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { BackButton } from "@/components/app/BackNav";
+import { Glass } from "@/components/ui";
 import { api, useMutation, useQuery } from "@/data";
 import { untilTomorrow } from "@/lib/day";
 import { color, cx } from "@/theme";
@@ -55,22 +56,20 @@ function Desires() {
 
   return (
     <Screen edges={["top"]}>
-      <View className="flex-row items-center justify-between">
-        <View className="-mb-2 flex-row"><BackButton /></View>
-        <ScreenHeader kicker="PIMENT · ENVIES SECRÈTES" title="Ce que vous n'osez pas…" />
-      </View>
+      <View className="-mb-2 flex-row"><BackButton /></View>
+      <ScreenHeader kicker="PIMENT · ENVIES SECRÈTES" title="Ce que vous n'osez pas…" />
       <Body className="text-text-muted">
         {`Chaque jour, 5 nouvelles envies épicées et brûlantes. Réponds oui, peut-être ou non. ${them} ne verra jamais tes réponses, seulement ce que vous voulez tous les deux.`}
       </Body>
 
-      <View accessibilityRole="tablist" className="flex-row rounded-pill bg-surface p-1">
+      <Glass float radius={999} accessibilityRole="tablist" className="flex-row p-1">
         {([["answer", `Du jour · ${batch.filter((r) => r.answer).length}/${batch.length}`], ["matches", `Matchs du jour · ${matches.data?.length ?? 0}`]] as const).map(([k, l]) => (
           <Pressable key={k} accessibilityRole="tab" accessibilityState={{ selected: tab === k }} onPress={() => setTab(k)}
-            className={cx("h-[40px] flex-1 items-center justify-center rounded-pill", tab === k ? "bg-surface-raised" : "")}>
+            className="h-[40px] flex-1 items-center justify-center rounded-pill" style={{ backgroundColor: tab === k ? color["accent-soft"] : "transparent" }}>
             <Text className={cx("font-sans-bold text-sm", tab === k ? "text-text" : "text-text-muted")}>{l}</Text>
           </Pressable>
         ))}
-      </View>
+      </Glass>
 
       {tab === "answer" ? (
         <View className="gap-3">

@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { Lock } from "lucide-react-native";
-import { cx } from "@/theme";
+import { cx, isEditorial } from "@/theme";
 import { color as brandColor } from "@/theme";
 import { Glass } from "./Glass";
 import { HeroCard } from "./Hero";
@@ -29,12 +29,14 @@ export function DesireCard({
             <Text className="font-sans-bold text-[15px]" style={{ color: on ? brandColor.bg : ink.title }}>{o.label}</Text>
           );
           return on ? (
-            <Pressable key={o.key} accessibilityRole="radio" accessibilityState={{ checked: true }} aria-checked onPress={() => onChange(o.key)}
-              className="h-[48px] flex-1 items-center justify-center rounded-pill" style={{ backgroundColor: brandColor.text, boxShadow: "0 6px 16px rgba(29,27,32,0.22)" }}>
-              {label}
-            </Pressable>
+            <Glass key={o.key} float interactive radius={999} prominent={isEditorial() ? brandColor.accent : brandColor.text} className="h-[48px] flex-1">
+              <Pressable accessibilityRole="radio" accessibilityState={{ checked: true }} aria-checked onPress={() => onChange(o.key)}
+                className="flex-1 items-center justify-center">
+                {label}
+              </Pressable>
+            </Glass>
           ) : (
-            <Glass key={o.key} tone="bright" radius={999} shadow={false} className="h-[48px] flex-1">
+            <Glass key={o.key} float interactive radius={999} shadow={false} className="h-[48px] flex-1">
               <Pressable accessibilityRole="radio" accessibilityState={{ checked: false }} aria-checked={false} onPress={() => onChange(o.key)}
                 className={cx("flex-1 items-center justify-center active:opacity-70")}>
                 {label}

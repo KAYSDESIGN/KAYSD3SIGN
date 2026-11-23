@@ -1,7 +1,7 @@
 import { ActivityIndicator, Pressable, Text, View, type PressableProps } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
 import { color, cx, isEditorial } from "@/theme";
-import { glassLight, GradientFill } from "./Glass";
+import { Glass, glassLight, GradientFill } from "./Glass";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
@@ -37,6 +37,28 @@ export function Button({
   children, variant = "primary", size = "md", loading, disabled, icon: Icon, block, className, ...p
 }: ButtonProps) {
   const off = disabled || loading;
+  const content = loading ? (
+    <ActivityIndicator color={iconColor(variant)} />
+  ) : (
+    <View className="flex-row items-center gap-2">
+      {Icon ? <Icon size={size === "sm" ? 16 : 18} color={iconColor(variant)} strokeWidth={2.2} /> : null}
+      <Text className={cx(isEditorial() ? "font-sans-semibold" : "font-sans-bold", text[size], label[variant])}>{children}</Text>
+    </View>
+  );
+
+  // Palette éditoriale : boutons en Liquid Glass (principal = verre teinté bordeaux, secondaire = verre clair)
+  if (isEditorial() && (variant === "primary" || variant === "secondary")) {
+    return (
+      <Glass float interactive radius={16} prominent={variant === "primary" ? color.accent : undefined}
+        className={cx(block && "self-stretch", off && "opacity-50", className)}>
+        <Pressable accessibilityRole="button" accessibilityLabel={children} accessibilityState={{ disabled: !!off, busy: !!loading }}
+          disabled={off} hitSlop={size === "sm" ? 4 : 0} className={cx("flex-row items-center justify-center", height[size])} {...p}>
+          {content}
+        </Pressable>
+      </Glass>
+    );
+  }
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -54,14 +76,7 @@ export function Button({
         : isEditorial() ? { borderRadius: 16 } : undefined}
       {...p}
     >
-      {loading ? (
-        <ActivityIndicator color={iconColor(variant)} />
-      ) : (
-        <View className="flex-row items-center gap-2">
-          {Icon ? <Icon size={size === "sm" ? 16 : 18} color={iconColor(variant)} strokeWidth={2.2} /> : null}
-          <Text className={cx(isEditorial() ? "font-sans-semibold" : "font-sans-bold", text[size], label[variant])}>{children}</Text>
-        </View>
-      )}
+      {content}
     </Pressable>
   );
 }
@@ -70,6 +85,15 @@ export function Button({
 export function IconButton({
   icon: Icon, label: a11y, onPress, tone = "default", className,
 }: { icon: LucideIcon; label: string; onPress?: () => void; tone?: "default" | "accent"; className?: string }) {
+  if (isEditorial()) {
+    return (
+      <Glass float interactive radius={999} tone={tone === "accent" ? "tinted" : "clear"} className={className} style={{ width: 44, height: 44 }}>
+        <Pressable accessibilityRole="button" accessibilityLabel={a11y} onPress={onPress} className="flex-1 items-center justify-center">
+          <Icon size={20} color={tone === "accent" ? color["on-accent-soft"] : color.text} strokeWidth={2} />
+        </Pressable>
+      </Glass>
+    );
+  }
   return (
     <Pressable
       accessibilityRole="button"

@@ -7,7 +7,7 @@ import { Check, SearchX } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Body, Button, Caption, Card, Display, EmptyState, GradientFill, Heading, Muted, Toast } from "@/components/ui";
+import { Body, Button, Caption, Card, Display, EmptyState, Glass, GradientFill, Heading, Muted, Toast } from "@/components/ui";
 import { api, useMutation, useQuery } from "@/data";
 import { cx } from "@/theme";
 import { localDay, untilTomorrow } from "@/lib/day";
@@ -55,14 +55,16 @@ function QuizPlay() {
           {next.choices.map((c, i) => {
             const on = picked.includes(i);
             return (
-              <Pressable key={c} accessibilityRole="checkbox" accessibilityState={{ checked: on, disabled: answer.pending }} disabled={answer.pending}
+              <Glass key={c} float interactive radius={20} tone={on ? "tinted" : "clear"}>
+              <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: on, disabled: answer.pending }} aria-checked={on} disabled={answer.pending}
                 onPress={() => toggle(i)}
-                className={cx("lg min-h-[56px] flex-row items-center gap-3 rounded-[20px] px-4", on ? "bg-accent-soft" : "bg-surface")}>
+                className="min-h-[56px] flex-row items-center gap-3 px-4">
                 <View className={cx("h-[24px] w-[24px] items-center justify-center overflow-hidden rounded-[8px] border-2", on ? "border-transparent" : "border-border-input")}>
                   {on ? <><GradientFill sheen={false} /><View><Check size={15} color="#FFFFFF" strokeWidth={3} /></View></> : null}
                 </View>
                 <Text className="flex-1 font-sans-semibold text-base text-text">{c}</Text>
               </Pressable>
+              </Glass>
             );
           })}
         </View>

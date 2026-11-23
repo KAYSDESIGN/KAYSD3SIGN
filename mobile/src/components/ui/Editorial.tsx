@@ -39,14 +39,16 @@ export function ArrowLink({ children, onWine }: { children: string; onWine?: boo
 
 /** Bouton pilule : blanc sur photo, bordeaux sur carte claire. */
 export function PillButton({ children, onPress, tone = "wine", label }: { children: string; onPress?: () => void; tone?: "wine" | "light"; label?: string }) {
-  const bg = tone === "wine" ? color["card-wine"] : "rgba(255,255,255,0.92)";
-  const fg = tone === "wine" ? color["on-wine"] : "#241820";
+  // Verre teinté bordeaux (action principale) ou verre clair sur photo
+  const fg = tone === "wine" ? color["on-wine"] : "#FFFFFF";
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={label ?? children} onPress={onPress}
-      className="h-[40px] flex-row items-center gap-2 self-start rounded-[14px] px-4 active:opacity-80" style={{ backgroundColor: bg }}>
-      <Text className="font-sans-semibold text-[14px]" style={{ color: fg }}>{children}</Text>
-      <ArrowRight size={16} color={fg} strokeWidth={2.2} />
-    </Pressable>
+    <Glass float interactive radius={14} className="self-start" prominent={tone === "wine" ? color["card-wine"] : undefined} variant={tone === "light" ? "clear" : undefined}>
+      <Pressable accessibilityRole="button" accessibilityLabel={label ?? children} onPress={onPress}
+        className="h-[40px] flex-row items-center gap-2 px-4">
+        <Text className="font-sans-semibold text-[14px]" style={{ color: fg }}>{children}</Text>
+        <ArrowRight size={16} color={fg} strokeWidth={2.2} />
+      </Pressable>
+    </Glass>
   );
 }
 
@@ -60,14 +62,14 @@ export function PhotoCard({ photo, chip, title, action, onPress, width, height =
       <Image source={photo} resizeMode="cover" style={{ position: "absolute", width: "100%", height: "100%" }} accessibilityIgnoresInvertColors />
       <LinearGradient colors={["rgba(30,10,18,0.15)", "rgba(30,10,18,0.35)", "rgba(30,10,18,0.78)"]} locations={[0, 0.4, 1]} style={{ position: "absolute", inset: 0 }} />
       <View className="flex-1 justify-between p-5">
-        <View className="self-start rounded-pill px-3 py-[6px]" style={{ backgroundColor: "rgba(30,10,18,0.45)" }}>
-          <Text className="font-sans-semibold text-[12px]" style={{ color: "#FFFFFF" }}>{chip}</Text>
-        </View>
+        <Glass float variant="clear" radius={999} className="self-start">
+          <View className="px-3 py-[6px]"><Text className="font-sans-semibold text-[12px]" style={{ color: "#FFFFFF" }}>{chip}</Text></View>
+        </Glass>
         <View className="gap-3">
           <Text numberOfLines={3} className="font-sans-semibold text-[21px] leading-[27px]" style={{ color: "#FFFFFF" }}>{title}</Text>
           {/* Bouton en verre liquide posé sur la photo (comme le dock) */}
           <View pointerEvents="none" className="self-start">
-            <Glass float radius={14} style={{ backgroundColor: "rgba(255,255,255,0.16)" }}>
+            <Glass float interactive variant="clear" radius={14}>
               <View className="h-[40px] flex-row items-center gap-2 px-4">
                 <Text className="font-sans-semibold text-[14px]" style={{ color: "#FFFFFF" }}>{action}</Text>
                 <ArrowRight size={16} color="#FFFFFF" strokeWidth={2.2} />
