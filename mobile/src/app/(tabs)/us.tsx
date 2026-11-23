@@ -31,7 +31,7 @@ export default function Us() {
         <Heading className="text-center">{paired ? `${me} & ${them}` : `${me} & …`}</Heading>
         <View className="flex-row items-center gap-2">
           {paired ? <StreakBadge days={couple.data?.streak_count ?? 0} /> : null}
-          {spice.data?.effective ? <SpiceBadge level={spice.data.effective} /> : null}
+          {spice.data?.effective ? <SpiceBadge size="md" level={spice.data.effective} /> : null}
         </View>
       </View>
 

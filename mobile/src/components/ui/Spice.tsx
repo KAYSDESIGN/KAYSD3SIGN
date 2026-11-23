@@ -9,11 +9,12 @@ export const SPICE: Record<Spice, { label: string; peppers: string; hint: string
   hot: { label: "Brûlant", peppers: "🌶️🌶️🌶️", hint: "Sans filtre, entre adultes consentants", bg: "bg-spice-hot" },
 };
 
-export function SpiceBadge({ level }: { level: Spice }) {
+export function SpiceBadge({ level, size = "sm" }: { level: Spice; size?: "sm" | "md" }) {
   const s = SPICE[level];
+  // « md » : même hauteur et même texte que la pastille de série (flamme), pour les aligner côte à côte
   return (
-    <View accessible accessibilityLabel={`Niveau ${s.label}`} className={cx("h-[26px] flex-row items-center self-start rounded-pill px-3", s.bg)}>
-      <Text className="font-sans-bold text-xs text-on-spice">{s.label}</Text>
+    <View accessible accessibilityLabel={`Niveau ${s.label}`} className={cx("flex-row items-center rounded-pill px-3", size === "md" ? "h-[34px] self-center" : "h-[26px] self-start", s.bg)}>
+      <Text className={cx("font-sans-bold text-on-spice", size === "md" ? "text-sm" : "text-xs")}>{s.label}</Text>
     </View>
   );
 }
