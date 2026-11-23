@@ -53,7 +53,7 @@ export function subscribe(cb: () => void) {
 // --- erreurs -----------------------------------------------------------------------
 const KNOWN: DataErrorCode[] = [
   "already_paired", "invalid_or_expired_code", "couple_full", "not_paired", "not_signed_in", "already_answered",
-  "not_your_turn", "invalid_move", "stale_game", "premium_required", "invalid_date",
+  "not_your_turn", "invalid_move", "stale_game", "premium_required", "invalid_date", "quiz_closed", "game_in_progress",
 ];
 function fail(e: { message?: string; code?: string } | null): never {
   const msg = e?.message ?? "";
@@ -198,17 +198,11 @@ export async function purchase(_product: Offer["product"]): Promise<void> { emit
 
 // --- envies secrètes (S21) ------------------------------------------------------------
 export type DesireRow = { desire: Desire; answer: DesireAnswer | null; answeredAt: string | null; locked: boolean };
+/** Les 5 envies du jour (tirées côté serveur, les mêmes pour les deux). */
 export async function getDesires(): Promise<DesireRow[]> {
-  const u = await uidOrThrow();
-  const status = await getSpiceStatus();
-  if (!status.effective) return [];
-  const prem = await isPremium();
-  const desires = (await must(sb().from("desires").select("id, category, spice_level, body, is_premium").eq("active", true).order("id"))) as Desire[];
-  const mine = (await must(sb().from("desire_answers").select("desire_id, answer, created_at").eq("user_id", u))) as { desire_id: string; answer: DesireAnswer; created_at: string }[];
-  return desires
-    .filter((d) => SPICE_RANK[d.spice_level] <= SPICE_RANK[status.effective!])
-    .sort((a, b) => SPICE_RANK[a.spice_level] - SPICE_RANK[b.spice_level])
-    .map((d) => { const m = mine.find((x) => x.desire_id === d.id); return { desire: d, answer: m?.answer ?? null, answeredAt: m?.created_at ?? null, locked: d.is_premium && !prem }; });
+  await uidOrThrow();
+  const rows = (await must(sb().rpc("get_daily_desires"))) as (Desire & { answer: DesireAnswer | null; answered_at: string | null })[];
+  return rows.map(({ answer, answered_at, ...d }) => ({ desire: d, answer, answeredAt: answered_at, locked: false }));
 }
 export async function answerDesire(desireId: string, answerValue: DesireAnswer): Promise<void> {
   const [u, c] = [await uidOrThrow(), await myCoupleId()];
@@ -266,40 +260,53 @@ export async function deleteAccount(): Promise<void> {
 // --- quiz (S10) ----------------------------------------------------------------------------------
 export type QuizRow = { quiz: Quiz; locked: boolean; lastSession: QuizSession | null };
 type QuizDb = { id: string; title: string; blurb: string; spice_level: Spice; is_premium: boolean; quiz_questions: { id: string; position: number; body: string; choices: string[] }[] };
-type SessionDb = { id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string };
+type SessionDb = { id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string; day: string | null; question_ids: string[] | null };
+const SESSION_COLS = "id, quiz_id, status, match_score, created_at, day, question_ids";
 
 function toQuiz(q: QuizDb): Quiz {
   return { id: q.id, title: q.title, blurb: q.blurb, spice_level: q.spice_level, is_premium: q.is_premium,
     questions: [...q.quiz_questions].sort((a, b) => a.position - b.position).map(({ id, body, choices }) => ({ id, body, choices })) };
+}
+/** Le quiz réduit aux questions tirées pour cette partie, dans l'ordre du tirage. */
+function forSession(quiz: Quiz, sess: SessionDb): Quiz {
+  if (!sess.question_ids) return quiz;
+  const byId = new Map(quiz.questions.map((q) => [q.id, q]));
+  return { ...quiz, questions: sess.question_ids.map((id) => byId.get(id)).filter((q): q is Quiz["questions"][number] => !!q) };
 }
 async function sessionView(sess: SessionDb, u: string): Promise<QuizSession> {
   const ans = (await must(sb().from("quiz_answers").select("user_id, question_id, choices").eq("session_id", sess.id))) as { user_id: string; question_id: string; choices: number[] }[];
   const mine = Object.fromEntries(ans.filter((a) => a.user_id === u).map((a) => [a.question_id, a.choices]));
   const theirs = sess.status === "revealed" ? Object.fromEntries(ans.filter((a) => a.user_id !== u).map((a) => [a.question_id, a.choices])) : null;
   const partnerDone = !!(await must(sb().rpc("quiz_partner_done", { p_session: sess.id })));
-  return { ...sess, mine, theirs, partnerDone };
+  const { question_ids: _q, ...rest } = sess;
+  return { ...rest, mine, theirs, partnerDone };
 }
 async function allQuizzes(): Promise<Quiz[]> {
   const rows = (await must(sb().from("quizzes").select("id, title, blurb, spice_level, is_premium, quiz_questions(id, position, body, choices)").eq("active", true))) as QuizDb[];
   return rows.map(toQuiz).sort((a, b) => SPICE_RANK[a.spice_level] - SPICE_RANK[b.spice_level]);
 }
+/** Les quiz du jour : 5 questions nouvelles par catégorie, une seule partie par jour. */
 export async function getQuizzes(): Promise<QuizRow[]> {
   const u = await uidOrThrow();
-  const [quizzes, status, prem] = [await allQuizzes(), await getSpiceStatus(), await isPremium()];
-  const sessions = (await must(sb().from("quiz_sessions").select("id, quiz_id, status, match_score, created_at").order("created_at", { ascending: false }))) as SessionDb[];
-  const visible = quizzes.filter((z) => z.spice_level === "soft" || (status.effective && SPICE_RANK[z.spice_level] <= SPICE_RANK[status.effective]));
-  return Promise.all(visible.map(async (quiz) => {
-    const last = sessions.find((x) => x.quiz_id === quiz.id);
-    return { quiz, locked: quiz.is_premium && !prem, lastSession: last ? await sessionView(last, u) : null };
+  const daily = (await must(sb().rpc("daily_quizzes"))) as { quiz_id: string; session_id: string | null }[];
+  const quizzes = await allQuizzes();
+  const ids = daily.map((d) => d.session_id).filter((x): x is string => !!x);
+  const sessions = ids.length ? (await must(sb().from("quiz_sessions").select(SESSION_COLS).in("id", ids))) as SessionDb[] : [];
+  const rows = await Promise.all(daily.map(async (d) => {
+    const quiz = quizzes.find((z) => z.id === d.quiz_id); const sess = sessions.find((x) => x.id === d.session_id);
+    if (!quiz || !sess) return null;
+    const row: QuizRow = { quiz: forSession(quiz, sess), locked: false, lastSession: await sessionView(sess, u) };
+    return row;
   }));
+  return rows.filter((r) => r !== null);
 }
 export async function startQuiz(quizId: string): Promise<string> { await uidOrThrow(); const id = await must(sb().rpc("start_quiz", { p_quiz: quizId })); emit(); return id as string; }
 export async function getQuizSession(id: string): Promise<{ quiz: Quiz; session: QuizSession } | null> {
   const u = await uidOrThrow();
-  const rows = (await must(sb().from("quiz_sessions").select("id, quiz_id, status, match_score, created_at").eq("id", id))) as SessionDb[];
+  const rows = (await must(sb().from("quiz_sessions").select(SESSION_COLS).eq("id", id))) as SessionDb[];
   if (!rows[0]) return null;
   const quiz = (await allQuizzes()).find((z) => z.id === rows[0].quiz_id);
-  return quiz ? { quiz, session: await sessionView(rows[0], u) } : null;
+  return quiz ? { quiz: forSession(quiz, rows[0]), session: await sessionView(rows[0], u) } : null;
 }
 export async function answerQuiz(sessionId: string, questionId: string, choices: number[]): Promise<void> {
   if (!choices.length) throw new DataError("invalid_move");
@@ -326,6 +333,7 @@ export async function getGame(id: string): Promise<Game | null> {
   return rows[0] ? toGame(rows[0]) : null;
 }
 export async function createGame(type: GameType): Promise<string> { await uidOrThrow(); const id = await must(sb().rpc("create_game", { p_type: type })); emit(); return id as string; }
+export async function abandonGame(gameId: string): Promise<void> { await uidOrThrow(); await must(sb().rpc("abandon_game", { p_game: gameId })); emit(); }
 export async function playMove(gameId: string, index: number, version: number): Promise<void> {
   await uidOrThrow(); await must(sb().rpc("play_move", { p_game: gameId, p_index: index, p_version: version })); emit();
 }

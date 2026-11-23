@@ -7,9 +7,10 @@ import { Flame, Lock, Sparkles } from "lucide-react-native";
 import { DevPanel } from "@/components/app/DevPanel";
 import { Screen, Skeleton } from "@/components/app/Screen";
 import { useGate } from "@/components/app/useGate";
-import { Body, Button, Card, DesireCard, EmojiText, EmptyState, Muted, SPICE, SpiceBadge } from "@/components/ui";
+import { Body, Button, Card, DesireCard, EmojiText, EmptyState, Muted, SPICE, SpiceBadge, Toast } from "@/components/ui";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
-import { api, useQuery } from "@/data";
+import { api, useMutation, useQuery } from "@/data";
+import { untilTomorrow } from "@/lib/day";
 import { color, cx } from "@/theme";
 
 // S21 · Envies secrètes : chacun répond en secret, seuls les oui communs apparaissent
@@ -19,8 +20,7 @@ function Desires() {
   const rows = useQuery(api.getDesires, [status.data?.effective]);
   const matches = useQuery(api.getMutualDesires);
   const [tab, setTab] = useState<"answer" | "matches">("answer");
-  const [extra, setExtra] = useState(0);
-  const [showPast, setShowPast] = useState(false);
+  const answer = useMutation(api.answerDesire);
   const them = partner?.display_name ?? "ton/ta partenaire";
 
   if (status.loading && !status.data) return <Screen edges={["top"]}><Skeleton className="h-[34px] w-1/2" /><Skeleton className="h-[200px]" /></Screen>;
@@ -42,24 +42,13 @@ function Desires() {
     );
   }
 
-  const list = rows.data ?? [];
-  const open = list.filter((r) => !r.locked);
-  const locked = list.filter((r) => r.locked);
-
-  // Envies du jour : 5 nouvelles chaque jour, dans le même ordre pour vous deux (plus de matchs).
-  const today = localDay(new Date());
-  const rank = (id: string) => hash(today + id);
-  const answeredToday = open.filter((r) => r.answeredAt && localDay(new Date(r.answeredAt)) === today);
-  const fresh = open.filter((r) => !r.answer).sort((a, b) => rank(a.desire.id) - rank(b.desire.id));
-  const batch = [...answeredToday, ...fresh.slice(0, Math.max(0, DAILY + extra - answeredToday.length))]
-    .sort((a, b) => rank(a.desire.id) - rank(b.desire.id));
-  const past = open.filter((r) => r.answer && !answeredToday.includes(r));
-  const doneToday = batch.every((r) => r.answer);
-  const leftAfter = fresh.length - batch.filter((r) => !r.answer).length;
-  const card = (r: (typeof list)[number]) => (
+  // Les 5 envies du jour (tirées côté serveur, les mêmes pour vous deux) ; tout repart à zéro à minuit.
+  const batch = rows.data ?? [];
+  const doneToday = batch.length > 0 && batch.every((r) => r.answer);
+  const card = (r: (typeof batch)[number]) => (
     <DesireCard key={r.desire.id} text={r.desire.body} kicker={`${r.desire.category} · ${SPICE[r.desire.spice_level].label}`}
       art={r.desire.spice_level === "hot" ? "night" : r.desire.spice_level === "spicy" ? "ember" : "violet"}
-      value={r.answer ?? undefined} onChange={(a) => api.answerDesire(r.desire.id, a)} />
+      value={r.answer ?? undefined} onChange={(a) => answer.mutate(r.desire.id, a)} />
   );
 
   return (
@@ -68,11 +57,11 @@ function Desires() {
         <ScreenHeader kicker="ENVIES SECRÈTES" title="Ce que vous n'osez pas dire" right={<SpiceBadge level={status.data.effective} />} />
       </View>
       <Body className="text-text-muted">
-        {`Chaque jour, 5 nouvelles envies. Réponds oui, peut-être ou non. ${them} ne verra jamais tes réponses, seulement ce que vous voulez tous les deux.`}
+        {`Chaque jour, 5 nouvelles envies épicées et brûlantes. Réponds oui, peut-être ou non. ${them} ne verra jamais tes réponses, seulement ce que vous voulez tous les deux.`}
       </Body>
 
       <View accessibilityRole="tablist" className="flex-row rounded-pill bg-surface p-1">
-        {([["answer", `Du jour · ${batch.filter((r) => r.answer).length}/${batch.length}`], ["matches", `Nos matchs · ${matches.data?.length ?? 0}`]] as const).map(([k, l]) => (
+        {([["answer", `Du jour · ${batch.filter((r) => r.answer).length}/${batch.length}`], ["matches", `Matchs du jour · ${matches.data?.length ?? 0}`]] as const).map(([k, l]) => (
           <Pressable key={k} accessibilityRole="tab" accessibilityState={{ selected: tab === k }} onPress={() => setTab(k)}
             className={cx("h-[40px] flex-1 items-center justify-center rounded-pill", tab === k ? "bg-surface-raised" : "")}>
             <Text className={cx("font-sans-bold text-sm", tab === k ? "text-text" : "text-text-muted")}>{l}</Text>
@@ -84,33 +73,11 @@ function Desires() {
         <View className="gap-3">
           {rows.loading && !rows.data ? <Skeleton className="h-[180px]" /> : null}
           {batch.map(card)}
-          {rows.data && doneToday ? (
-            <Card className="gap-3">
-              <EmojiText size={18} className="font-sans-bold text-base text-text">
-                {leftAfter > 0 ? "🔥 C'est tout pour aujourd'hui" : "🔥 Vous avez fait le tour de toutes les envies"}
-              </EmojiText>
-              <Muted>{leftAfter > 0 ? `${DAILY} nouvelles envies t'attendent demain. Encore ${leftAfter} à découvrir.` : "De nouvelles envies arriveront bientôt."}</Muted>
-              {leftAfter > 0 ? <Button variant="secondary" onPress={() => setExtra((n) => n + DAILY)}>{`Voir ${Math.min(DAILY, leftAfter)} envies de plus maintenant`}</Button> : null}
-            </Card>
-          ) : null}
-          {past.length ? (
-            <>
-              <Pressable accessibilityRole="button" accessibilityState={{ expanded: showPast }} onPress={() => setShowPast((v) => !v)} className="py-2 active:opacity-60">
-                <Text className="font-sans-bold text-sm text-text-muted">{`${showPast ? "Masquer" : "Revoir"} mes réponses précédentes (${past.length})`}</Text>
-              </Pressable>
-              {showPast ? past.map(card) : null}
-            </>
-          ) : null}
-          {locked.length ? (
-            <Card className="gap-3">
-              <View className="flex-row items-center gap-2">
-                <Lock size={18} color={color.gold} />
-                <Text className="flex-1 font-sans-bold text-base text-text">{locked.length} envies de plus avec Premium</Text>
-              </View>
-              {locked.slice(0, 2).map((r) => (
-                <Text key={r.desire.id} className="font-sans text-sm text-text-muted">{"• " + blur(r.desire.body)}</Text>
-              ))}
-              <Button variant="secondary" icon={Sparkles} onPress={() => router.push("/premium")}>Découvrir Premium</Button>
+          {answer.error ? <Toast tone="error">{answer.error}</Toast> : null}
+          {doneToday ? (
+            <Card className="gap-2">
+              <EmojiText size={18} className="font-sans-bold text-base text-text">{"🔥 C'est tout pour aujourd'hui"}</EmojiText>
+              <Muted>{`Allez voir vos matchs du jour. 5 nouvelles envies dans ${untilTomorrow()}.`}</Muted>
             </Card>
           ) : null}
         </View>
@@ -121,11 +88,11 @@ function Desires() {
               <Flame size={20} color={color.accent} fill={color.accent} />
               <View className="flex-1">
                 <Text className="font-sans-bold text-base text-text">{d.body}</Text>
-                <Text className="font-sans text-sm text-on-accent-soft">{d.category} · vous avez dit oui tous les deux</Text>
+                <Text className="font-sans text-sm text-on-accent-soft">{`${d.category} · oui tous les deux aujourd'hui`}</Text>
               </View>
             </View>
           )) : (
-            <EmptyState icon={Flame} title="Pas encore de match" body={`Continuez à répondre. Dès que ${them} et toi dites oui à la même envie, elle apparaît ici.`} />
+            <EmptyState icon={Flame} title="Pas encore de match aujourd'hui" body={`Dès que ${them} et toi dites oui à la même envie du jour, elle apparaît ici. Les matchs repartent à zéro à minuit.`} />
           )}
           <Muted className="text-center">Les « peut-être » et les « non » restent toujours secrets.</Muted>
         </View>
@@ -135,10 +102,6 @@ function Desires() {
     </Screen>
   );
 }
-
-const DAILY = 5;
-const localDay = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-function hash(str: string) { let h = 0; for (const c of str) h = (h * 31 + c.charCodeAt(0)) | 0; return Math.abs(h); }
 
 /** Montre juste le début, pour donner envie sans tout dévoiler. */
 function blur(t: string) { const w = t.split(" "); return w.slice(0, 2).join(" ") + " …"; }

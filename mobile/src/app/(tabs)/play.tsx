@@ -20,11 +20,19 @@ function Play() {
   const create = useMutation(api.createGame);
   const them = partner?.display_name ?? "l'autre";
   const active = games.data?.filter((g) => g.status === "active") ?? [];
-  const finished = games.data?.filter((g) => g.status === "finished") ?? [];
+  const finished = games.data?.filter((g) => g.status !== "active") ?? [];
+  const current = active[0];
   const wins = finished.filter((g) => g.winner_id === profile?.id).length;
   const losses = finished.filter((g) => g.winner_id && g.winner_id !== profile?.id).length;
 
-  const start = async (t: GameType) => { const id = await create.mutate(t); if (id) router.push({ pathname: "/game/[id]", params: { id } }); };
+  // Une seule partie à la fois : tant qu'elle n'est pas finie, on y retourne au lieu d'en lancer une autre.
+  const start = async (t: GameType) => {
+    if (current) return router.push({ pathname: "/game/[id]", params: { id: current.id } });
+    const id = await create.mutate(t); if (id) router.push({ pathname: "/game/[id]", params: { id } });
+  };
+  const gameRow = (t: GameType) => current
+    ? current.game_type === t ? { subtitle: status(current), action: "Reprendre" } : { subtitle: "Finissez d'abord la partie en cours", action: "Bloqué" }
+    : { subtitle: t === "tic_tac_toe" ? "3 cœurs alignés" : "4 pions à la suite", action: "Jouer" };
   const status = (g: Game) => g.turn_user_id === profile?.id ? "À toi de jouer" : `Au tour de ${them}`;
 
   return (
@@ -35,7 +43,7 @@ function Play() {
 
       {games.loading && !games.data ? <Skeleton className="h-[80px]" /> : active.length ? (
         <View className="gap-2">
-          <Caption>Parties en cours</Caption>
+          <Caption>Partie en cours · une seule à la fois</Caption>
           {active.map((g) => (
             <Pressable key={g.id} accessibilityRole="button" accessibilityLabel={`${GAME_NAMES[g.game_type]}, ${status(g)}`}
               onPress={() => router.push({ pathname: "/game/[id]", params: { id: g.id } })}
@@ -53,8 +61,8 @@ function Play() {
       <View className="gap-2">
         <SectionTitle title="Nouvelle partie" />
         <GlassList>
-          <ListRow first icon={Grid3x3} tone="rose" title={GAME_NAMES.tic_tac_toe} subtitle="3 cœurs alignés" action="Jouer" onPress={() => start("tic_tac_toe")} />
-          <ListRow icon={Columns3} tone="violet" title={GAME_NAMES.four_in_row} subtitle="4 pions à la suite" action="Jouer" onPress={() => start("four_in_row")} />
+          <ListRow first icon={Grid3x3} tone="rose" title={GAME_NAMES.tic_tac_toe} {...gameRow("tic_tac_toe")} onPress={() => start("tic_tac_toe")} />
+          <ListRow icon={Columns3} tone="violet" title={GAME_NAMES.four_in_row} {...gameRow("four_in_row")} onPress={() => start("four_in_row")} />
           <ListRow icon={Smile} tone="coral" title="Quiz à deux" subtitle="Votre score de complicité" action="Jouer" onPress={() => router.push("/quiz")} />
           <ListRow icon={Dices} tone="night" title="Dés coquins" subtitle="Pour pimenter la soirée" action="Lancer" onPress={() => router.push("/dice")} />
         </GlassList>

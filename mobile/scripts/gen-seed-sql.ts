@@ -10,6 +10,8 @@ const out: string[] = ["-- Contenu HotCouple (généré, ne pas éditer à la ma
 for (const p of [...SEED_PROMPTS, ...SEED_CHALLENGES]) {
   out.push(`insert into public.prompts (id, kind, challenge_kind, spice_level, locale, body) values (${id(p.id)}, ${q(p.kind)}, ${p.challenge_kind ? q(p.challenge_kind) : "null"}, ${q(p.spice_level)}, 'fr', ${q(p.body)}) on conflict (id) do update set body = excluded.body, spice_level = excluded.spice_level, challenge_kind = excluded.challenge_kind;`);
 }
+// Contenu retiré du fichier : désactivé (jamais supprimé, des cartes passées y font référence).
+out.push(`update public.prompts set active = (id in (${[...SEED_PROMPTS, ...SEED_CHALLENGES].map((p) => id(p.id)).join(", ")}));`);
 for (const d of SEED_DESIRES) {
   out.push(`insert into public.desires (id, locale, category, spice_level, body, is_premium) values (${id(d.id)}, 'fr', ${q(d.category)}, ${q(d.spice_level)}, ${q(d.body)}, ${d.is_premium}) on conflict (id) do update set body = excluded.body, category = excluded.category, spice_level = excluded.spice_level, is_premium = excluded.is_premium;`);
 }

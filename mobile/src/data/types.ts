@@ -72,6 +72,8 @@ export type DataErrorCode =
   | "invalid_move"
   | "stale_game"
   | "premium_required"
+  | "quiz_closed"
+  | "game_in_progress"
   | "invalid_date"
   | "invalid_credentials"
   | "weak_password"
@@ -94,6 +96,7 @@ export type Offer = { product: "monthly" | "yearly" | "lifetime"; title: string;
 export type Quiz = { id: string; title: string; blurb: string; spice_level: Spice; is_premium: boolean; questions: { id: string; body: string; choices: string[] }[] };
 export type QuizSession = {
   id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string;
+  day: string | null;                      // jour du quiz (une partie par jour, fermée ensuite)
   mine: Record<string, number[]>;          // question_id -> choix (plusieurs réponses possibles)
   theirs: Record<string, number[]> | null; // visible seulement une fois révélé
   partnerDone: boolean;
@@ -101,7 +104,7 @@ export type QuizSession = {
 export type GameType = "tic_tac_toe" | "four_in_row";
 export type Game = {
   id: string; game_type: GameType; board: (string | null)[]; cols: number; rows: number;
-  turn_user_id: string | null; status: "active" | "finished"; winner_id: string | null; draw: boolean;
+  turn_user_id: string | null; status: "active" | "finished" | "abandoned"; winner_id: string | null; draw: boolean;
   version: number; players: [string, string]; updated_at: string;
 };
 export type SpecialDate = { id: string; title: string; date: string; repeats_yearly: boolean };

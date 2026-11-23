@@ -1,4 +1,4 @@
-// Quiz à deux sur la vraie base : les deux jouent, voient le résultat, puis « Rejouer ». Comptes de test @example.com supprimés à la fin.
+// Quiz à deux sur la vraie base : les deux jouent, voient le résultat, puis tout est verrouillé jusqu'au lendemain. Comptes de test @example.com supprimés à la fin.
 // Usage : S=<dossier captures> node e2e/quiz-two-users-real.cjs
 const { chromium } = require('playwright');
 const URL = 'https://hotcouple-2b6781.homehub-28saz.workers.dev/';
@@ -36,7 +36,15 @@ const stamp = Date.now().toString(36);
     await step('Sam joue les 5 questions', async () => { await play(B, [[0], [1], [2, 3], [0], [1]]); });
     await step('Sam voit le résultat', async () => { await B.getByLabel(/pour cent de complicité/).locator('visible=true').first().waitFor({ timeout: 20000 }); console.log('   ', await B.getByLabel(/pour cent de complicité/).locator('visible=true').first().getAttribute('aria-label')); });
     await step('Kay voit le résultat', async () => { await A.goto(URL + 'quiz', { waitUntil: 'networkidle' }); await A.see(/% de complicité/); await A.btn(/^Nos petites habitudes/).click(); await A.getByLabel(/pour cent de complicité/).locator('visible=true').first().waitFor({ timeout: 20000 }); });
-    await step('Kay rejoue', async () => { await A.btn('Rejouer').click(); await A.see(/· 1 sur 5/); });
+    await step('Verrouillé : plus de rejouer, la même partie revient', async () => {
+      await A.see('Réponses verrouillées.');
+      if (await A.getByRole('button', { name: 'Rejouer' }).count()) throw new Error('bouton Rejouer encore présent');
+      await A.goto(URL + 'quiz', { waitUntil: 'networkidle' }); await A.see(/terminé/);
+    });
+    if (process.env.S) await step('capture de l\'accueil', async () => {
+      await A.goto(URL + 'home', { waitUntil: 'networkidle' }); await A.see(/Aujourd'hui · /, 60000); await A.waitForTimeout(1500);
+      await A.screenshot({ path: `${process.env.S}/home-today.png`, fullPage: true });
+    });
   } catch {}
   console.log('erreurs Kay:', JSON.stringify(A.errs.slice(0, 6)), '| Sam:', JSON.stringify(B.errs.slice(0, 6)));
   // nettoyage des comptes de test

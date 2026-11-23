@@ -16,9 +16,10 @@ type Store = {
   responses: Response[];
   moods: Mood[];
   messages: Message[];
+  dailyDesires: { couple_id: string; day: string; ids: string[] }[];
   desireAnswers: { couple_id: string; user_id: string; desire_id: string; answer: DesireAnswer; created_at?: string; updated_at: string }[];
   bucket: (BucketItem & { couple_id: string })[];
-  quizSessions: { id: string; couple_id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string }[];
+  quizSessions: { id: string; couple_id: string; quiz_id: string; status: "open" | "revealed"; match_score: number | null; created_at: string; day: string; question_ids: string[] }[];
   quizAnswers: { session_id: string; user_id: string; question_id: string; choices: number[] }[];
   games: (Game & { couple_id: string })[];
   specialDates: (SpecialDate & { couple_id: string })[];
@@ -32,7 +33,7 @@ const LATENCY = 120;
 
 const s: Store = {
   session: null, emails: {}, profiles: {}, couples: {}, members: [],
-  assignments: [], responses: [], moods: [], messages: [], desireAnswers: [], bucket: [],
+  assignments: [], responses: [], moods: [], messages: [], dailyDesires: [], desireAnswers: [], bucket: [],
   quizSessions: [], quizAnswers: [], games: [], specialDates: [], datePlans: [],
 };
 
@@ -380,22 +381,32 @@ export async function purchase(product: Offer["product"]): Promise<void> {
 /** answeredAt : date de la première réponse (sert au tirage des envies du jour). */
 export type DesireRow = { desire: Desire; answer: DesireAnswer | null; answeredAt: string | null; locked: boolean };
 
+/** Équivalent de get_daily_desires : 5 envies épicées / brûlantes par jour, les mêmes pour les deux. */
+function dailyDesires(c: string): Desire[] {
+  const spice = coupleSpice(c); if (!spice) return [];
+  const day = dayIn(s.couples[c].timezone);
+  const ex = s.dailyDesires.find((x) => x.couple_id === c && x.day === day);
+  if (ex) return ex.ids.map((id) => SEED_DESIRES.find((d) => d.id === id)!);
+  const pool = SEED_DESIRES.filter((d) => spice === "soft" ? d.spice_level === "soft" : d.spice_level !== "soft" && SPICE_RANK[d.spice_level] <= SPICE_RANK[spice]);
+  const last = (id: string) => s.dailyDesires.filter((x) => x.couple_id === c && x.ids.includes(id)).reduce((m, x) => (x.day > m ? x.day : m), "");
+  const ids = [...pool].sort((x, y) => last(x.id).localeCompare(last(y.id)) || hash(c + day + x.id) - hash(c + day + y.id)).slice(0, 5).map((d) => d.id);
+  s.desireAnswers = s.desireAnswers.filter((a) => !(a.couple_id === c && ids.includes(a.desire_id)));
+  s.dailyDesires.push({ couple_id: c, day, ids });
+  return ids.map((id) => SEED_DESIRES.find((d) => d.id === id)!);
+}
+
 export async function getDesires(): Promise<DesireRow[]> {
   await wait();
   const u = me(); const c = coupleOf(u); if (!c) throw new DataError("not_paired");
-  const spice = coupleSpice(c); if (!spice) return [];
-  const prem = premium(c);
-  return SEED_DESIRES.filter((d) => SPICE_RANK[d.spice_level] <= SPICE_RANK[spice]).map((d) => ({
-    desire: d,
-    // RLS : on ne lit que SES réponses
-    answer: s.desireAnswers.find((a) => a.user_id === u && a.desire_id === d.id)?.answer ?? null,
-    answeredAt: (() => { const a = s.desireAnswers.find((x) => x.user_id === u && x.desire_id === d.id); return a ? a.created_at ?? a.updated_at : null; })(),
-    locked: d.is_premium && !prem,
-  }));
+  return dailyDesires(c).map((d) => {
+    const a = s.desireAnswers.find((x) => x.user_id === u && x.desire_id === d.id); // RLS : on ne lit que SES réponses
+    return { desire: d, answer: a?.answer ?? null, answeredAt: a ? a.created_at ?? a.updated_at : null, locked: false };
+  });
 }
 
 function answerDesireAs(userId: string, desireId: string, answer: DesireAnswer) {
   const c = coupleOf(userId); if (!c) throw new DataError("not_paired");
+  if (!dailyDesires(c).some((d) => d.id === desireId)) throw new DataError("quiz_closed");
   const ex = s.desireAnswers.find((a) => a.user_id === userId && a.desire_id === desireId);
   if (ex) { ex.answer = answer; ex.updated_at = now(); }
   else s.desireAnswers.push({ couple_id: c, user_id: userId, desire_id: desireId, answer, created_at: now(), updated_at: now() });
@@ -411,7 +422,8 @@ export async function getMutualDesires(): Promise<Desire[]> {
   const u = me(); const p = partnerOf(u); if (!p) return [];
   const yes = (id: string) => new Set(s.desireAnswers.filter((a) => a.user_id === id && a.answer === "yes").map((a) => a.desire_id));
   const a = yes(u); const b = yes(p);
-  return SEED_DESIRES.filter((d) => a.has(d.id) && b.has(d.id));
+  const c = coupleOf(u); if (!c) return [];
+  return dailyDesires(c).filter((d) => a.has(d.id) && b.has(d.id)); // matchs du jour seulement
 }
 
 // --- bucket list (S13) --------------------------------------------------------
@@ -467,7 +479,8 @@ Object.assign(dev, {
   async partnerDesires() {
     await wait();
     const set = (id: string, a: DesireAnswer) => answerDesireAs(PARTNER_ID, id, a);
-    set("d01", "yes"); set("d02", "no"); set("d03", "maybe"); set("d04", "yes"); set("d05", "yes"); set("d06", "yes"); set("d08", "yes");
+    const c = coupleOf(PARTNER_ID); if (!c) return;
+    dailyDesires(c).forEach((d, i) => set(d.id, i % 3 === 2 ? "no" : "yes"));
   },
   async partnerNote(body = "Hâte de te retrouver ce soir.") {
     await wait(); s.messages.push({ id: uid(), sender_id: PARTNER_ID, kind: "text", body, created_at: now() }); emit();
@@ -482,26 +495,44 @@ Object.assign(dev, {
 // --- quiz de compatibilité (S10) ---------------------------------------------
 export type QuizRow = { quiz: Quiz; locked: boolean; lastSession: QuizSession | null };
 
+/** Le quiz réduit aux 5 questions tirées pour la partie. */
+function quizFor(q: Store["quizSessions"][number]): Quiz {
+  const quiz = SEED_QUIZZES.find((z) => z.id === q.quiz_id)!;
+  return { ...quiz, questions: q.question_ids.map((id) => quiz.questions.find((x) => x.id === id)!).filter(Boolean) };
+}
+
 function sessionView(q: Store["quizSessions"][number], userId: string): QuizSession {
   const ans = s.quizAnswers.filter((a) => a.session_id === q.id);
   const mine = Object.fromEntries(ans.filter((a) => a.user_id === userId).map((a) => [a.question_id, a.choices]));
   const theirsArr = ans.filter((a) => a.user_id !== userId);
-  const total = SEED_QUIZZES.find((z) => z.id === q.quiz_id)?.questions.length ?? 0;
+  const { question_ids, ...rest } = q;
   return {
-    ...q, mine,
+    ...rest, mine,
     // même règle que la policy qans_read : visible seulement après révélation
     theirs: q.status === "revealed" ? Object.fromEntries(theirsArr.map((a) => [a.question_id, a.choices])) : null,
-    partnerDone: theirsArr.length >= total,
+    partnerDone: theirsArr.length >= question_ids.length,
   };
+}
+
+/** Équivalent de ensure_daily_quiz : une partie par quiz et par jour, 5 questions jamais posées d'abord. */
+function dailyQuiz(c: string, quiz: Quiz) {
+  const day = dayIn(s.couples[c].timezone);
+  const ex = s.quizSessions.find((q) => q.couple_id === c && q.quiz_id === quiz.id && q.day === day);
+  if (ex) return ex;
+  const last = (id: string) => s.quizSessions.filter((q) => q.couple_id === c && q.quiz_id === quiz.id && q.question_ids.includes(id)).reduce((m, q) => (q.day > m ? q.day : m), "");
+  const ids = [...quiz.questions].sort((x, y) => last(x.id).localeCompare(last(y.id)) || hash(c + day + x.id) - hash(c + day + y.id)).slice(0, 5).map((x) => x.id);
+  const sess = { id: uid(), couple_id: c, quiz_id: quiz.id, status: "open" as const, match_score: null, created_at: now(), day, question_ids: ids };
+  s.quizSessions.push(sess);
+  return sess;
 }
 
 export async function getQuizzes(): Promise<QuizRow[]> {
   await wait();
-  const u = me(); const c = coupleOf(u); if (!c) return [];
-  const spice = coupleSpice(c) ?? "soft"; const prem = premium(c);
-  return SEED_QUIZZES.filter((z) => z.spice_level === "soft" || (coupleSpice(c) && SPICE_RANK[z.spice_level] <= SPICE_RANK[spice])).map((quiz) => {
-    const last = [...s.quizSessions].reverse().find((q) => q.couple_id === c && q.quiz_id === quiz.id);
-    return { quiz, locked: quiz.is_premium && !prem, lastSession: last ? sessionView(last, u) : null };
+  const u = me(); const c = coupleOf(u); if (!c || membersOf(c).length < 2) return [];
+  const spice = coupleSpice(c);
+  return SEED_QUIZZES.filter((z) => z.spice_level === "soft" || (spice && SPICE_RANK[z.spice_level] <= SPICE_RANK[spice])).map((quiz) => {
+    const sess = dailyQuiz(c, quiz);
+    return { quiz: quizFor(sess), locked: false, lastSession: sessionView(sess, u) };
   });
 }
 
@@ -509,19 +540,13 @@ export async function startQuiz(quizId: string): Promise<string> {
   await wait();
   const c = coupleOf(me()); if (!c) throw new DataError("not_paired");
   const quiz = SEED_QUIZZES.find((z) => z.id === quizId); if (!quiz) throw new DataError("invalid_move");
-  if (quiz.is_premium && !premium(c)) throw new DataError("premium_required");
-  const open = s.quizSessions.find((q) => q.couple_id === c && q.quiz_id === quizId && q.status === "open");
-  if (open) return open.id;
-  const id = uid();
-  s.quizSessions.push({ id, couple_id: c, quiz_id: quizId, status: "open", match_score: null, created_at: now() });
-  emit();
-  return id;
+  const id = dailyQuiz(c, quiz).id; emit(); return id;
 }
 
 export async function getQuizSession(id: string): Promise<{ quiz: Quiz; session: QuizSession } | null> {
   await wait();
   const u = me(); const q = s.quizSessions.find((x) => x.id === id && x.couple_id === coupleOf(u)); if (!q) return null;
-  return { quiz: SEED_QUIZZES.find((z) => z.id === q.quiz_id)!, session: sessionView(q, u) };
+  return { quiz: quizFor(q), session: sessionView(q, u) };
 }
 
 /** Score d'une question à réponses multiples : réponses communes / réponses données (indice de Jaccard). */
@@ -534,12 +559,12 @@ function overlapScore(a: number[], b: number[]) {
 
 function answerQuizAs(userId: string, sessionId: string, questionId: string, choices: number[]) {
   const q = s.quizSessions.find((x) => x.id === sessionId && x.couple_id === coupleOf(userId));
-  if (!q || q.status !== "open") throw new DataError("invalid_move");
+  if (!q || q.day !== dayIn(s.couples[q.couple_id].timezone) || !q.question_ids.includes(questionId)) throw new DataError("quiz_closed");
   if (!choices.length) throw new DataError("invalid_move");
   if (s.quizAnswers.some((a) => a.session_id === sessionId && a.user_id === userId && a.question_id === questionId)) throw new DataError("already_answered");
   s.quizAnswers.push({ session_id: sessionId, user_id: userId, question_id: questionId, choices: [...new Set(choices)].sort() });
   // même logique que le trigger reveal_quiz
-  const quiz = SEED_QUIZZES.find((z) => z.id === q.quiz_id)!;
+  const quiz = quizFor(q);
   const ans = s.quizAnswers.filter((a) => a.session_id === sessionId);
   if (ans.length >= quiz.questions.length * 2) {
     const total = quiz.questions.reduce((acc, qq) => {
@@ -587,6 +612,7 @@ export async function getGame(id: string): Promise<Game | null> {
 export async function createGame(type: GameType): Promise<string> {
   await wait();
   const u = me(); const c = coupleOf(u); const p = partnerOf(u); if (!c || !p) throw new DataError("not_paired");
+  if (s.games.some((g) => g.couple_id === c && g.status === "active")) throw new DataError("game_in_progress");
   const { cols, rows } = GAME_SHAPE[type];
   const id = uid();
   s.games.push({ id, couple_id: c, game_type: type, board: Array(cols * rows).fill(null), cols, rows,
@@ -613,6 +639,13 @@ function playAs(userId: string, gameId: string, index: number, version: number) 
   else if (g.board.every(Boolean)) { g.status = "finished"; g.draw = true; g.turn_user_id = null; }
   else g.turn_user_id = g.players.find((x) => x !== userId)!;
   g.version++; g.updated_at = now();
+  emit();
+}
+export async function abandonGame(gameId: string): Promise<void> {
+  await wait();
+  const u = me(); const g = s.games.find((x) => x.id === gameId && x.couple_id === coupleOf(u));
+  if (!g || g.status !== "active") throw new DataError("invalid_move");
+  g.status = "abandoned"; g.winner_id = g.players.find((p) => p !== u) ?? null; g.turn_user_id = null; g.version++; g.updated_at = now();
   emit();
 }
 export async function playMove(gameId: string, index: number, version: number): Promise<void> {

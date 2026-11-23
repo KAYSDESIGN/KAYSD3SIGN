@@ -10,6 +10,7 @@ import { useGate } from "@/components/app/useGate";
 import { Body, Button, Caption, Card, Display, EmptyState, GradientFill, Heading, Muted, Toast } from "@/components/ui";
 import { api, useMutation, useQuery } from "@/data";
 import { cx } from "@/theme";
+import { localDay, untilTomorrow } from "@/lib/day";
 
 function verdict(score: number) {
   if (score >= 80) return "Âmes sœurs, ou presque.";
@@ -24,14 +25,15 @@ function QuizPlay() {
   const data = useQuery(() => api.getQuizSession(id), [id]);
   const answer = useMutation(api.answerQuiz);
   const [picked, setPicked] = useState<number[]>([]);
-  const replay = useMutation(api.startQuiz);
   const them = partner?.display_name ?? "ton/ta partenaire";
 
   if (data.loading && !data.data) return <Screen><Skeleton className="h-[34px] w-1/2" /><Skeleton className="h-[260px]" /></Screen>;
   if (!data.data) return <Screen><EmptyState icon={SearchX} title="Quiz introuvable" body="Il a peut-être été effacé." action="Retour" onAction={() => router.replace("/quiz")} /></Screen>;
 
   const { quiz, session } = data.data;
-  const next = session.status === "open" ? quiz.questions.find((q) => session.mine[q.id] === undefined) : undefined;
+  // Un quiz d'un jour passé est fermé : plus de réponse possible.
+  const closed = !!session.day && session.day < localDay();
+  const next = session.status === "open" && !closed ? quiz.questions.find((q) => session.mine[q.id] === undefined) : undefined;
   const done = quiz.questions.filter((q) => session.mine[q.id] !== undefined).length;
 
   if (next) {
@@ -77,8 +79,10 @@ function QuizPlay() {
     return (
       <Screen>
         <Caption>{quiz.title}</Caption>
-        <Heading>{"C'est envoyé !"}</Heading>
-        <Body className="text-text-muted">{`Votre score s'affichera dès que ${them} aura répondu à son tour.`}</Body>
+        <Heading>{closed ? "Ce quiz est fermé" : "C'est envoyé !"}</Heading>
+        <Body className="text-text-muted">{closed
+          ? "Vous n'avez pas fini tous les deux avant minuit. Un nouveau quiz vous attend aujourd'hui."
+          : `Tes réponses sont verrouillées. Votre score s'affichera dès que ${them} aura répondu à son tour.`}</Body>
         <Button variant="secondary" onPress={() => (router.canGoBack() ? router.back() : router.replace("/quiz"))}>Retour aux quiz</Button>
         {api.dev.enabled ? <DevPanel actions={[{ label: "Sam répond au quiz", onPress: () => api.dev.partnerAnswersQuiz(session.id) }]} /> : null}
       </Screen>
@@ -110,11 +114,7 @@ function QuizPlay() {
           );
         })}
       </View>
-      <Button size="lg" loading={replay.pending} onPress={async () => {
-        const nid = await replay.mutate(quiz.id);
-        if (nid) router.replace({ pathname: "/quiz/[id]", params: { id: nid } });
-      }}>Rejouer</Button>
-      {replay.error ? <Toast tone="error">{replay.error}</Toast> : null}
+      <Muted className="text-center">{closed ? "Quiz terminé." : `Réponses verrouillées. Nouvelles questions dans ${untilTomorrow()}.`}</Muted>
       <Button variant="secondary" onPress={() => (router.canGoBack() ? router.back() : router.replace("/quiz"))}>Retour aux quiz</Button>
     </Screen>
   );

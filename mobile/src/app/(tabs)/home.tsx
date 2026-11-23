@@ -7,11 +7,12 @@ import { Screen, Skeleton } from "@/components/app/Screen";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { useGate } from "@/components/app/useGate";
 import {
-  Button, DailyCard, Emoji, EmojiText, Glass, GlassList, HeroCard, ListRow, MOODS, SectionTitle, Toast,
+  Button, DailyCard, Emoji, EmojiText, Glass, GlassList, HeroCard, ListRow, MOODS, Muted, SectionTitle, Toast,
   type DailyState,
 } from "@/components/ui";
 import { api, useQuery, type DailyView } from "@/data";
 import { AVATAR_COLORS } from "@/theme";
+import { untilTomorrow } from "@/lib/day";
 
 const moodOf = (k?: string) => MOODS.find((m) => m.key === k);
 
@@ -39,9 +40,8 @@ function CoupleButton({ me, them }: { me: string; them?: string }) {
   );
 }
 
+// Le reste de la vie à deux (le quotidien est dans « Aujourd'hui »).
 const SHORTCUTS = [
-  { icon: Target, tone: "coral", title: "Défi du jour", subtitle: "Un petit défi à relever à deux", action: "Ouvrir", href: "/challenge" },
-  { icon: Smile, tone: "violet", title: "Quiz à deux", subtitle: "Votre score de complicité", action: "Jouer", href: "/quiz" },
   { icon: CalendarClock, tone: "rose", title: "Soirée à deux", subtitle: "Proposer un jour, une heure, un thème", action: "Voir", href: "/plan" },
   { icon: MessageCircle, tone: "plum", title: "Petits mots", subtitle: "Rien que pour vous deux", action: "Écrire", href: "/notes" },
   { icon: ListChecks, tone: "amber", title: "Nos envies d'ailleurs", subtitle: "Voyages, sorties, premières fois", action: "Voir", href: "/bucket" },
@@ -56,6 +56,53 @@ function Shortcuts() {
         <ListRow key={s.href} first={i === 0} icon={s.icon} tone={s.tone} title={s.title} subtitle={s.subtitle} action={s.action} onPress={() => router.push(s.href as never)} />
       ))}
     </GlassList>
+  );
+}
+
+type Step = "todo" | "waiting" | "done";
+const STEP_LABEL: Record<Step, string> = { todo: "À faire", waiting: "En attente", done: "Fait" };
+const stepOf = (views: DailyView[] | undefined): Step =>
+  !views?.length ? "todo" : views.every((v) => v.mine && v.theirs) ? "done" : views.every((v) => v.mine) ? "waiting" : "todo";
+
+/**
+ * Le rituel du jour : tout ce qui se renouvelle à minuit, avec où vous en êtes.
+ * Les questions du jour sont juste au-dessus (cartes) ; ici le défi, le quiz et les envies.
+ */
+function TodayRitual({ them, questions }: { them: string; questions?: DailyView[] }) {
+  const challenges = useQuery(api.getChallenges);
+  const quizzes = useQuery(api.getQuizzes);
+  const desires = useQuery(api.getDesires);
+
+  const challenge = stepOf(challenges.data);
+  const qz = quizzes.data ?? [];
+  const quizStep: Step = !qz.length ? "todo"
+    : qz.every((r) => r.lastSession?.status === "revealed") ? "done"
+    : qz.every((r) => r.lastSession && Object.keys(r.lastSession.mine).length >= r.quiz.questions.length) ? "waiting" : "todo";
+  const quizDone = qz.filter((r) => r.lastSession?.status === "revealed").length;
+  const des = desires.data ?? [];
+  const desAnswered = des.filter((r) => r.answer).length;
+  const desStep: Step = des.length && desAnswered === des.length ? "done" : "todo";
+
+  const steps = [stepOf(questions), challenge, quizStep, desires.data?.length ? desStep : null].filter((x): x is Step => !!x);
+  const done = steps.filter((x) => x === "done").length;
+
+  return (
+    <>
+      <SectionTitle title={`Aujourd'hui · ${done}/${steps.length}`} />
+      <Muted className="-mt-2 px-[2px]">{`Tout se renouvelle à minuit, dans ${untilTomorrow()}.`}</Muted>
+      <GlassList>
+        <ListRow first icon={Target} tone="coral" title="Défi du jour"
+          subtitle={challenge === "waiting" ? `En attente de ${them}` : challenge === "done" ? "Relevé tous les deux" : "Deux défis à relever"}
+          action={STEP_LABEL[challenge]} onPress={() => router.push("/challenge")} />
+        <ListRow icon={Smile} tone="violet" title="Quiz du jour"
+          subtitle={qz.length ? `${qz.length} quiz de 5 questions · ${quizDone} terminé${quizDone > 1 ? "s" : ""}` : "5 nouvelles questions"}
+          action={STEP_LABEL[quizStep]} onPress={() => router.push("/quiz")} />
+        {desires.data?.length ? (
+          <ListRow icon={Sparkles} tone="rose" title="Envies secrètes du jour" subtitle={`${desAnswered}/${des.length} répondues · vos matchs du jour`}
+            action={STEP_LABEL[desStep]} onPress={() => router.push("/desires")} />
+        ) : null}
+      </GlassList>
+    </>
   );
 }
 
@@ -101,6 +148,13 @@ function SoloHome({ name }: { name: string }) {
       )}
 
       <Chips />
+
+      <SectionTitle title="Chaque jour, à deux" />
+      <GlassList>
+        <ListRow first icon={Target} tone="coral" title="Défi du jour" subtitle="Deux défis nouveaux chaque jour" action="Voir" onPress={() => router.push("/challenge")} />
+        <ListRow icon={Smile} tone="violet" title="Quiz à deux" subtitle="5 nouvelles questions chaque jour" action="Voir" onPress={() => router.push("/quiz")} />
+        <ListRow icon={Sparkles} tone="rose" title="Envies secrètes" subtitle="5 envies épicées par jour, vos matchs du jour" action="Voir" onPress={() => router.push("/desires")} />
+      </GlassList>
 
       <SectionTitle title="Ce qui vous attend" />
       <Shortcuts />
@@ -162,7 +216,7 @@ function PairedHome() {
         </GlassList>
       ) : null}
 
-      <Chips />
+      <TodayRitual them={them} questions={today.data} />
 
       <SectionTitle title="Pour vous deux" />
       <Shortcuts />

@@ -1,4 +1,5 @@
 import type React from "react";
+import { useState } from "react";
 import { withPartner } from "@/components/app/PairGate";
 import { Gamepad2 as Gamepad2Icon } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
@@ -19,6 +20,8 @@ function GameScreen() {
   const game = useQuery(() => api.getGame(id), [id]);
   const move = useMutation(api.playMove);
   const again = useMutation(api.createGame);
+  const quit = useMutation(api.abandonGame);
+  const [confirmQuit, setConfirmQuit] = useState(false);
   const them = partner?.display_name ?? "l'autre";
 
   if (game.loading && !game.data) return <Screen><Skeleton className="h-[34px] w-1/2" /><Skeleton className="h-[320px]" /></Screen>;
@@ -26,7 +29,9 @@ function GameScreen() {
   if (!g) return <Screen><EmptyState icon={SearchX} title="Partie introuvable" body="Elle a peut-être été effacée." action="Retour" onAction={() => router.replace("/play")} /></Screen>;
 
   const myTurn = g.status === "active" && g.turn_user_id === profile?.id;
-  const headline = g.status === "finished"
+  const headline = g.status === "abandoned"
+    ? g.winner_id === profile?.id ? `${them} a abandonné, tu gagnes` : "Tu as abandonné"
+    : g.status === "finished"
     ? g.draw ? "Égalité !" : g.winner_id === profile?.id ? "Tu as gagné 🎉" : `${them} a gagné`
     : myTurn ? "À toi de jouer" : `Au tour de ${them}`;
   const play = (i: number) => { if (myTurn && !move.pending) move.mutate(g.id, i, g.version); };
@@ -41,7 +46,14 @@ function GameScreen() {
       </View>
       {g.game_type === "tic_tac_toe" ? <TicTacToe g={g} me={profile?.id} onPlay={play} enabled={myTurn} /> : <FourInRow g={g} me={profile?.id} onPlay={play} enabled={myTurn} />}
       {move.error ? <Toast tone="error">{move.error}</Toast> : null}
-      {g.status === "finished" ? (
+      {quit.error ? <Toast tone="error">{quit.error}</Toast> : null}
+      {g.status === "active" ? (
+        <Button variant="ghost" loading={quit.pending} onPress={async () => {
+          if (!confirmQuit) return setConfirmQuit(true);
+          await quit.mutate(g.id); setConfirmQuit(false);
+        }}>{confirmQuit ? `Confirmer : ${them} gagne la partie` : "Abandonner la partie"}</Button>
+      ) : null}
+      {g.status !== "active" ? (
         <Button size="lg" loading={again.pending} onPress={async () => { const nid = await again.mutate(g.game_type); if (nid) router.replace({ pathname: "/game/[id]", params: { id: nid } }); }}>Revanche</Button>
       ) : null}
       {api.dev.enabled && g.status === "active" && !myTurn ? <DevPanel actions={[{ label: "Sam joue", onPress: () => api.dev.partnerPlays(g.id) }]} /> : null}

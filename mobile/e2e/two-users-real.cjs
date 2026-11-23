@@ -11,6 +11,11 @@ const log = (...a) => console.log(...a);
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 } });
     const p = await ctx.newPage(); p.__errs = [];
     p.on('pageerror', e => p.__errs.push(e.message));
+    if (process.env.DBG) {
+      p.on('requestfailed', r => r.url().includes('supabase') && log('dbg-fail', p.name, r.url().split('/').slice(-2).join('/').slice(0, 80), r.failure()?.errorText));
+      p.on('requestfinished', async r => { if (!r.url().includes('supabase')) return; const t = r.timing(); const ms = t.responseEnd; if (ms > 1500) log('dbg-slow', p.name, Math.round(ms), r.method(), r.url().split('/').slice(-2).join('/').slice(0, 90)); });
+      p.on('response', async r => { if (r.url().includes('/rpc/') && r.status() >= 400) log('dbg-err', p.name, r.status(), r.url().split('/').pop(), (await r.text().catch(() => '')).slice(0, 200)); });
+    }
     p.on('response', r => { if (r.status() >= 400) p.__errs.push(r.status() + ' ' + r.request().method() + ' ' + r.url().replace(/apikey=[^&]+/, '')); });
     p.on('console', m => m.type() === 'error' && p.__errs.push(m.text()));
     p.click2 = (n) => p.getByRole('button', { name: n, exact: true }).locator('visible=true').first().click();
@@ -103,21 +108,19 @@ const log = (...a) => console.log(...a);
     const fresh = (p) => p.locator('[role="radiogroup"]:not(:has([aria-checked="true"]))').locator('visible=true');
     for (const p of [A, B]) await step(`${p.name} dit oui à la première envie du jour`, async () => {
       await p.getByRole('tab', { name: /Envies/ }).locator('visible=true').first().click();
-      await p.getByRole('tab', { name: /Du jour · 0\/5/ }).locator('visible=true').first().waitFor({ timeout: 20000 });
+      await p.getByRole('tab', { name: /Du jour · 0\/5/ }).locator('visible=true').first().waitFor({ timeout: 60000 });
       await fresh(p).first().getByRole('radio', { name: 'Oui' }).click();
       await p.getByRole('tab', { name: /Du jour · 1\/5/ }).locator('visible=true').first().waitFor({ timeout: 15000 });
     });
     await step('Le match apparaît chez Kay', async () => {
-      await A.getByRole('tab', { name: /Nos matchs · 1/ }).locator('visible=true').first().waitFor({ timeout: 25000 });
+      await A.getByRole('tab', { name: /Matchs du jour · 1/ }).locator('visible=true').first().waitFor({ timeout: 25000 });
     });
-    await step('Kay finit ses 5 envies du jour, puis en demande 5 de plus', async () => {
+    await step('Kay finit ses 5 envies du jour', async () => {
       for (let i = 2; i <= 5; i++) {
         await fresh(A).first().getByRole('radio', { name: 'Peut-être' }).click();
         await A.getByRole('tab', { name: new RegExp(`Du jour · ${i}/5`) }).locator('visible=true').first().waitFor({ timeout: 15000 });
       }
       await A.see("C'est tout pour aujourd'hui", 15000);
-      await A.getByRole('button', { name: /Voir 5 envies de plus/ }).locator('visible=true').first().click();
-      await A.getByRole('tab', { name: /Du jour · 5\/10/ }).locator('visible=true').first().waitFor({ timeout: 15000 });
     });
     await step('Kay lance un morpion et joue', async () => {
       await A.getByRole('tab', { name: /Jouer/ }).locator('visible=true').first().click();
@@ -133,6 +136,10 @@ const log = (...a) => console.log(...a);
       await B.see('Au tour de Kay');
     });
     await step('Kay reçoit le coup de Sam', async () => { await A.see('À toi de jouer', 25000); });
+    await step('Une seule partie à la fois : Quatre d\'affilée bloqué pour Sam', async () => {
+      await B.goto(URL + 'play', { waitUntil: 'networkidle' });
+      await B.getByRole('button', { name: /Quatre d'affilée\. Finissez d'abord la partie en cours/ }).locator('visible=true').first().waitFor({ timeout: 15000 });
+    });
     await B.screenshot({ path: 'real-B-game.png' });
     for (const p of [A, B]) await step(`${p.name} supprime son compte`, async () => {
       await p.goto(URL + 'settings', { waitUntil: 'networkidle' });

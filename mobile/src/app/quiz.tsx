@@ -7,24 +7,29 @@ import { Screen, Skeleton } from "@/components/app/Screen";
 import { Body, SpiceBadge, Toast } from "@/components/ui";
 import { ScreenHeader } from "@/components/app/ScreenHeader";
 import { api, useMutation, useQuery } from "@/data";
+import { useGate } from "@/components/app/useGate";
+import { untilTomorrow } from "@/lib/day";
 import { color } from "@/theme";
 
 // S10 · Quiz à deux (liste)
 function Quizzes() {
   const list = useQuery(api.getQuizzes);
   const start = useMutation(api.startQuiz);
+  const { partner } = useGate();
+  const them = partner?.display_name ?? "l'autre";
 
   return (
     <Screen>
-      <ScreenHeader kicker="QUIZ À DEUX" title="Sur la même longueur d'onde ?" />
-      <Body className="text-text-muted">Répondez chacun de votre côté. Votre score de complicité s'affiche quand vous avez fini tous les deux.</Body>
+      <ScreenHeader kicker="QUIZ DU JOUR" title="Sur la même longueur d'onde ?" />
+      <Body className="text-text-muted">{`Chaque jour, 5 nouvelles questions par quiz. Répondez chacun de votre côté : vos réponses sont définitives. Nouvelles questions dans ${untilTomorrow()}.`}</Body>
       {start.error ? <Toast tone="error">{start.error}</Toast> : null}
       {list.loading && !list.data ? <Skeleton className="h-[200px]" /> : null}
       <View className="gap-3">
         {list.data?.map(({ quiz, locked, lastSession }) => {
-          const status = !lastSession ? "Nouveau"
-            : lastSession.status === "revealed" ? `${lastSession.match_score} % de complicité`
-            : Object.keys(lastSession.mine).length < quiz.questions.length ? "En cours" : "En attente de l'autre";
+          const mineCount = lastSession ? Object.keys(lastSession.mine).length : 0;
+          const status = !lastSession || mineCount === 0 ? "À faire"
+            : lastSession.status === "revealed" ? `${lastSession.match_score} % de complicité · terminé`
+            : mineCount < quiz.questions.length ? `En cours · ${mineCount}/${quiz.questions.length}` : `En attente de ${them}`;
           return (
             <Pressable
               key={quiz.id}
@@ -32,7 +37,7 @@ function Quizzes() {
               accessibilityLabel={`${quiz.title}. ${quiz.blurb} ${locked ? "Réservé à Premium." : status}`}
               onPress={async () => {
                 if (locked) return router.push("/premium");
-                // en cours ou terminé : on rouvre la partie (le résultat si elle est finie) ; sinon on en commence une
+                // la partie du jour (une seule par jour) : questions, attente ou résultat verrouillé
                 const id = lastSession ? lastSession.id : await start.mutate(quiz.id);
                 if (id) router.push({ pathname: "/quiz/[id]", params: { id } });
               }}
