@@ -72,16 +72,20 @@ function Piece({ owner, me, size }: { owner: string | null; me?: string; size: n
 
 type BoardProps = { g: Game; me?: string; onPlay: (i: number) => void; enabled: boolean };
 
+// Plateau : fond rosé, cases couleur de page avec un liseré, bien visibles même vides (toutes palettes)
+const boardStyle = () => ({ backgroundColor: color["card-rose"].startsWith("#") ? color["card-rose"] : color.border });
+const cellStyle = () => ({ backgroundColor: color.bg, borderWidth: 1, borderColor: color.border });
+
 function TicTacToe({ g, me, onPlay, enabled }: BoardProps) {
   return (
-    <View accessibilityLabel="Plateau 3 par 3" className="aspect-square w-full max-w-[360px] flex-row flex-wrap self-center rounded-lg bg-border p-[6px]">
+    <View accessibilityLabel="Plateau 3 par 3" className="aspect-square w-full max-w-[360px] flex-row flex-wrap self-center rounded-lg p-[6px]" style={boardStyle()}>
       {g.board.map((v, i) => {
         const who = v ? (v === me ? "ton cœur" : "sa flamme") : "vide";
         return (
           <View key={i} className="h-1/3 w-1/3 p-[3px]">
             <Pressable accessibilityRole="button" accessibilityLabel={`Ligne ${Math.floor(i / 3) + 1}, colonne ${(i % 3) + 1}, ${who}`}
               accessibilityState={{ disabled: !enabled || !!v }} disabled={!enabled || !!v} onPress={() => onPlay(i)}
-              className={cx("flex-1 items-center justify-center rounded-md bg-surface", enabled && !v && "active:bg-accent-soft")}>
+              className={cx("flex-1 items-center justify-center rounded-md", enabled && !v && "active:opacity-70")} style={cellStyle()}>
               <Piece owner={v} me={me} size={40} />
             </Pressable>
           </View>
@@ -93,7 +97,7 @@ function TicTacToe({ g, me, onPlay, enabled }: BoardProps) {
 
 function FourInRow({ g, me, onPlay, enabled }: BoardProps) {
   return (
-    <View className="w-full max-w-[420px] flex-row self-center rounded-lg bg-border p-[4px]">
+    <View className="w-full max-w-[420px] flex-row self-center rounded-lg p-[4px]" style={boardStyle()}>
       {Array.from({ length: g.cols }, (_, c) => {
         const full = !!g.board[c];
         return (
@@ -103,7 +107,7 @@ function FourInRow({ g, me, onPlay, enabled }: BoardProps) {
             {Array.from({ length: g.rows }, (_, r) => {
               const v = g.board[r * g.cols + c];
               return (
-                <View key={r} className="aspect-square items-center justify-center rounded-pill bg-bg">
+                <View key={r} className="aspect-square items-center justify-center rounded-pill" style={cellStyle()}>
                   <Piece owner={v} me={me} size={20} />
                 </View>
               );
