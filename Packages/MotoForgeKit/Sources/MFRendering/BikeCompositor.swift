@@ -227,7 +227,7 @@ public final class BikeCompositor: @unchecked Sendable {
             "inputRVector": CIVector(x: gain, y: 0, z: 0, w: 0),
             "inputGVector": CIVector(x: 0, y: gain, z: 0, w: 0),
             "inputBVector": CIVector(x: 0, y: 0, z: gain, w: 0)
-        ]).applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: 0.45 + 0.55 * gloss * (1 - 0.6 * roughness)])
+        ]).applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: 0.30 + 0.40 * gloss * (1 - 0.6 * roughness)])
     }
 
     private func paint(_ base: CIImage, material: Material, mask: CIImage) -> CIImage {
@@ -245,7 +245,7 @@ public final class BikeCompositor: @unchecked Sendable {
         ])
 
         // 2. Finish: gloss keeps contrast (reflections), roughness flattens it.
-        let contrast = 0.45 + 0.55 * p.gloss * (1 - 0.6 * p.roughness)
+        let contrast = 0.30 + 0.40 * p.gloss * (1 - 0.6 * p.roughness)
         shading = shading.applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: contrast])
 
         // 3. Color layer (solid, bi-color or multi-color gradient).

@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "revision": 2,
- "generatedAt": "2026-11-25T20:44:42Z",
+ "generatedAt": "2026-11-25T21:17:31Z",
  "brands": [
   {
    "id": "honda",
@@ -2673,7 +2673,118 @@
        }
       }
      ],
-     "visualAssets": [],
+     "visualAssets": [
+      {
+       "angle": "front",
+       "assetName": "acc_mivv-gp-pro_front",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.438125,
+         "y": 0.587727
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [
+        "mask_front_muffler"
+       ],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rear",
+       "assetName": "acc_mivv-gp-pro_rear",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.559688,
+         "y": 0.591818
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [
+        "mask_rear_muffler"
+       ],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "leftProfile",
+       "assetName": "acc_mivv-gp-pro_leftProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.577812,
+         "y": 0.586818
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [
+        "mask_leftProfile_muffler"
+       ],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rightProfile",
+       "assetName": "acc_mivv-gp-pro_rightProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.456875,
+         "y": 0.592273
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [
+        "mask_rightProfile_muffler"
+       ],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rearThreeQuarter",
+       "assetName": "acc_mivv-gp-pro_rearThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.59375,
+         "y": 0.6
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [
+        "mask_rearThreeQuarter_muffler"
+       ],
+       "zIndex": 100,
+       "occludedBy": []
+      }
+     ],
      "accessoryID": "mivv.gp-pro.cb125r21"
     },
     {
@@ -3289,7 +3400,118 @@
        }
       }
      ],
-     "visualAssets": [],
+     "visualAssets": [
+      {
+       "angle": "rear",
+       "assetName": "acc_puig-9653n_rear",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.378636
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [
+        "honda.cb125r.jc91.rear-fender"
+       ],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "leftProfile",
+       "assetName": "acc_puig-9653n_leftProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.77375,
+         "y": 0.403182
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [
+        "honda.cb125r.jc91.rear-fender"
+       ],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rightProfile",
+       "assetName": "acc_puig-9653n_rightProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.22625,
+         "y": 0.403182
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [
+        "honda.cb125r.jc91.rear-fender"
+       ],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "frontThreeQuarter",
+       "assetName": "acc_puig-9653n_frontThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.665625,
+         "y": 0.411818
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [
+        "honda.cb125r.jc91.rear-fender"
+       ],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rearThreeQuarter",
+       "assetName": "acc_puig-9653n_rearThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.702812,
+         "y": 0.392727
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [
+        "honda.cb125r.jc91.rear-fender"
+       ],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      }
+     ],
      "accessoryID": "puig.license-support.cb125r"
     }
    ],
@@ -3349,7 +3571,128 @@
        }
       }
      ],
-     "visualAssets": [],
+     "visualAssets": [
+      {
+       "angle": "front",
+       "assetName": "acc_rg-radiator-guard_front",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.453182
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rear",
+       "assetName": "acc_rg-radiator-guard_rear",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.496818
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "leftProfile",
+       "assetName": "acc_rg-radiator-guard_leftProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.355,
+         "y": 0.501364
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rightProfile",
+       "assetName": "acc_rg-radiator-guard_rightProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.644687,
+         "y": 0.501364
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "frontThreeQuarter",
+       "assetName": "acc_rg-radiator-guard_frontThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.405313,
+         "y": 0.454545
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rearThreeQuarter",
+       "assetName": "acc_rg-radiator-guard_rearThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.39375,
+         "y": 0.498636
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      }
+     ],
      "accessoryID": "rg.radiator-guard.cb125r"
     },
     {
@@ -3447,7 +3790,128 @@
        }
       }
      ],
-     "visualAssets": [],
+     "visualAssets": [
+      {
+       "angle": "front",
+       "assetName": "acc_rg-aero-cp0522_front",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.443636
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rear",
+       "assetName": "acc_rg-aero-cp0522_rear",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.447727
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "leftProfile",
+       "assetName": "acc_rg-aero-cp0522_leftProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.422187,
+         "y": 0.443636
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rightProfile",
+       "assetName": "acc_rg-aero-cp0522_rightProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.577812,
+         "y": 0.443636
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "frontThreeQuarter",
+       "assetName": "acc_rg-aero-cp0522_frontThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.50125,
+         "y": 0.442727
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rearThreeQuarter",
+       "assetName": "acc_rg-aero-cp0522_rearThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.406562,
+         "y": 0.445909
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      }
+     ],
      "accessoryID": "rg.aero-crash-protectors.cb125r21"
     }
    ],
@@ -3531,7 +3995,128 @@
      ],
      "homologations": [],
      "offers": [],
-     "visualAssets": [],
+     "visualAssets": [
+      {
+       "angle": "front",
+       "assetName": "acc_givi-tn1199_front",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.545455
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rear",
+       "assetName": "acc_givi-tn1199_rear",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.543636
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "leftProfile",
+       "assetName": "acc_givi-tn1199_leftProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.382188,
+         "y": 0.545909
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rightProfile",
+       "assetName": "acc_givi-tn1199_rightProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.617812,
+         "y": 0.545455
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "frontThreeQuarter",
+       "assetName": "acc_givi-tn1199_frontThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.420312,
+         "y": 0.546364
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rearThreeQuarter",
+       "assetName": "acc_givi-tn1199_rearThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.371875,
+         "y": 0.544091
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      }
+     ],
      "accessoryID": "givi.tn1199"
     }
    ],
@@ -3573,7 +4158,128 @@
      ],
      "homologations": [],
      "offers": [],
-     "visualAssets": [],
+     "visualAssets": [
+      {
+       "angle": "front",
+       "assetName": "acc_givi-a1164_front",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.196818
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rear",
+       "assetName": "acc_givi-a1164_rear",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.197273
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "leftProfile",
+       "assetName": "acc_givi-a1164_leftProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.306875,
+         "y": 0.221818
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rightProfile",
+       "assetName": "acc_givi-a1164_rightProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.693125,
+         "y": 0.221818
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "frontThreeQuarter",
+       "assetName": "acc_givi-a1164_frontThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.365938,
+         "y": 0.200455
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rearThreeQuarter",
+       "assetName": "acc_givi-a1164_rearThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.384688,
+         "y": 0.239545
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      }
+     ],
      "accessoryID": "givi.a1164"
     }
    ],
@@ -3661,7 +4367,128 @@
      ],
      "homologations": [],
      "offers": [],
-     "visualAssets": [],
+     "visualAssets": [
+      {
+       "angle": "front",
+       "assetName": "acc_givi-b45-sr1169_front",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.207727
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rear",
+       "assetName": "acc_givi-b45-sr1169_rear",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.5,
+         "y": 0.132273
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "leftProfile",
+       "assetName": "acc_givi-b45-sr1169_leftProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.7425,
+         "y": 0.173636
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rightProfile",
+       "assetName": "acc_givi-b45-sr1169_rightProfile",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.2575,
+         "y": 0.173636
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "frontThreeQuarter",
+       "assetName": "acc_givi-b45-sr1169_frontThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.640625,
+         "y": 0.201818
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      },
+      {
+       "angle": "rearThreeQuarter",
+       "assetName": "acc_givi-b45-sr1169_rearThreeQuarter",
+       "assetAnchor": {
+        "x": 0.5,
+        "y": 0.5
+       },
+       "placement": {
+        "position": {
+         "x": 0.669687,
+         "y": 0.14
+        },
+        "scale": 1,
+        "rotationDegrees": 0
+       },
+       "hidesComponents": [],
+       "eraseMaskAssets": [],
+       "zIndex": 100,
+       "occludedBy": []
+      }
+     ],
      "accessoryID": "givi.b45"
     }
    ],

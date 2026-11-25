@@ -410,7 +410,8 @@ def build_accessory(name):
             acc(cyl(Vector((0.86, 0.10 * s, 0.62)), Vector((0.86, 0.17 * s, 0.62)), 0.008, material=ALU, verts=10))
             acc(sphere(Vector((0.86, 0.19 * s, 0.62)), (0.035, 0.025, 0.035), material=BLACK))
     elif name == "givi-a1164":
-        acc(box(TOP + Vector((0.10, 0, 0.16)), (0.006, 0.21, 0.28), material=SMOKE, bevel=0.01, rot=(0, math.radians(-25), 0)))
+        acc(box(hl + Vector((0.03, 0, 0.17)), (0.006, 0.21, 0.26), material=SMOKE, bevel=0.01, rot=(0, math.radians(-22), 0)))
+        for s in (1, -1): acc(cyl(hl + Vector((-0.02, 0.07 * s, 0.05)), hl + Vector((0.02, 0.08 * s, 0.10)), 0.006, material=SATIN_BLACK, verts=8))
     else:
         raise SystemExit(f"unknown accessory {name}")
 

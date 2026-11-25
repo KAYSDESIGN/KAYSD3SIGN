@@ -285,13 +285,21 @@ if ACC_ASSETS:
     index = {v["id"]: v for a in accessories for v in a["variants"]}
     for render, (variant_ids, hides, erase) in ACC_VISUALS.items():
         assets = []
+        from PIL import Image
         for angle in ANGLES:
-            if not os.path.exists(os.path.join(ACC_ASSETS, f"acc_{render}_{angle}.png")):
+            path = os.path.join(ACC_ASSETS, f"acc_{render}_{angle}.png")
+            if not os.path.exists(path):
                 continue
+            img = Image.open(path).convert("RGBA")
+            bbox = img.split()[3].point(lambda a: 255 if a > 8 else 0).getbbox()
+            if not bbox:
+                continue  # part hidden by the bike from this angle
+            W, H = img.size
+            cx, cy = (bbox[0] + bbox[2]) / 2 / W, (bbox[1] + bbox[3]) / 2 / H
             assets.append({
                 "angle": angle, "assetName": f"acc_{render}_{angle}",
                 "assetAnchor": {"x": 0.5, "y": 0.5},
-                "placement": {"position": {"x": 0.5, "y": 0.5}, "scale": 1, "rotationDegrees": 0},
+                "placement": {"position": {"x": round(cx, 6), "y": round(cy, 6)}, "scale": 1, "rotationDegrees": 0},
                 "hidesComponents": [f"{GEN}.{h}" for h in hides],
                 "eraseMaskAssets": [f"mask_{angle}_{erase}"] if erase else [],
                 "zIndex": 100, "occludedBy": [],

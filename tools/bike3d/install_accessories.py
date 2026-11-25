@@ -28,9 +28,10 @@ acc_f = folder("Accessories"); clean_f = folder("CB125R Clean")
 for f in sorted(os.listdir(ACC)):
     if f.startswith("acc_") and f.endswith(".png"):
         img = Image.open(os.path.join(ACC, f)).convert("RGBA")
-        bbox = img.getbbox()
-        imageset(acc_f, f[:-4], img)
-        print(f, "visible" if bbox else "empty")
+        bbox = img.split()[3].point(lambda a: 255 if a > 8 else 0).getbbox()
+        if not bbox:
+            print(f, "empty (skipped)"); continue
+        imageset(acc_f, f[:-4], img.crop(bbox))   # cropped to the part; placement computed by build_catalog.py
     elif f.startswith("clean_") and f.endswith(".png"):
         clean = Image.open(os.path.join(ACC, f)).convert("RGBA")
         imageset(clean_f, f[:-4], clean)
