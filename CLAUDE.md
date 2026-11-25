@@ -80,6 +80,13 @@ open MotoForge.xcodeproj
 
 Ne pas committer `MotoForge.xcodeproj` (généré).
 
-## 7. Compte rendu
+## 7. Pipelines de données et de visuels
+
+- **Visuels moto** : `tools/bike3d/cb125r_jc91.py` (Blender 4.2 LTS, cotes officielles Honda) → `install_assets.py` (asset catalog + contrôles de cohérence) → `tools/catalog/build_catalog.py` (vues et masques dans `catalog.json`). Voir `docs/visuals/README.md`.
+- **Accessoires 3D** : `--accessory <id>` (moto en holdout = occultations exactes), `--cleanplate <pièce>` pour les pièces remplacées, puis `install_accessories.py`.
+- **Catalogue** : toute donnée est saisie dans `tools/catalog/build_catalog.py` avec sa source et sa date ; `catalog_report.py` régénère `docs/CATALOG.md`. Ne jamais éditer `catalog.json` à la main.
+- **CI** : `.github/workflows/ios.yml` (runners macOS gratuits, dépôt public) compile, lance tous les tests et exporte les captures d'écran (`ScreenshotTests`). `scripts/ci_fetch_artifact.sh <url signée>` récupère les erreurs.
+
+## 8. Compte rendu
 
 Après chaque étape : fonctionnalités terminées, tests effectués, problèmes rencontrés, éléments restants. Tenir `docs/ROADMAP.md` à jour.
