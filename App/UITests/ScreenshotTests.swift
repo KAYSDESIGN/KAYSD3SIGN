@@ -5,7 +5,7 @@ final class ScreenshotTests: XCTestCase {
     override func setUp() { continueAfterFailure = true }
 
     private func snap(_ app: XCUIApplication, _ name: String) {
-        sleep(1)
+        sleep(3)
         let a = XCTAttachment(screenshot: app.screenshot())
         a.name = name
         a.lifetime = .keepAlways
@@ -39,7 +39,9 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Accueil"].tap()
         app.buttons["Atelier"].firstMatch.tap()
         _ = app.navigationBars["Atelier"].waitForExistence(timeout: 5)
-        snap(app, "05-atelier-couleur")
+        snap(app, "05-atelier-origine")
+        if app.buttons["Rouge"].exists { app.buttons["Rouge"].tap(); snap(app, "05-atelier-rouge") }
+        if app.buttons["Satiné"].exists { app.buttons["Satiné"].tap(); snap(app, "05-atelier-rouge-satine") }
         app.buttons["Finition"].tap(); snap(app, "05b-atelier-finition")
         app.buttons["Pièces"].tap(); snap(app, "05c-atelier-pieces")
         app.buttons["Configurer"].tap(); snap(app, "05d-atelier-configurer")
@@ -47,12 +49,12 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Couleur"].tap()
         if app.buttons["Plus de couleurs"].exists {
             app.buttons["Plus de couleurs"].tap(); snap(app, "07-studio-peinture")
-            app.buttons["Annuler"].tap()
+            app.navigationBars.buttons["Annuler"].firstMatch.tap()
         }
         app.buttons["Finition"].tap()
         if app.buttons["Covering"].waitForExistence(timeout: 2) {
             app.buttons["Covering"].tap(); snap(app, "07b-studio-covering")
-            app.buttons["Annuler"].tap()
+            app.navigationBars.buttons["Annuler"].firstMatch.tap()
         }
         app.buttons["Garage"].tap()
         app.navigationBars["Mon garage"].buttons["Ajouter une moto"].tap()

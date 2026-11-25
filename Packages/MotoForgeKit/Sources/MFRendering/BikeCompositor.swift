@@ -30,9 +30,21 @@ public final class BikeCompositor: @unchecked Sendable {
         case renderFailed
     }
 
-    public func render(_ plan: RenderPlan) throws -> CGImage {
+    /// - Parameter scale: output scale (e.g. 0.35 for thumbnails); every input is resampled first so the cost drops with it.
+    public func render(_ plan: RenderPlan, scale: CGFloat = 1) throws -> CGImage {
+        guard scale < 1 else { return try renderPlan(plan) }
+        // A throw-away compositor with a resampling loader: no shared mutable state (thread-safe), same CIContext.
+        let original = loadAsset
+        let scaled = BikeCompositor(loadAsset: { original($0)?.transformed(by: CGAffineTransform(scaleX: scale, y: scale)) },
+                                    stageColor: stageColor, context: context)
+        return try scaled.renderPlan(plan)
+    }
+
+    private func load(_ name: String) -> CIImage? { loadAsset(name) }
+
+    private func renderPlan(_ plan: RenderPlan) throws -> CGImage {
         guard case .base(let baseName)? = plan.layers.first else { throw CompositorError.renderFailed }
-        guard let base = loadAsset(baseName) else { throw CompositorError.missingAsset(baseName) }
+        guard let base = load(baseName) else { throw CompositorError.missingAsset(baseName) }
         let extent = base.extent
         var current = base
 
@@ -43,7 +55,7 @@ public final class BikeCompositor: @unchecked Sendable {
             case .erase(let maskName):
                 let mask = try loadMask(maskName, extent: extent)
                 // Prefer a clean plate (the bike rendered without that part); fall back to the stage colour.
-                let fill = Self.cleanPlateName(forMask: maskName).flatMap(loadAsset) ?? CIImage(color: stageColor).cropped(to: extent)
+                let fill = Self.cleanPlateName(forMask: maskName).flatMap { self.load($0) } ?? CIImage(color: stageColor).cropped(to: extent)
                 current = blend(fill, over: current, mask: mask)
             case .component(_, let maskName, let style):
                 let mask = try loadMask(maskName, extent: extent)
@@ -53,7 +65,7 @@ public final class BikeCompositor: @unchecked Sendable {
                 let source = style.map { styled(base, style: $0, mask: mask) } ?? base
                 current = blend(source, over: current, mask: mask)
             case .accessory(_, let assetName, let anchor, let placement):
-                guard let asset = loadAsset(assetName) else { throw CompositorError.missingAsset(assetName) }
+                guard let asset = load(assetName) else { throw CompositorError.missingAsset(assetName) }
                 current = place(asset, anchor: anchor, placement: placement, in: extent).composited(over: current)
             }
         }
@@ -155,10 +167,10 @@ public final class BikeCompositor: @unchecked Sendable {
             }
             return (shaded(pattern.transformed(by: rotation).cropped(to: extent)), full)
         case .sticker(let assetName):
-            guard let img = loadAsset(assetName) else { return nil }
+            guard let img = load(assetName) else { return nil }
             return decal(img, center: center, size: size, rotation: p.rotationDegrees, extent: extent, shading: shading, tile: false)
         case .userImage(let file, let isTexture):
-            guard let img = loadAsset("file:" + file) else { return nil }
+            guard let img = load("file:" + file) else { return nil }
             return decal(img, center: center, size: size, rotation: p.rotationDegrees, extent: extent, shading: shading, tile: isTexture)
         }
     }
@@ -308,7 +320,7 @@ public final class BikeCompositor: @unchecked Sendable {
     }
 
     private func loadMask(_ name: String, extent: CGRect) throws -> CIImage {
-        guard let mask = loadAsset(name) else { throw CompositorError.missingAsset(name) }
+        guard let mask = load(name) else { throw CompositorError.missingAsset(name) }
         // Masks are grayscale; CIBlendWithMask reads luminance. Scale if exported at another size.
         guard mask.extent.size != extent.size, mask.extent.width > 0, mask.extent.height > 0 else { return mask }
         return mask.transformed(by: CGAffineTransform(scaleX: extent.width / mask.extent.width, y: extent.height / mask.extent.height))

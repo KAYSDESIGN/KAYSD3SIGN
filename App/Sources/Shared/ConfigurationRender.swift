@@ -39,7 +39,7 @@ struct ConfigurationRender: View {
               let plan = try? editor.renderPlan(angle: vehicle.view(for: angle) != nil ? angle : (vehicle.availableAngles.first ?? angle), using: builder)
         else { return }
         let compositor = self.compositor
-        let rendered = await Task.detached(priority: .utility) { try? compositor.render(plan) }.value
+        let rendered = await Task.detached(priority: .utility) { try? compositor.render(plan, scale: 0.4) }.value
         if let rendered {
             await RenderCache.shared.store(rendered, for: key)
             withAnimation(.easeOut(duration: 0.2)) { image = rendered }

@@ -57,8 +57,10 @@ final class AppModel {
         let bike = OwnedMotorcycle(variantID: variant.id, originalColorwayID: variant.colorways.first?.id, year: 2022, mileageKm: 12480)
         await addMotorcycle(bike)
         guard let project = await createProject(for: bike, name: "CB125R Bi-ton") else { return }
-        for accessory in compatibleAccessories(for: variant.id).prefix(3) {
-            try? await addAccessory(accessory, variant: accessory.variants[0], to: project.id)
+        var categories = Set<AccessoryCategory>()
+        for accessory in compatibleAccessories(for: variant.id) where categories.count < 3 {
+            guard let v = accessory.variants.first(where: { !$0.visualAssets.isEmpty }), categories.insert(accessory.category).inserted else { continue }
+            try? await addAccessory(accessory, variant: v, to: project.id)
         }
         if var p = self.project(project.id) {
             p.budget.maximum = Money(3500, p.budget.currency)

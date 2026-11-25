@@ -199,7 +199,8 @@ final class WorkshopViewModel {
                 ConfigurationEditor.originalStyle(of: id, vehicle: e.vehicle, colorway: e.configuration.originalColorwayID)
             }
             var notices: [String] = []
-            if !plan.accessoriesWithoutVisual.isEmpty { notices.append("\(plan.accessoriesWithoutVisual.count) accessoire(s) sans visuel pour cet angle.") }
+            let missing = plan.accessoriesWithoutVisual.filter { !(model.accessoryVariant($0)?.1.visualAssets.isEmpty ?? true) }
+            if !missing.isEmpty { notices.append("\(missing.count) pièce(s) non visible(s) sous cet angle.") }
             renderNotice = notices.isEmpty ? nil : notices.joined(separator: " ")
             renderTask = Task.detached(priority: .userInitiated) { [compositor] in
                 let rendered = try? compositor.render(plan)
