@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "generatedAt": "2026-11-25T00:00:00Z",
+  "brands": [
+    {
+      "id": "honda",
+      "name": "Honda"
+    }
+  ],
+  "models": [
+    {
+      "id": "honda.cb125r",
+      "brandID": "honda",
+      "name": "CB125R"
+    }
+  ],
+  "generations": [
+    {
+      "id": "honda.cb125r.jc91",
+      "modelID": "honda.cb125r",
+      "code": "JC91",
+      "verification": {
+        "status": "unverified",
+        "notes": "À vérifier sur source primaire Honda avant publication."
+      }
+    }
+  ],
+  "variants": [
+    {
+      "id": "honda.cb125r.jc91.base",
+      "generationID": "honda.cb125r.jc91",
+      "versionName": "CB125R (JC91)",
+      "colorways": [],
+      "components": [
+        {
+          "id": "honda.cb125r.jc91.base.tank",
+          "kind": {
+            "tank": {}
+          },
+          "displayName": "Réservoir",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.tank-shrouds",
+          "kind": {
+            "tankShrouds": {}
+          },
+          "displayName": "Écopes",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.front-fender",
+          "kind": {
+            "frontFender": {}
+          },
+          "displayName": "Garde-boue avant",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.rear-fender",
+          "kind": {
+            "rearFender": {}
+          },
+          "displayName": "Garde-boue arrière",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.tail-section",
+          "kind": {
+            "tailSection": {}
+          },
+          "displayName": "Coque arrière",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.front-wheel",
+          "kind": {
+            "frontWheel": {}
+          },
+          "displayName": "Jante avant",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.rear-wheel",
+          "kind": {
+            "rearWheel": {}
+          },
+          "displayName": "Jante arrière",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.fork",
+          "kind": {
+            "fork": {}
+          },
+          "displayName": "Fourche",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.frame",
+          "kind": {
+            "frame": {}
+          },
+          "displayName": "Cadre",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.swingarm",
+          "kind": {
+            "swingarm": {}
+          },
+          "displayName": "Bras oscillant",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.handlebar",
+          "kind": {
+            "handlebar": {}
+          },
+          "displayName": "Guidon",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.levers",
+          "kind": {
+            "levers": {}
+          },
+          "displayName": "Leviers",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.brake-calipers",
+          "kind": {
+            "brakeCalipers": {}
+          },
+          "displayName": "Étriers de frein",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.seat",
+          "kind": {
+            "seat": {}
+          },
+          "displayName": "Selle",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        },
+        {
+          "id": "honda.cb125r.jc91.base.engine-covers",
+          "kind": {
+            "engineCovers": {}
+          },
+          "displayName": "Caches moteur",
+          "supportedModes": [
+            "paint",
+            "wrap"
+          ]
+        }
+      ],
+      "views": [],
+      "verification": {
+        "status": "unverified",
+        "notes": "Années, versions et coloris d'origine à documenter. Liste des composants à confirmer avec les visuels de référence."
+      }
+    }
+  ],
+  "accessories": [],
+  "referenceColors": []
+}
