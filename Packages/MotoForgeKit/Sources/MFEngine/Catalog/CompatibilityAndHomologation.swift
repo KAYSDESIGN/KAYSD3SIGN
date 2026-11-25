@@ -57,4 +57,12 @@ public enum OfferSelector {
         let verified = inCurrency.filter { $0.verification.isTrustworthy }
         return (verified.isEmpty ? inCurrency : verified).min { $0.price.amount < $1.price.amount }
     }
+
+    /// Offer to display: best one in the preferred currency, else the cheapest verified offer in any currency
+    /// (shown in its own currency, never converted).
+    public static func displayOffer(for variant: AccessoryVariant, preferredCurrency: String) -> MerchantOffer? {
+        if let preferred = bestOffer(for: variant, currency: preferredCurrency) { return preferred }
+        let verified = variant.offers.filter { $0.verification.isTrustworthy }
+        return (verified.isEmpty ? variant.offers : verified).min { $0.price.amount < $1.price.amount }
+    }
 }

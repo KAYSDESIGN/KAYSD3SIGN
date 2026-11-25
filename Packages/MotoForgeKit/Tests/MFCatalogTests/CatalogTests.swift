@@ -15,12 +15,26 @@ struct CatalogTests {
         #expect(errors.isEmpty, "\(errors)")
     }
 
-    @Test func bundledCatalogContainsNoInventedFacts() async throws {
+    @Test func bundledCatalogIsFullySourced() async throws {
         let snapshot = try await BundledCatalogRepository().snapshot()
-        // Until sourced, nothing may be marked verified.
-        #expect(snapshot.generations.allSatisfy { !$0.verification.isTrustworthy })
-        #expect(snapshot.variants.allSatisfy { $0.colorways.isEmpty && $0.year == nil })
-        #expect(snapshot.accessories.isEmpty)
+        #expect(snapshot.generations.allSatisfy { $0.verification.isTrustworthy })
+        #expect(snapshot.generations.first?.firstYear == 2021)
+        #expect(snapshot.variants.allSatisfy { v in v.colorways.allSatisfy { $0.verification.isTrustworthy } })
+        let references = snapshot.accessories.flatMap(\.variants)
+        #expect(references.count >= 30)
+        // Every reference has a verified fitment for a JC91 variant; no unsourced homologation or price.
+        let jc91 = Set(snapshot.variants.map(\.id))
+        for r in references {
+            #expect(r.compatibilities.contains { $0.verification.isTrustworthy && !jc91.isDisjoint(with: $0.vehicleVariantIDs) }, "\(r.id)")
+            #expect(r.homologations.allSatisfy { $0.verification.isTrustworthy }, "\(r.id)")
+            #expect(r.offers.allSatisfy { $0.verification.verifiedAt != nil && $0.price.amount > 0 }, "\(r.id)")
+        }
+    }
+
+    @Test func decimalPricesAreExact() async throws {
+        let snapshot = try await BundledCatalogRepository().snapshot()
+        let arrow = snapshot.accessories.flatMap(\.variants).first { $0.reference == "51519XKIW" }
+        #expect(arrow?.offers.first?.price.amount == Decimal(string: "450.18")!)
     }
 
     @Test func validatorRejectsUnsourcedData() {

@@ -28,7 +28,7 @@ struct ProductDetailView: View {
     private func content(_ accessory: Accessory) -> some View {
         let variant = accessory.variants[min(variantIndex, accessory.variants.count - 1)]
         let bike = model.selectedMotorcycle
-        let offer = OfferSelector.bestOffer(for: variant, currency: "EUR")
+        let offer = OfferSelector.displayOffer(for: variant, preferredCurrency: "EUR")
         let compat = bike.flatMap { CompatibilityChecker.compatibility(of: variant, with: $0.variantID) }
         let homologation = bike.map { HomologationResolver.resolve(variant, country: country, vehicle: $0.variantID) }
 
@@ -41,11 +41,14 @@ struct ProductDetailView: View {
                         .font(MFTypography.callout)
                         .foregroundStyle(MFColor.textSecondary)
                     HStack(alignment: .firstTextBaseline) {
-                        Text(offer.map { Format.money($0.price) } ?? "Prix non vérifié")
+                        Text(offer.map { Format.money($0.price) } ?? "Prix non communiqué")
                             .font(.system(.title2).weight(.bold))
                             .foregroundStyle(offer == nil ? MFColor.textSecondary : MFColor.accent)
                         if let offer {
                             MFBadge(offer.priceKind == .verified ? .verified : .estimate)
+                            if let tax = offer.taxNote {
+                                Text(tax).font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
+                            }
                             if let date = offer.verification.verifiedAt {
                                 Text("au \(date.formatted(date: .abbreviated, time: .omitted))")
                                     .font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
@@ -167,14 +170,15 @@ struct ProductDetailView: View {
             VStack(alignment: .leading, spacing: MFSpacing.s) {
                 MFSectionHeader("Vendeurs")
                 if variant.offers.isEmpty {
-                    Text("Aucun vendeur référencé.").font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
+                    Text("Le fabricant ne publie pas de prix. Consultez un revendeur agréé.").font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
                 }
                 ForEach(variant.offers, id: \.url) { offer in
                     Button { openURL(offer.url) } label: {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(offer.merchantName).font(MFTypography.callout.weight(.semibold))
-                                Text(offer.priceKind == .verified ? "Prix vérifié" : "Prix non vérifié").font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
+                                Text([offer.priceKind == .verified ? "Prix vérifié" : "Prix non vérifié", offer.taxNote].compactMap { $0 }.joined(separator: " · "))
+                                    .font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
                             }
                             Spacer()
                             Text(Format.money(offer.price)).font(MFTypography.callout.weight(.semibold))

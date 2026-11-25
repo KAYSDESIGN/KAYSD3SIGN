@@ -387,3 +387,13 @@ struct ProjectInsightsTests {
         #expect(normalized == "2 347,90 €")
     }
 }
+
+@Suite("Offre affichée")
+struct DisplayOfferTests {
+    @Test func fallsBackToOtherCurrencyWithoutConverting() {
+        var v = Fixtures.mirrorAccessory().1
+        v.offers = [MerchantOffer(merchantName: "UK", url: URL(string: "https://example.com")!, price: Money(59.99, "GBP"), verification: Fixtures.verified)]
+        #expect(OfferSelector.bestOffer(for: v, currency: "EUR") == nil)
+        #expect(OfferSelector.displayOffer(for: v, preferredCurrency: "EUR")?.price.currency == "GBP")
+    }
+}

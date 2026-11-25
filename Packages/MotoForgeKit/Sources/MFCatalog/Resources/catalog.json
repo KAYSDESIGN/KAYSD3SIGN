@@ -1,211 +1,2065 @@
 {
-  "schemaVersion": 1,
-  "revision": 1,
-  "generatedAt": "2026-11-25T00:00:00Z",
-  "brands": [
+ "schemaVersion": 1,
+ "revision": 2,
+ "generatedAt": "2026-11-25T20:29:44Z",
+ "brands": [
+  {
+   "id": "honda",
+   "name": "Honda"
+  }
+ ],
+ "models": [
+  {
+   "id": "honda.cb125r",
+   "brandID": "honda",
+   "name": "CB125R"
+  }
+ ],
+ "generations": [
+  {
+   "id": "honda.cb125r.jc91",
+   "modelID": "honda.cb125r",
+   "code": "JC91",
+   "firstYear": 2021,
+   "lastYear": 2023,
+   "verification": {
+    "status": "verified",
+    "source": "Honda Japon (type 8BJ-JC91, 19/03/2021) et Honda Motor Europe (modèle 2021, 11/11/2020 ; 24YM, 21/03/2024)",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://global.honda/jp/news/2021/2210319-cb125r.html",
+    "notes": "Le millésime 24YM (Euro 5+, écran TFT 5 pouces) est traité comme JC95 conformément au périmètre du projet ; certaines fiches japonaises conservent le type 8BJ-JC91 pour 2024."
+   }
+  }
+ ],
+ "variants": [
+  {
+   "id": "honda.cb125r.jc91.eu",
+   "generationID": "honda.cb125r.jc91",
+   "versionName": "Europe · 21YM–23YM (Euro 5, 11 kW)",
+   "colorways": [
     {
-      "id": "honda",
-      "name": "Honda"
+     "id": "honda.cb125r.jc91.eu.pearl-smoky-gray",
+     "name": "Pearl Smoky Gray",
+     "manufacturerCodes": [],
+     "componentMaterials": {},
+     "verification": {
+      "status": "verified",
+      "source": "Padgett's Motorcycles, concession Honda (21YM HONDA CB125R)",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "sourceURL": "https://www.padgettsmotorcycles.com/honda/21ym-honda-cb125r/",
+      "notes": "Teinte confirmée par Honda Japon (パールスモーキーグレー)."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.eu.mat-gunpowder-black-metallic",
+     "name": "Mat Gunpowder Black Metallic",
+     "manufacturerCodes": [],
+     "componentMaterials": {},
+     "verification": {
+      "status": "verified",
+      "source": "Padgett's Motorcycles, concession Honda (21YM HONDA CB125R)",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "sourceURL": "https://www.padgettsmotorcycles.com/honda/21ym-honda-cb125r/",
+      "notes": "Teinte confirmée par Honda Japon (マットガンパウダーブラックメタリック)."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.eu.candy-chromosphere-red",
+     "name": "Candy Chromosphere Red",
+     "manufacturerCodes": [],
+     "componentMaterials": {},
+     "verification": {
+      "status": "verified",
+      "source": "Padgett's Motorcycles, concession Honda (21YM HONDA CB125R)",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "sourceURL": "https://www.padgettsmotorcycles.com/honda/21ym-honda-cb125r/",
+      "notes": "Teinte confirmée par Honda Japon (キャンディークロモスフィアレッド)."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.eu.mat-jeans-blue-metallic",
+     "name": "Mat Jeans Blue Metallic",
+     "manufacturerCodes": [],
+     "componentMaterials": {},
+     "verification": {
+      "status": "verified",
+      "source": "Padgett's Motorcycles, concession Honda (21YM HONDA CB125R)",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "sourceURL": "https://www.padgettsmotorcycles.com/honda/21ym-honda-cb125r/"
+     }
     }
-  ],
-  "models": [
+   ],
+   "components": [
     {
-      "id": "honda.cb125r",
-      "brandID": "honda",
-      "name": "CB125R"
+     "id": "honda.cb125r.jc91.tank",
+     "kind": {
+      "tank": {}
+     },
+     "displayName": "Réservoir",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.tank-shrouds",
+     "kind": {
+      "tankShrouds": {}
+     },
+     "displayName": "Écopes",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.front-fender",
+     "kind": {
+      "frontFender": {}
+     },
+     "displayName": "Garde-boue avant",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.rear-fender",
+     "kind": {
+      "rearFender": {}
+     },
+     "displayName": "Garde-boue arrière",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.tail-section",
+     "kind": {
+      "tailSection": {}
+     },
+     "displayName": "Coque arrière",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.front-wheel",
+     "kind": {
+      "frontWheel": {}
+     },
+     "displayName": "Jante avant",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.rear-wheel",
+     "kind": {
+      "rearWheel": {}
+     },
+     "displayName": "Jante arrière",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.fork",
+     "kind": {
+      "fork": {}
+     },
+     "displayName": "Fourche",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.frame",
+     "kind": {
+      "frame": {}
+     },
+     "displayName": "Cadre",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.swingarm",
+     "kind": {
+      "swingarm": {}
+     },
+     "displayName": "Bras oscillant",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.handlebar",
+     "kind": {
+      "handlebar": {}
+     },
+     "displayName": "Guidon",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.levers",
+     "kind": {
+      "levers": {}
+     },
+     "displayName": "Leviers",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.brake-calipers",
+     "kind": {
+      "brakeCalipers": {}
+     },
+     "displayName": "Étriers de frein",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.seat",
+     "kind": {
+      "seat": {}
+     },
+     "displayName": "Selle",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.engine-covers",
+     "kind": {
+      "engineCovers": {}
+     },
+     "displayName": "Caches moteur",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.protections",
+     "kind": {
+      "protections": {}
+     },
+     "displayName": "Sabot moteur",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
     }
-  ],
-  "generations": [
+   ],
+   "views": [],
+   "verification": {
+    "status": "verified",
+    "source": "Honda Motor Europe, annonce de la gamme 2021 (11/11/2020)",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://global.honda/newsroom/news/2020/2201111eng.html",
+    "notes": "Nouveau moteur 4 soupapes 11 kW, fourche Showa SFF-BP 41 mm, disque flottant 296 mm, étrier radial 4 pistons, ABS IMU."
+   }
+  },
+  {
+   "id": "honda.cb125r.jc91.jp",
+   "generationID": "honda.cb125r.jc91",
+   "year": 2021,
+   "versionName": "Japon · 8BJ-JC91",
+   "colorways": [
     {
-      "id": "honda.cb125r.jc91",
-      "modelID": "honda.cb125r",
-      "code": "JC91",
-      "verification": {
-        "status": "unverified",
-        "notes": "À vérifier sur source primaire Honda avant publication."
+     "id": "honda.cb125r.jc91.jp.matte-gunpowder-black-metallic",
+     "name": "Matte Gunpowder Black Metallic (マットガンパウダーブラックメタリック)",
+     "manufacturerCodes": [],
+     "componentMaterials": {},
+     "verification": {
+      "status": "verified",
+      "source": "Honda Japon, communiqué du 19/03/2021",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "sourceURL": "https://global.honda/jp/news/2021/2210319-cb125r.html"
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.jp.pearl-smoky-grey",
+     "name": "Pearl Smoky Grey (パールスモーキーグレー)",
+     "manufacturerCodes": [],
+     "componentMaterials": {},
+     "verification": {
+      "status": "verified",
+      "source": "Honda Japon, communiqué du 19/03/2021",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "sourceURL": "https://global.honda/jp/news/2021/2210319-cb125r.html"
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.jp.candy-chromosphere-red",
+     "name": "Candy Chromosphere Red (キャンディークロモスフィアレッド)",
+     "manufacturerCodes": [],
+     "componentMaterials": {},
+     "verification": {
+      "status": "verified",
+      "source": "Honda Japon, communiqué du 19/03/2021",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "sourceURL": "https://global.honda/jp/news/2021/2210319-cb125r.html"
+     }
+    }
+   ],
+   "components": [
+    {
+     "id": "honda.cb125r.jc91.tank",
+     "kind": {
+      "tank": {}
+     },
+     "displayName": "Réservoir",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.tank-shrouds",
+     "kind": {
+      "tankShrouds": {}
+     },
+     "displayName": "Écopes",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.front-fender",
+     "kind": {
+      "frontFender": {}
+     },
+     "displayName": "Garde-boue avant",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.rear-fender",
+     "kind": {
+      "rearFender": {}
+     },
+     "displayName": "Garde-boue arrière",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.tail-section",
+     "kind": {
+      "tailSection": {}
+     },
+     "displayName": "Coque arrière",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.front-wheel",
+     "kind": {
+      "frontWheel": {}
+     },
+     "displayName": "Jante avant",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.rear-wheel",
+     "kind": {
+      "rearWheel": {}
+     },
+     "displayName": "Jante arrière",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.fork",
+     "kind": {
+      "fork": {}
+     },
+     "displayName": "Fourche",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.frame",
+     "kind": {
+      "frame": {}
+     },
+     "displayName": "Cadre",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.swingarm",
+     "kind": {
+      "swingarm": {}
+     },
+     "displayName": "Bras oscillant",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.handlebar",
+     "kind": {
+      "handlebar": {}
+     },
+     "displayName": "Guidon",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.levers",
+     "kind": {
+      "levers": {}
+     },
+     "displayName": "Leviers",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.brake-calipers",
+     "kind": {
+      "brakeCalipers": {}
+     },
+     "displayName": "Étriers de frein",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.seat",
+     "kind": {
+      "seat": {}
+     },
+     "displayName": "Selle",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.engine-covers",
+     "kind": {
+      "engineCovers": {}
+     },
+     "displayName": "Caches moteur",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    },
+    {
+     "id": "honda.cb125r.jc91.protections",
+     "kind": {
+      "protections": {}
+     },
+     "displayName": "Sabot moteur",
+     "supportedModes": [
+      "paint",
+      "wrap"
+     ]
+    }
+   ],
+   "views": [],
+   "verification": {
+    "status": "verified",
+    "source": "Honda Japon, communiqué du 19/03/2021 (type 8BJ-JC91, moteur JC91E)",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://global.honda/jp/news/2021/2210319-cb125r.html",
+    "notes": "2040×820×1055 mm, empattement 1345 mm, selle 815 mm, 130 kg, 11 kW à 10 000 tr/min, 12 N·m à 8000 tr/min, réservoir 10 L."
+   }
+  }
+ ],
+ "accessories": [
+  {
+   "id": "mivv.gp-pro.cb125r21",
+   "category": "exhausts",
+   "commercialName": "Échappement GP PRO",
+   "manufacturer": "MIVV",
+   "manufacturerURL": "https://mivv.com/en/",
+   "description": "Silencieux GP PRO pour CB 125 R 2021 > 2024. Fabricant : +1,8 ch et +0,9 N·m au banc, -1 kg (4,00 → 3,00 kg).",
+   "materials": [
+    "Carbone",
+    "Titane",
+    "Inox"
+   ],
+   "photos": [],
+   "variants": [
+    {
+     "id": "mivv.gp-pro.cb125r21.h.077.l2p",
+     "reference": "H.077.L2P",
+     "colorway": "Carbone (corps central), finition brillante",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA CB 125 R 2021 > 2024",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/"
+       }
       }
-    }
-  ],
-  "variants": [
-    {
-      "id": "honda.cb125r.jc91.base",
-      "generationID": "honda.cb125r.jc91",
-      "versionName": "CB125R (JC91)",
-      "colorways": [],
-      "components": [
-        {
-          "id": "honda.cb125r.jc91.base.tank",
-          "kind": {
-            "tank": {}
-          },
-          "displayName": "Réservoir",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.tank-shrouds",
-          "kind": {
-            "tankShrouds": {}
-          },
-          "displayName": "Écopes",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.front-fender",
-          "kind": {
-            "frontFender": {}
-          },
-          "displayName": "Garde-boue avant",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.rear-fender",
-          "kind": {
-            "rearFender": {}
-          },
-          "displayName": "Garde-boue arrière",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.tail-section",
-          "kind": {
-            "tailSection": {}
-          },
-          "displayName": "Coque arrière",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.front-wheel",
-          "kind": {
-            "frontWheel": {}
-          },
-          "displayName": "Jante avant",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.rear-wheel",
-          "kind": {
-            "rearWheel": {}
-          },
-          "displayName": "Jante arrière",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.fork",
-          "kind": {
-            "fork": {}
-          },
-          "displayName": "Fourche",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.frame",
-          "kind": {
-            "frame": {}
-          },
-          "displayName": "Cadre",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.swingarm",
-          "kind": {
-            "swingarm": {}
-          },
-          "displayName": "Bras oscillant",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.handlebar",
-          "kind": {
-            "handlebar": {}
-          },
-          "displayName": "Guidon",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.levers",
-          "kind": {
-            "levers": {}
-          },
-          "displayName": "Leviers",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.brake-calipers",
-          "kind": {
-            "brakeCalipers": {}
-          },
-          "displayName": "Étriers de frein",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.seat",
-          "kind": {
-            "seat": {}
-          },
-          "displayName": "Selle",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        },
-        {
-          "id": "honda.cb125r.jc91.base.engine-covers",
-          "kind": {
-            "engineCovers": {}
-          },
-          "displayName": "Caches moteur",
-          "supportedModes": [
-            "paint",
-            "wrap"
-          ]
-        }
-      ],
-      "views": [],
-      "verification": {
-        "status": "unverified",
-        "notes": "Années, versions et coloris d'origine à documenter. Liste des composants à confirmer avec les visuels de référence."
+     ],
+     "homologations": [
+      {
+       "countryCode": "FR",
+       "vehicleVariantID": "honda.cb125r.jc91.eu",
+       "status": "approvedWithConditions",
+       "approvalNumbers": [],
+       "conditions": [
+        "Homologation valable uniquement avec le catalyseur MIVV ACC.073.A1 (vendu séparément).",
+        "Euro 5 uniquement : incompatible avec les véhicules Euro 5+ à sonde lambda post-catalyseur.",
+        "dB-killer amovible requis pour la conformité."
+       ],
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/"
+       }
       }
+     ],
+     "offers": [
+      {
+       "merchantName": "MIVV (prix catalogue)",
+       "url": "https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/",
+       "price": {
+        "amount": 536,
+        "currency": "EUR"
+       },
+       "taxNote": "HT",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "mivv.gp-pro.cb125r21"
+    },
+    {
+     "id": "mivv.gp-pro.cb125r21.h.077.l6p",
+     "reference": "H.077.L6P",
+     "colorway": "Titane (corps central), finition perlée",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA CB 125 R 2021 > 2024",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-l6p-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "homologations": [
+      {
+       "countryCode": "FR",
+       "vehicleVariantID": "honda.cb125r.jc91.eu",
+       "status": "approvedWithConditions",
+       "approvalNumbers": [],
+       "conditions": [
+        "Homologation valable uniquement avec le catalyseur MIVV ACC.073.A1 (vendu séparément).",
+        "Euro 5 uniquement : incompatible avec les véhicules Euro 5+ à sonde lambda post-catalyseur.",
+        "dB-killer amovible requis pour la conformité."
+       ],
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-l6p-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "offers": [
+      {
+       "merchantName": "MIVV (prix catalogue)",
+       "url": "https://mivv.com/en/exhaust/h-077-l6p-honda-cb-125-r-2021/",
+       "price": {
+        "amount": 536,
+        "currency": "EUR"
+       },
+       "taxNote": "HT",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-l6p-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "mivv.gp-pro.cb125r21"
+    },
+    {
+     "id": "mivv.gp-pro.cb125r21.h.077.lxbp",
+     "reference": "H.077.LXBP",
+     "colorway": "Inox noir « Black Moon »",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA CB 125 R 2021 > 2024",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-lxbp-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "homologations": [
+      {
+       "countryCode": "FR",
+       "vehicleVariantID": "honda.cb125r.jc91.eu",
+       "status": "approvedWithConditions",
+       "approvalNumbers": [],
+       "conditions": [
+        "Homologation valable uniquement avec le catalyseur MIVV ACC.073.A1 (vendu séparément).",
+        "Euro 5 uniquement : incompatible avec les véhicules Euro 5+ à sonde lambda post-catalyseur.",
+        "dB-killer amovible requis pour la conformité."
+       ],
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-lxbp-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "offers": [
+      {
+       "merchantName": "MIVV (prix catalogue)",
+       "url": "https://mivv.com/en/exhaust/h-077-lxbp-honda-cb-125-r-2021/",
+       "price": {
+        "amount": 477,
+        "currency": "EUR"
+       },
+       "taxNote": "HT",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-lxbp-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "mivv.gp-pro.cb125r21"
     }
-  ],
-  "accessories": [],
-  "referenceColors": []
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "MIVV, fiche produit officielle",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/"
+   }
+  },
+  {
+   "id": "mivv.mk3.cb125r21",
+   "category": "exhausts",
+   "commercialName": "Échappement MK3",
+   "manufacturer": "MIVV",
+   "manufacturerURL": "https://mivv.com/en/",
+   "description": "Silencieux MK3 « racing » pour CB 125 R 2021 > 2024. Non homologué pour un usage routier selon le fabricant. -2 kg (4,00 → 2,00 kg).",
+   "materials": [
+    "Inox 304"
+   ],
+   "photos": [],
+   "variants": [
+    {
+     "id": "mivv.mk3.cb125r21.h.078.sm3b",
+     "reference": "H.078.SM3B",
+     "colorway": "Inox 304 noir « Black Moon »",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA CB 125 R 2021 > 2024",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-078-sm3b-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "homologations": [
+      {
+       "countryCode": "FR",
+       "vehicleVariantID": "honda.cb125r.jc91.eu",
+       "status": "notApproved",
+       "approvalNumbers": [],
+       "conditions": [],
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-078-sm3b-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "offers": [
+      {
+       "merchantName": "MIVV (prix catalogue)",
+       "url": "https://mivv.com/en/exhaust/h-078-sm3b-honda-cb-125-r-2021/",
+       "price": {
+        "amount": 343,
+        "currency": "EUR"
+       },
+       "taxNote": "HT",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-078-sm3b-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "mivv.mk3.cb125r21"
+    },
+    {
+     "id": "mivv.mk3.cb125r21.h.078.sm3x",
+     "reference": "H.078.SM3X",
+     "colorway": "Inox 304 brossé",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA CB 125 R 2021 > 2024",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-078-sm3x-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "homologations": [
+      {
+       "countryCode": "FR",
+       "vehicleVariantID": "honda.cb125r.jc91.eu",
+       "status": "notApproved",
+       "approvalNumbers": [],
+       "conditions": [],
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-078-sm3x-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "offers": [
+      {
+       "merchantName": "MIVV (prix catalogue)",
+       "url": "https://mivv.com/en/exhaust/h-078-sm3x-honda-cb-125-r-2021/",
+       "price": {
+        "amount": 322,
+        "currency": "EUR"
+       },
+       "taxNote": "HT",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-078-sm3x-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "mivv.mk3.cb125r21"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "MIVV, fiche produit officielle",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://mivv.com/en/exhaust/h-078-sm3b-honda-cb-125-r-2021/"
+   }
+  },
+  {
+   "id": "mivv.catalyst.acc073a1",
+   "category": "exhausts",
+   "commercialName": "Catalyseur pour GP PRO",
+   "manufacturer": "MIVV",
+   "manufacturerURL": "https://mivv.com/en/",
+   "description": "Catalyseur nécessaire à l'homologation des silencieux GP PRO sur CB 125 R 2021 > 2024 (listé comme accessoire sur les fiches GP PRO).",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "mivv.catalyst.acc073a1.std",
+     "reference": "ACC.073.A1",
+     "colorway": "Standard",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "Accessoire listé pour HONDA CB 125 R 2021 > 2024",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [
+      {
+       "merchantName": "MIVV (prix catalogue)",
+       "url": "https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/",
+       "price": {
+        "amount": 130,
+        "currency": "EUR"
+       },
+       "taxNote": "HT",
+       "verification": {
+        "status": "verified",
+        "source": "MIVV, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "mivv.catalyst.acc073a1"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "MIVV, fiche produit officielle",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/"
+   }
+  },
+  {
+   "id": "leovince.lv-one-evo.cb125r21",
+   "category": "exhausts",
+   "commercialName": "LV ONE EVO Carbon",
+   "manufacturer": "LeoVince",
+   "manufacturerURL": "https://www.leovince.com/",
+   "description": "Silencieux carbone pré-imprégné, embout carbone. 3,74 kg. Produit indiqué comme arrêté par le fabricant (plus vendu sur sa boutique).",
+   "materials": [
+    "Carbone"
+   ],
+   "photos": [],
+   "variants": [
+    {
+     "id": "leovince.lv-one-evo.cb125r21.14391ek",
+     "reference": "14391EK",
+     "colorway": "Carbone mat",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA CB 125 R Neo Sports Café 2021 - 2023",
+       "verification": {
+        "status": "verified",
+        "source": "LeoVince, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.leovince.com/en-hr/product/14391ek-lv-one-evo-carbon-fiber-honda-cb-125-r-neo-sports-cafe-2021-2023"
+       }
+      }
+     ],
+     "homologations": [
+      {
+       "countryCode": "FR",
+       "vehicleVariantID": "honda.cb125r.jc91.eu",
+       "status": "approvedWithConditions",
+       "approvalNumbers": [],
+       "conditions": [
+        "Homologué ECE/UE (bruit ECE-R92, émissions 134/2014) pour les seuls types listés dans l'ePass du fabricant."
+       ],
+       "verification": {
+        "status": "verified",
+        "source": "LeoVince, fiche produit officielle",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.leovince.com/en-hr/product/14391ek-lv-one-evo-carbon-fiber-honda-cb-125-r-neo-sports-cafe-2021-2023"
+       }
+      }
+     ],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "leovince.lv-one-evo.cb125r21"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "LeoVince, fiche produit officielle",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.leovince.com/en-hr/product/14391ek-lv-one-evo-carbon-fiber-honda-cb-125-r-neo-sports-cafe-2021-2023"
+   }
+  },
+  {
+   "id": "arrow.x-kone.cb125r21",
+   "category": "exhausts",
+   "commercialName": "Silencieux X-Kone Nichrom",
+   "manufacturer": "Arrow",
+   "manufacturerURL": "https://www.arrow.it/",
+   "description": "Silencieux X-Kone, corps Nichrom satiné, embout carbone, Ø 45 mm, environ 2,2 kg. Version Euro 5 « Honda Type JC91 Vers. 1 ».",
+   "materials": [
+    "Nichrom",
+    "Carbone"
+   ],
+   "photos": [],
+   "variants": [
+    {
+     "id": "arrow.x-kone.cb125r21.51519xkiw",
+     "reference": "51519XKIW",
+     "colorway": "Nichrom / embout carbone",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "Honda CB 125i R H2O 4T E5 2021-2024",
+       "verification": {
+        "status": "verified",
+        "source": "EasyParts (revendeur), fiche produit Arrow",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547"
+       }
+      }
+     ],
+     "homologations": [
+      {
+       "countryCode": "FR",
+       "vehicleVariantID": "honda.cb125r.jc91.eu",
+       "status": "approvedWithConditions",
+       "approvalNumbers": [],
+       "conditions": [
+        "Homologation CE uniquement avec le catalyseur Arrow 11030KZ."
+       ],
+       "verification": {
+        "status": "verified",
+        "source": "EasyParts (revendeur), fiche produit Arrow",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547"
+       }
+      }
+     ],
+     "offers": [
+      {
+       "merchantName": "EasyParts",
+       "url": "https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547",
+       "price": {
+        "amount": 450.18,
+        "currency": "EUR"
+       },
+       "taxNote": "Prix revendeur, TVA à confirmer sur le site",
+       "verification": {
+        "status": "verified",
+        "source": "EasyParts (revendeur), fiche produit Arrow",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "arrow.x-kone.cb125r21"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "EasyParts (revendeur), fiche produit Arrow",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547"
+   }
+  },
+  {
+   "id": "arrow.catalyst.cb125r21",
+   "category": "exhausts",
+   "commercialName": "Catalyseur pour X-Kone",
+   "manufacturer": "Arrow",
+   "manufacturerURL": "https://www.arrow.it/",
+   "description": "Catalyseur requis pour l'homologation CE du silencieux X-Kone 51519XKIW.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "arrow.catalyst.cb125r21.11030kz",
+     "reference": "11030KZ",
+     "colorway": "Standard",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "Produit recommandé avec 51519XKIW pour CB 125i R E5 2021-2024",
+       "verification": {
+        "status": "verified",
+        "source": "EasyParts (revendeur), fiche produit Arrow",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [
+      {
+       "merchantName": "EasyParts",
+       "url": "https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547",
+       "price": {
+        "amount": 125.62,
+        "currency": "EUR"
+       },
+       "taxNote": "Prix revendeur",
+       "verification": {
+        "status": "verified",
+        "source": "EasyParts (revendeur), fiche produit Arrow",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "arrow.catalyst.cb125r21"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "EasyParts (revendeur), fiche produit Arrow",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547"
+   }
+  },
+  {
+   "id": "puig.r19.cb125r",
+   "category": "frameProtection",
+   "commercialName": "Tampons de protection R19",
+   "manufacturer": "Puig",
+   "manufacturerURL": "https://puigusa.com/en/bikes/honda/cb125r-neo-sports-cafe/2021",
+   "description": "Tampons de cadre R19, embouts caoutchouc gris par défaut (autres couleurs d'embouts proposées par le revendeur).",
+   "materials": [
+    "Aluminium",
+    "Nylon"
+   ],
+   "photos": [],
+   "variants": [
+    {
+     "id": "puig.r19.cb125r.9654n",
+     "reference": "9654N",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA CB125R Neo Sports Cafe 2018-2026",
+       "verification": {
+        "status": "verified",
+        "source": "ACMOTOS (revendeur), fiche Puig 9654N",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://acmotos.com/en/puig-r19-frame-sliders-9654n-honda-cb125r-neo-sports-cafe"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [
+      {
+       "merchantName": "ACMOTOS",
+       "url": "https://acmotos.com/en/puig-r19-frame-sliders-9654n-honda-cb125r-neo-sports-cafe",
+       "price": {
+        "amount": 121.99,
+        "currency": "EUR"
+       },
+       "taxNote": "TTC (TVA 21 %), prix hors promotion",
+       "verification": {
+        "status": "verified",
+        "source": "ACMOTOS (revendeur)",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://acmotos.com/en/puig-r19-frame-sliders-9654n-honda-cb125r-neo-sports-cafe"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "puig.r19.cb125r"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "ACMOTOS (revendeur)",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://acmotos.com/en/puig-r19-frame-sliders-9654n-honda-cb125r-neo-sports-cafe"
+   }
+  },
+  {
+   "id": "puig.license-support.cb125r",
+   "category": "licensePlateHolders",
+   "commercialName": "Support de plaque",
+   "manufacturer": "Puig",
+   "manufacturerURL": "https://puigusa.com/en/bikes/honda/cb125r-neo-sports-cafe/2021",
+   "description": "Support de plaque court conçu pour conserver les clignotants et l'éclairage de plaque d'origine.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "puig.license-support.cb125r.9653n",
+     "reference": "9653N",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA CB125R NEO SPORTS CAFE (2018-2026)",
+       "verification": {
+        "status": "verified",
+        "source": "DriftnDrive (revendeur), fiche Puig 9653N",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://driftndrive.com.au/products/9653n"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [
+      {
+       "merchantName": "DriftnDrive",
+       "url": "https://driftndrive.com.au/products/9653n",
+       "price": {
+        "amount": 199.95,
+        "currency": "AUD"
+       },
+       "taxNote": "TTC",
+       "verification": {
+        "status": "verified",
+        "source": "DriftnDrive (revendeur)",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://driftndrive.com.au/products/9653n"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "puig.license-support.cb125r"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "DriftnDrive (revendeur)",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://driftndrive.com.au/products/9653n"
+   }
+  },
+  {
+   "id": "rg.radiator-guard.cb125r",
+   "category": "engineProtection",
+   "commercialName": "Grille de radiateur",
+   "manufacturer": "R&G Racing",
+   "manufacturerURL": "https://www.rg-racing.com/browsebike/Honda/CB125R/2021",
+   "description": "Grille de protection de radiateur spécifique CB125R.",
+   "materials": [
+    "Aluminium"
+   ],
+   "photos": [],
+   "variants": [
+    {
+     "id": "rg.radiator-guard.cb125r.black",
+     "reference": "RAD0235 (Black)",
+     "colorway": "Black",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "Honda CB125R ('18-22)",
+       "verification": {
+        "status": "verified",
+        "source": "Sportsbikeshop (revendeur), fiche R&G RAD0235",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/729335"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [
+      {
+       "merchantName": "Sportsbikeshop",
+       "url": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/729335",
+       "price": {
+        "amount": 59.99,
+        "currency": "GBP"
+       },
+       "taxNote": "TTC (PVC 70,99 £)",
+       "verification": {
+        "status": "verified",
+        "source": "Sportsbikeshop (revendeur)",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/729335"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "rg.radiator-guard.cb125r"
+    },
+    {
+     "id": "rg.radiator-guard.cb125r.titanium",
+     "reference": "RAD0235 (Titanium)",
+     "colorway": "Titanium",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "Honda CB125R ('18-22)",
+       "verification": {
+        "status": "verified",
+        "source": "Sportsbikeshop (revendeur), fiche R&G RAD0235",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/729335"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [
+      {
+       "merchantName": "Sportsbikeshop",
+       "url": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/729335",
+       "price": {
+        "amount": 59.99,
+        "currency": "GBP"
+       },
+       "taxNote": "TTC (PVC 70,99 £)",
+       "verification": {
+        "status": "verified",
+        "source": "Sportsbikeshop (revendeur)",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/729335"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "rg.radiator-guard.cb125r"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "Sportsbikeshop (revendeur)",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/729335"
+   }
+  },
+  {
+   "id": "rg.aero-crash-protectors.cb125r21",
+   "category": "frameProtection",
+   "commercialName": "Tampons Aero",
+   "manufacturer": "R&G Racing",
+   "manufacturerURL": "https://www.rg-racing.com/browsebike/Honda/CB125R/2021",
+   "description": "Tampons de protection style Aero, montage sur le cadre, aucune modification requise selon le revendeur.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "rg.aero-crash-protectors.cb125r21.cp0522bl",
+     "reference": "CP0522BL",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "Honda CB125R ('21-22)",
+       "verification": {
+        "status": "verified",
+        "source": "Sportsbikeshop (revendeur), fiche R&G CP0522BL",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/676789"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [
+      {
+       "merchantName": "Sportsbikeshop",
+       "url": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/676789",
+       "price": {
+        "amount": 74.36,
+        "currency": "GBP"
+       },
+       "taxNote": "TTC (PVC 88,00 £)",
+       "verification": {
+        "status": "verified",
+        "source": "Sportsbikeshop (revendeur)",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/676789"
+       }
+      }
+     ],
+     "visualAssets": [],
+     "accessoryID": "rg.aero-crash-protectors.cb125r21"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "Sportsbikeshop (revendeur)",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/676789"
+   }
+  },
+  {
+   "id": "givi.sr1169",
+   "category": "other",
+   "commercialName": "Support arrière MONOLOCK",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Fixation arrière spécifique pour top case MONOLOCK (platine fournie avec le top case).",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.sr1169.std",
+     "reference": "SR1169",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/optionals/sr1169"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.sr1169"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/optionals/sr1169"
+   }
+  },
+  {
+   "id": "givi.tn1199",
+   "category": "engineProtection",
+   "commercialName": "Pare-carters tubulaire",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Pare-carters tubulaire spécifique noir, slider intégré, tube Ø 25 mm. Montage conseillé par un professionnel.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.tn1199.std",
+     "reference": "TN1199",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/optionals/tn1199"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.tn1199"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/optionals/tn1199"
+   }
+  },
+  {
+   "id": "givi.a1164",
+   "category": "windscreens",
+   "commercialName": "Saute-vent fumé",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Saute-vent fumé 21 × 28 cm avec kit de fixation.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.a1164.std",
+     "reference": "A1164",
+     "colorway": "Fumé",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.a1164"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26"
+   }
+  },
+  {
+   "id": "givi.s312-led-projectors",
+   "category": "lighting",
+   "commercialName": "Projecteurs LED S312",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Paire de projecteurs LED 25 W (6000 lm), corps aluminium peint noir, à raccorder sous clé par un professionnel.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.s312-led-projectors.std",
+     "reference": "S312",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "TN1199"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/engine/s312-led-projectors"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.s312-led-projectors"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/engine/s312-led-projectors"
+   }
+  },
+  {
+   "id": "givi.b45",
+   "category": "other",
+   "commercialName": "Top case B45+ (45 L)",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, 45 L, deux casques intégraux. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.b45.std",
+     "reference": "B45+",
+     "colorway": "Noir, inserts gris",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b45"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.b45"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b45"
+   }
+  },
+  {
+   "id": "givi.b39nt-tech",
+   "category": "other",
+   "commercialName": "Top case B39NT TECH (39 L)",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, 39 L. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.b39nt-tech.std",
+     "reference": "B39NT TECH",
+     "colorway": "Noir, catadioptres argent",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b39nt-tech"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.b39nt-tech"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b39nt-tech"
+   }
+  },
+  {
+   "id": "givi.b47-blade",
+   "category": "other",
+   "commercialName": "Top case B47 BLADE (47 L)",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, 47 L. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.b47-blade.std",
+     "reference": "B47 BLADE",
+     "colorway": "Noir, catadioptres rouges",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b47-blade"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.b47-blade"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b47-blade"
+   }
+  },
+  {
+   "id": "givi.b47-blade-tech",
+   "category": "other",
+   "commercialName": "Top case B47 BLADE TECH (47 L)",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, 47 L. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.b47-blade-tech.std",
+     "reference": "B47 BLADE TECH",
+     "colorway": "Noir, catadioptres fumés",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b47-blade-tech"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.b47-blade-tech"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b47-blade-tech"
+   }
+  },
+  {
+   "id": "givi.e46-riviera-tech",
+   "category": "other",
+   "commercialName": "Top case E46 RIVIERA TECH (46 L)",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, 46 L, deux casques intégraux. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.e46-riviera-tech.std",
+     "reference": "E46 RIVIERA TECH",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/e46-riviera-tech"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.e46-riviera-tech"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/e46-riviera-tech"
+   }
+  },
+  {
+   "id": "givi.e455-simply-iv",
+   "category": "other",
+   "commercialName": "Top case E455 SIMPLY IV (45 L)",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, 45 L, charge max 3 kg. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.e455-simply-iv.std",
+     "reference": "E455 SIMPLY IV",
+     "colorway": "Noir, catadioptres rouges",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/e455-simply-iv"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.e455-simply-iv"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/e455-simply-iv"
+   }
+  },
+  {
+   "id": "givi.b37-blade",
+   "category": "other",
+   "commercialName": "Top case B37 BLADE (37 L)",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, 37 L. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.b37-blade.std",
+     "reference": "B37 BLADE",
+     "colorway": "Noir, catadioptres rouges",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b37-blade"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.b37-blade"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b37-blade"
+   }
+  },
+  {
+   "id": "givi.c30",
+   "category": "other",
+   "commercialName": "Top case C30 (30 L)",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, 30 L. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.c30.std",
+     "reference": "C30",
+     "colorway": "Noir, catadioptres rouges",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/c30"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.c30"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/c30"
+   }
+  },
+  {
+   "id": "givi.alp44a2-alpina",
+   "category": "other",
+   "commercialName": "Top case ALP44A2 ALPINA (44 L)",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, 44 L, aluminium 1,2 mm. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.alp44a2-alpina.std",
+     "reference": "ALP44A2 ALPINA",
+     "colorway": "Aluminium naturel",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/alp44a2-alpina"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.alp44a2-alpina"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/alp44a2-alpina"
+   }
+  },
+  {
+   "id": "givi.b39n",
+   "category": "other",
+   "commercialName": "Top case B39N",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, MONOLOCK. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.b39n.std",
+     "reference": "B39N",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.b39n"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26"
+   }
+  },
+  {
+   "id": "givi.e340-vision",
+   "category": "other",
+   "commercialName": "Top case E340 VISION",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, MONOLOCK. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.e340-vision.std",
+     "reference": "E340 VISION",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.e340-vision"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26"
+   }
+  },
+  {
+   "id": "givi.b38-bernina",
+   "category": "other",
+   "commercialName": "Top case B38 BERNINA",
+   "manufacturer": "GIVI",
+   "manufacturerURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26",
+   "description": "Top case MONOLOCK, MONOLOCK. Platine et kit universel inclus. Nécessite le support SR1169.",
+   "materials": [],
+   "photos": [],
+   "variants": [
+    {
+     "id": "givi.b38-bernina.std",
+     "reference": "B38 BERNINA",
+     "colorway": "Noir",
+     "compatibilities": [
+      {
+       "vehicleVariantIDs": [
+        "honda.cb125r.jc91.eu"
+       ],
+       "requiredAdapters": [
+        "SR1169"
+       ],
+       "notes": "HONDA > cb 125 r (21 > 26)",
+       "verification": {
+        "status": "verified",
+        "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+        "verifiedAt": "2026-11-25T00:00:00Z",
+        "sourceURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26"
+       }
+      }
+     ],
+     "homologations": [],
+     "offers": [],
+     "visualAssets": [],
+     "accessoryID": "givi.b38-bernina"
+    }
+   ],
+   "verification": {
+    "status": "verified",
+    "source": "GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »",
+    "verifiedAt": "2026-11-25T00:00:00Z",
+    "sourceURL": "https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26"
+   }
+  }
+ ],
+ "referenceColors": []
 }

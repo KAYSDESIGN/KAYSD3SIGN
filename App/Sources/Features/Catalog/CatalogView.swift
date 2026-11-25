@@ -113,7 +113,7 @@ private struct ProductCard: View {
 
     var body: some View {
         let variant = accessory.variants[0]
-        let offer = OfferSelector.bestOffer(for: variant, currency: "EUR")
+        let offer = OfferSelector.displayOffer(for: variant, preferredCurrency: "EUR")
         VStack(alignment: .leading, spacing: MFSpacing.xs) {
             ZStack(alignment: .topTrailing) {
                 BikeVisual(assetName: accessory.photos.first, placeholderSymbol: accessory.category.systemImage, placeholderText: "")
@@ -133,10 +133,15 @@ private struct ProductCard: View {
                 .lineLimit(2, reservesSpace: true)
             HStack(alignment: .bottom) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(offer.map { Format.money($0.price) } ?? "Prix non vérifié")
+                    Text(offer.map { Format.money($0.price) } ?? "Prix non communiqué")
                         .font(MFTypography.callout.weight(.bold))
                         .foregroundStyle(offer == nil ? MFColor.textSecondary : MFColor.accent)
-                    if let offer, offer.priceKind != .verified { MFBadge(.estimate) }
+                    if let offer {
+                        if offer.priceKind != .verified { MFBadge(.estimate) }
+                        else if let tax = offer.taxNote, tax.count <= 4 { Text(tax).font(MFTypography.caption).foregroundStyle(MFColor.textSecondary) }
+                    } else if accessory.variants.count > 1 {
+                        Text("\(accessory.variants.count) finitions").font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
+                    }
                 }
                 Spacer()
                 MFIconButton("cart.badge.plus", label: "Ajouter au projet", kind: .accent, size: 32) { add(variant) }

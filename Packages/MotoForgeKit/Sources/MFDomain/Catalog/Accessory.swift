@@ -176,13 +176,16 @@ public struct MerchantOffer: Hashable, Sendable, Codable {
     public var url: URL
     public var price: Money
     public var shippingCost: Money?
+    /// Tax context exactly as shown by the source (« HT », « TTC »…), never guessed.
+    public var taxNote: String?
     public var verification: Verification
 
-    public init(merchantName: String, url: URL, price: Money, shippingCost: Money? = nil, verification: Verification) {
+    public init(merchantName: String, url: URL, price: Money, shippingCost: Money? = nil, taxNote: String? = nil, verification: Verification) {
         self.merchantName = merchantName
         self.url = url
         self.price = price
         self.shippingCost = shippingCost
+        self.taxNote = taxNote
         self.verification = verification
     }
 

@@ -82,11 +82,11 @@ struct AddMotorcycleView: View {
 
     /// With a single-bike catalog, preselect the only path to save taps.
     private func preselectSingleChoices() {
-        guard let c = model.catalog, c.brands.count == 1, c.models.count == 1, c.generations.count == 1, c.variants.count == 1 else { return }
+        guard let c = model.catalog, c.brands.count == 1, c.models.count == 1, c.generations.count == 1, let first = c.variants.first else { return }
         brandID = c.brands[0].id
         modelID = c.models[0].id
         generationID = c.generations[0].id
-        variantID = c.variants[0].id
+        variantID = first.id
     }
 
     private func save() {
