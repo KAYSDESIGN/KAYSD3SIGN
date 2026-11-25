@@ -54,7 +54,19 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Finition"].tap()
         if app.buttons["Covering"].waitForExistence(timeout: 2) {
             app.buttons["Covering"].tap(); snap(app, "07b-studio-covering")
-            app.navigationBars.buttons["Annuler"].firstMatch.tap()
+            if app.buttons["Ajouter"].waitForExistence(timeout: 2) {
+                app.buttons["Ajouter"].tap()
+                if app.buttons["Bandes décoratives"].waitForExistence(timeout: 2) {
+                    app.buttons["Bandes décoratives"].tap()
+                    snap(app, "07c-covering-bandes")
+                }
+            }
+            if app.buttons["Appliquer le covering"].isEnabled {
+                app.buttons["Appliquer le covering"].tap()
+                snap(app, "07d-atelier-avec-covering")
+            } else {
+                app.navigationBars.buttons["Annuler"].firstMatch.tap()
+            }
         }
         app.buttons["Garage"].tap()
         app.navigationBars["Mon garage"].buttons["Ajouter une moto"].tap()
