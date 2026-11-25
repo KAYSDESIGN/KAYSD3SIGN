@@ -340,3 +340,50 @@ struct DiffTests {
         #expect(ConfigurationDiff(from: a, to: a).isEmpty)
     }
 }
+
+@Suite("Projets : progression, couleurs, budget")
+struct ProjectInsightsTests {
+    func project(_ statuses: [ShoppingListItem.Status]) -> CustomizationProject {
+        CustomizationProject(name: "P", motorcycleID: "m", configuration: ProjectConfiguration(vehicleVariantID: Fixtures.vehicleID),
+                             shoppingList: statuses.map { ShoppingListItem(kind: .custom, label: "x", unitPrice: nil, status: $0) })
+    }
+
+    @Test func progress() {
+        #expect(ProjectProgress.percent(of: project([])) == 0)
+        #expect(ProjectProgress.percent(of: project([.installed, .ordered, .toBuy, .toBuy])) == 38)
+        #expect(!ProjectProgress.isCompleted(project([])))
+        #expect(!ProjectProgress.isCompleted(project([.installed, .ordered])))
+        #expect(ProjectProgress.isCompleted(project([.installed, .installed])))
+    }
+
+    @Test func colorMemory() {
+        var fav = UserFavorites()
+        for i in 0..<15 { ColorMemory.pushRecent(RGBColor(red8: i, green8: 0, blue8: 0), into: &fav) }
+        ColorMemory.pushRecent(RGBColor(red8: 10, green8: 0, blue8: 0), into: &fav)
+        #expect(fav.recentColors.count == ColorMemory.recentLimit)
+        #expect(fav.recentColors.first?.rgb8.0 == 10)
+        #expect(fav.recentColors.filter { $0.rgb8.0 == 10 }.count == 1)
+        let c = RGBColor(red8: 1, green8: 2, blue8: 3)
+        ColorMemory.toggleFavorite(c, in: &fav)
+        #expect(ColorMemory.isFavorite(c, in: fav))
+        ColorMemory.toggleFavorite(c, in: &fav)
+        #expect(!ColorMemory.isFavorite(c, in: fav))
+    }
+
+    @Test func budgetRowsAndRing() {
+        let list = [ShoppingListItem(kind: .custom, label: "a", unitPrice: PricedAmount(Money(100, "EUR"), kind: .verified))]
+        let s = BudgetCalculator.summarize(budget: ProjectBudget(maximum: Money(400, "EUR"), labor: Money(100, "EUR")), shoppingList: list)
+        let rows = s.rows(itemCount: 1)
+        #expect(rows.map(\.category) == BudgetRow.Category.allCases)
+        #expect(rows[0].amount == 100 && rows[0].isVerified)
+        #expect(rows[3].amount == 100)
+        #expect(s.maximumUsage == 0.5)
+        #expect(BudgetCalculator.summarize(budget: ProjectBudget(), shoppingList: []).maximumUsage == nil)
+    }
+
+    @Test func moneyFormatting() {
+        let s = MoneyFormatting.string(Decimal(string: "2347.9")!, currency: "EUR")
+        let normalized = s.replacingOccurrences(of: "\u{202F}", with: " ").replacingOccurrences(of: "\u{00A0}", with: " ")
+        #expect(normalized == "2 347,90 €")
+    }
+}

@@ -1,68 +1,62 @@
 import SwiftUI
 import MFDesignSystem
 
-/// The five main destinations.
-enum AppTab: String, CaseIterable, Identifiable {
-    case home, garage, catalog, projects, menu
-    var id: String { rawValue }
-
-    var title: String {
-        switch self {
-        case .home: "Accueil"
-        case .garage: "Garage"
-        case .catalog: "Catalogue"
-        case .projects: "Projets"
-        case .menu: "Menu"
-        }
-    }
-
-    var systemImage: String {
-        switch self {
-        case .home: "house"
-        case .garage: "motorcycle"
-        case .catalog: "square.grid.2x2"
-        case .projects: "heart.text.square"
-        case .menu: "line.3.horizontal"
-        }
-    }
-}
-
-/// Root navigation. The system `TabView` provides the floating, native Liquid Glass tab bar on iOS 26+.
-///
-/// Screen contents are intentionally NOT designed yet: they must follow the validated mockups
-/// (docs/mockups/), which have not been provided. Each tab states this honestly.
+/// Root: five destinations, one navigation stack each, and the floating bar from the mockup.
 struct RootView: View {
-    @State private var selection: AppTab = .home
+    @Environment(AppModel.self) private var model
+    @Environment(AppRouter.self) private var router
 
     var body: some View {
-        TabView(selection: $selection) {
+        @Bindable var router = router
+        @Bindable var model = model
+
+        TabView(selection: $router.tab) {
             ForEach(AppTab.allCases) { tab in
-                NavigationStack {
-                    PendingMockupScreen(tab: tab)
-                        .navigationTitle(tab.title)
+                NavigationStack(path: router.path(for: tab)) {
+                    LoadGate { screen(for: tab) }
+                        .background(MFColor.background.ignoresSafeArea())
+                        .navigationDestination(for: Route.self) { destination($0) }
                 }
-                .tabItem { Label(tab.title, systemImage: tab.systemImage) }
+                .toolbar(.hidden, for: .tabBar)
                 .tag(tab)
             }
         }
-        .sensoryFeedback(.selection, trigger: selection)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            MFFloatingTabBar(
+                items: AppTab.allCases.map { MFTabItem($0, title: $0.title, systemImage: $0.systemImage) },
+                selection: $router.tab
+            )
+            .padding(.horizontal, MFSpacing.l)
+            .padding(.bottom, MFSpacing.xxs)
+        }
+        .sheet(isPresented: $router.isAddingMotorcycle) {
+            AddMotorcycleView()
+        }
+        .alert("Erreur", isPresented: Binding(get: { model.errorMessage != nil }, set: { if !$0 { model.errorMessage = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(model.errorMessage ?? "")
+        }
     }
-}
 
-private struct PendingMockupScreen: View {
-    let tab: AppTab
-
-    var body: some View {
-        MFUnavailableView(
-            tab.title,
-            systemImage: tab.systemImage,
-            message: "Cet écran sera construit à l'identique de la maquette validée dès sa réception."
-        )
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(MFColor.background)
+    @ViewBuilder
+    private func screen(for tab: AppTab) -> some View {
+        switch tab {
+        case .home: HomeView()
+        case .garage: GarageView()
+        case .catalog: CatalogView()
+        case .projects: ProjectsView()
+        case .menu: MenuView()
+        }
     }
-}
 
-#Preview {
-    RootView()
+    @ViewBuilder
+    private func destination(_ route: Route) -> some View {
+        switch route {
+        case .workshop(let id): WorkshopView(projectID: id)
+        case .product(let id): ProductDetailView(accessoryID: id)
+        case .budget(let id): BudgetView(projectID: id)
+        case .shoppingList(let id): ShoppingListView(projectID: id)
+        }
+    }
 }

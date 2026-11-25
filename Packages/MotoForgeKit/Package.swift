@@ -14,7 +14,8 @@ let package = Package(
         .library(name: "MFCatalog", targets: ["MFCatalog"]),
         .library(name: "MFAI", targets: ["MFAI"]),
         .library(name: "MFPersistence", targets: ["MFPersistence"]),
-        .library(name: "MFDesignSystem", targets: ["MFDesignSystem"])
+        .library(name: "MFDesignSystem", targets: ["MFDesignSystem"]),
+        .library(name: "MFRendering", targets: ["MFRendering"])
     ],
     targets: [
         // Pure domain models. No UI, no persistence framework.
@@ -38,6 +39,9 @@ let package = Package(
 
         // Design tokens and reusable SwiftUI components (Apple platforms only).
         .target(name: "MFDesignSystem", dependencies: ["MFDomain"]),
+
+        // Core Image compositor for render plans (Apple platforms only).
+        .target(name: "MFRendering", dependencies: ["MFDomain", "MFEngine"]),
 
         .testTarget(name: "MFDomainTests", dependencies: ["MFDomain"]),
         .testTarget(name: "MFEngineTests", dependencies: ["MFEngine", "MFDomain"]),

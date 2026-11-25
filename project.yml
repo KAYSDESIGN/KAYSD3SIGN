@@ -35,12 +35,15 @@ targets:
         product: MFPersistence
       - package: MotoForgeKit
         product: MFDesignSystem
+      - package: MotoForgeKit
+        product: MFRendering
     info:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: MOTOFORGE
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSPhotoLibraryUsageDescription: "Importer une couleur depuis une photo."
         ITSAppUsesNonExemptEncryption: false
     settings:
       base:

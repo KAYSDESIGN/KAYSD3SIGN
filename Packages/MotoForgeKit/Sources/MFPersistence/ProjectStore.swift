@@ -11,6 +11,9 @@ public protocol ProjectStore: Sendable {
     func loadGarage() async throws -> UserGarage
     func saveGarage(_ garage: UserGarage) async throws
 
+    func loadFavorites() async throws -> UserFavorites
+    func saveFavorites(_ favorites: UserFavorites) async throws
+
     func allProjects() async throws -> [CustomizationProject]
     func project(_ id: CustomizationProject.ID) async throws -> CustomizationProject
     /// Insert or update. Implementations set `updatedAt`.
@@ -58,6 +61,7 @@ enum PayloadCoding {
 /// In-memory store for tests, previews and as a fallback.
 public actor InMemoryProjectStore: ProjectStore {
     private var garage = UserGarage()
+    private var favorites = UserFavorites()
     private var projects: [CustomizationProject.ID: CustomizationProject] = [:]
     private let now: @Sendable () -> Date
 
@@ -67,6 +71,8 @@ public actor InMemoryProjectStore: ProjectStore {
 
     public func loadGarage() async throws -> UserGarage { garage }
     public func saveGarage(_ garage: UserGarage) async throws { self.garage = garage }
+    public func loadFavorites() async throws -> UserFavorites { favorites }
+    public func saveFavorites(_ favorites: UserFavorites) async throws { self.favorites = favorites }
 
     public func allProjects() async throws -> [CustomizationProject] {
         projects.values.sorted { $0.updatedAt > $1.updatedAt }

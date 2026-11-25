@@ -8,8 +8,11 @@ struct MotoForgeApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .environment(environment)
+                .environment(environment.model)
+                .environment(environment.router)
+                .environment(\.compositor, environment.compositor)
                 .tint(MFColor.accent)
+                .task { await environment.model.load() }
         }
     }
 }

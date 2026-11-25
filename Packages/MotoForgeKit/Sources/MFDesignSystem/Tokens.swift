@@ -19,6 +19,16 @@ public enum MFColor {
     public static let separator = Color(hex: 0x17171C).opacity(0.08)
     /// Neutral stage behind the motorcycle render: achromatic so UI never biases paint perception.
     public static let neutralStage = Color(hex: 0xF5F5F7)
+    /// Over-budget / destructive information.
+    public static let negative = Color(hex: 0xD92D20)
+    /// Light accent tint for selected tiles and segmented tracks (mockup « Atelier » tile).
+    public static let accentSoft = Color(hex: 0x7938F5, opacity: 0.14)
+    /// Track of segmented controls and chips.
+    public static let track = Color(hex: 0x17171C, opacity: 0.05)
+    /// Budget legend colors (mockup « Budget projet »), in `BudgetRow.Category` order.
+    public static let chart: [Color] = [
+        Color(hex: 0x7938F5), Color(hex: 0x4FA8F0), Color(hex: 0xF5A54A), Color(hex: 0x3FBF8F), Color(hex: 0xC9C9D1)
+    ]
 }
 
 public enum MFSpacing {

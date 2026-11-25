@@ -8,20 +8,20 @@ Légende : ✅ terminé · 🟡 en cours · ⛔ bloqué (ressource manquante) ·
 |---|---|---|---|
 | 1 | Examiner le projet existant | ✅ | Dépôt vide (README seul). |
 | 2 | Vérifier l'environnement | ✅ | Conteneur Linux sans Xcode. Toolchain Swift 6.1 Linux installée pour tester le cœur métier. Build iOS / simulateur / iPhone : **nécessite un Mac** avec Xcode 26. |
-| 3 | Examiner les maquettes | ⛔ | **Aucune maquette fournie.** À déposer dans `docs/mockups/`. |
+| 3 | Examiner les maquettes | ✅ | Planche de 8 écrans reçue (`docs/mockups/00-planche-v1.png`). Écarts avec le cahier des charges listés dans `docs/mockups/README.md`. |
 | 4 | CLAUDE.md | ✅ | Règles permanentes. |
 | 5 | Architecture + design system | ✅ | Package `MotoForgeKit` (6 modules), tokens, composants de base, coquille de navigation 5 onglets. |
-| 6 | Écrans fidèles aux maquettes | ⛔ | Bloqué par l'étape 3. |
-| 7 | Moteur de personnalisation local | 🟡 | Logique pure faite (configuration, undo/redo, plan de rendu par angle, hit-test, couleurs). Compositeur Core Image : à faire (nécessite visuels + masques pour être validé). |
+| 6 | Écrans fidèles aux maquettes | 🟡 | 8 écrans + barre flottante + menu écrits. **Non compilés** (pas de Mac) : à valider sur Xcode 26 / simulateur. |
+| 7 | Moteur de personnalisation local | 🟡 | Logique pure testée. Compositeur Core Image écrit (`MFRendering`) : brillant/satiné/mat/métallisé/nacré/candy, bicolore. **Non validé** faute de visuels et masques. |
 | 8 | Ressources visuelles CB125R | ⛔ | 6 visuels de référence sous licence + masques par composant à produire/obtenir. |
 | 9 | Catalogue vérifié | ⛔ | 30 références à sourcer (fabricant, référence, compatibilité, prix daté, homologation). |
-| 10 | Projets & budget | 🟡 | Logique faite (store, duplication, renommage, budget, liste d'achat, diff). UI à faire après maquettes. |
+| 10 | Projets & budget | 🟡 | Logique testée + écrans (projets, comparaison, partage texte, budget, liste d'achat). Export d'images : après intégration des visuels. |
 | 11 | Services IA | ⏳ | Abstraction prête, aucun fournisseur (aucun service payant). |
 | 12 | Tests simulateur / iPhone | ⏳ | Nécessite un Mac. |
 
 ## Ressources manquantes (bloquantes)
 
-1. **Maquettes validées** (Accueil, Garage, Atelier, Studio peinture, Studio covering, Catalogue, Fiche produit, Projets, Budget, Menu). Format PNG/PDF/Figma export, une image par écran et par état important.
+1. **Maquettes manquantes** : Menu/paramètres, studio de peinture avancé, studio covering, ajout de moto, états vides. Construits pour l'instant avec des composants système sobres.
 2. **Visuels de référence CB125R JC91** : 6 angles cohérents (même éclairage, même fond neutre, même résolution, idéalement ≥ 2400 px), avec droits d'usage commercial écrits. Options : shooting photo d'une moto réelle (recommandé), rendus 3D sous licence, ou visuels presse Honda avec autorisation.
 3. **Masques par composant et par angle** (PNG niveaux de gris, même taille que la base). Peuvent être préparés semi-automatiquement (segmentation) puis retouchés.
 4. **Données véhicule sourcées** : années couvertes par JC91, versions commercialisées en France, coloris d'origine avec codes Honda.

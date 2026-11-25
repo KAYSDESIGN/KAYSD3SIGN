@@ -71,3 +71,22 @@ struct DomainTests {
         #expect(AccessoryCategory.allCases.count == 19)
     }
 }
+
+@Suite("Préréglages atelier")
+struct PresetTests {
+    @Test func quickPicksMatchMockupAndAreNotReferences() {
+        #expect(PaintPresets.quickColors.count == 12)
+        #expect(Set(PaintPresets.quickColors.map(\.id)).count == 12)
+        #expect(PaintPresets.quickColors.allSatisfy { $0.source == .custom && !$0.isVerifiedReference })
+        #expect(PaintPresets.quickEffects == [.gloss, .satin, .matte, .metallic])
+        #expect(PaintPresets.quickEffects.allSatisfy { $0.renderAvailability == .available })
+    }
+
+    @Test func legacyGarageWithoutYearDecodes() throws {
+        let json = #"{"motorcycles":[{"id":"a","variantID":"v","addedAt":"2026-01-01T00:00:00Z"}]}"#
+        let d = JSONDecoder(); d.dateDecodingStrategy = .iso8601
+        let g = try d.decode(UserGarage.self, from: Data(json.utf8))
+        #expect(g.motorcycles.first?.year == nil)
+        #expect(g.motorcycles.first?.mileageKm == nil)
+    }
+}

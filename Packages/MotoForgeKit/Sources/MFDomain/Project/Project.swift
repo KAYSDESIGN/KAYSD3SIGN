@@ -8,15 +8,21 @@ public struct OwnedMotorcycle: Identifiable, Hashable, Sendable, Codable {
     public var id: ID
     public var variantID: MotorcycleVariant.ID
     public var originalColorwayID: OriginalColorway.ID?
+    /// Model year of the user's own motorcycle (entered by the user).
+    public var year: Int?
+    /// Mileage entered by the user.
+    public var mileageKm: Int?
     /// Optional user nickname ("Ma CB").
     public var nickname: String?
     public var addedAt: Date
 
     public init(id: ID = .generate(), variantID: MotorcycleVariant.ID, originalColorwayID: OriginalColorway.ID?,
-                nickname: String? = nil, addedAt: Date = Date()) {
+                year: Int? = nil, mileageKm: Int? = nil, nickname: String? = nil, addedAt: Date = Date()) {
         self.id = id
         self.variantID = variantID
         self.originalColorwayID = originalColorwayID
+        self.year = year
+        self.mileageKm = mileageKm
         self.nickname = nickname
         self.addedAt = addedAt
     }
@@ -33,6 +39,20 @@ public struct UserGarage: Hashable, Sendable, Codable {
 
     public var selected: OwnedMotorcycle? {
         motorcycles.first { $0.id == selectedMotorcycleID } ?? motorcycles.first
+    }
+}
+
+/// Favorites and color memory of the user (paint studio, catalog).
+public struct UserFavorites: Hashable, Sendable, Codable {
+    public var accessoryIDs: [Accessory.ID]
+    public var colors: [RGBColor]
+    /// Most recent first.
+    public var recentColors: [RGBColor]
+
+    public init(accessoryIDs: [Accessory.ID] = [], colors: [RGBColor] = [], recentColors: [RGBColor] = []) {
+        self.accessoryIDs = accessoryIDs
+        self.colors = colors
+        self.recentColors = recentColors
     }
 }
 
