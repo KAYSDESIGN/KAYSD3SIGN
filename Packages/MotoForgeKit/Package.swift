@@ -46,6 +46,7 @@ let package = Package(
         .testTarget(name: "MFDomainTests", dependencies: ["MFDomain"]),
         .testTarget(name: "MFEngineTests", dependencies: ["MFEngine", "MFDomain"]),
         .testTarget(name: "MFCatalogTests", dependencies: ["MFCatalog", "MFDomain", "MFEngine"]),
-        .testTarget(name: "MFPersistenceTests", dependencies: ["MFPersistence", "MFDomain"])
+        .testTarget(name: "MFPersistenceTests", dependencies: ["MFPersistence", "MFDomain"]),
+        .testTarget(name: "MFRenderingTests", dependencies: ["MFRendering", "MFEngine", "MFDomain"])
     ]
 )

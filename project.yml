@@ -67,3 +67,4 @@ schemes:
         - package: MotoForgeKit/MFEngineTests
         - package: MotoForgeKit/MFCatalogTests
         - package: MotoForgeKit/MFPersistenceTests
+        - package: MotoForgeKit/MFRenderingTests
