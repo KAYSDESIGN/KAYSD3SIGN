@@ -63,9 +63,11 @@ jobs:
       - name: Screenshots
         if: always()
         run: |
-          xcrun simctl boot "${{ steps.sim.outputs.udid }}" || true
           mkdir -p screenshots
-          xcrun xcresulttool export attachments --path TestResults.xcresult --output-path screenshots 2>/dev/null || true
+          [ -d TestResults.xcresult ] && xcrun xcresulttool export attachments --path TestResults.xcresult --output-path screenshots 2>/dev/null || true
+      - name: Error summary
+        if: failure()
+        run: grep -hE "error:" build.log test.log 2>/dev/null | sort -u | head -100 > errors.txt || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -73,5 +75,6 @@ jobs:
           path: |
             build.log
             test.log
+            errors.txt
             screenshots
           retention-days: 7

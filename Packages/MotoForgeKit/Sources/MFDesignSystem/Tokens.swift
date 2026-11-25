@@ -61,7 +61,7 @@ public enum MFTypography {
     public static let captionEmphasized = Font.system(.caption, design: .default).weight(.semibold)
 }
 
-public struct MFShadow {
+public struct MFShadow: Sendable {
     public let color: Color
     public let radius: CGFloat
     public let y: CGFloat
