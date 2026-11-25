@@ -228,6 +228,7 @@ public final class BikeCompositor: @unchecked Sendable {
             "inputGVector": CIVector(x: 0, y: gain, z: 0, w: 0),
             "inputBVector": CIVector(x: 0, y: 0, z: gain, w: 0)
         ]).applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: 0.30 + 0.40 * gloss * (1 - 0.6 * roughness)])
+            .applyingFilter("CIToneCurve", parameters: Self.highlightCurve)
     }
 
     private func paint(_ base: CIImage, material: Material, mask: CIImage) -> CIImage {
@@ -246,7 +247,7 @@ public final class BikeCompositor: @unchecked Sendable {
 
         // 2. Finish: gloss keeps contrast (reflections), roughness flattens it.
         let contrast = 0.30 + 0.40 * p.gloss * (1 - 0.6 * p.roughness)
-        shading = shading.applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: contrast])
+        shading = Self.compressHighlights(shading.applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: contrast]))
 
         // 3. Color layer (solid, bi-color or multi-color gradient).
         let color = material.baseColor.rgb.adjusted(by: p)
@@ -310,6 +311,18 @@ public final class BikeCompositor: @unchecked Sendable {
     }
 
     // MARK: - Helpers
+
+    /// Keeps mid-tones (the paint colour) intact while compressing specular highlights and deep shadows,
+    /// so a red stays red instead of turning pink under the photo's reflections.
+    static var highlightCurve: [String: Any] { [
+        "inputPoint0": CIVector(x: 0, y: 0.10), "inputPoint1": CIVector(x: 0.25, y: 0.31),
+        "inputPoint2": CIVector(x: 0.5, y: 0.5), "inputPoint3": CIVector(x: 0.75, y: 0.62),
+        "inputPoint4": CIVector(x: 1, y: 0.72)
+    ] }
+
+    static func compressHighlights(_ image: CIImage) -> CIImage {
+        image.applyingFilter("CIToneCurve", parameters: highlightCurve)
+    }
 
     /// `mask_<angle>_<part>` → `clean_<part>_<angle>`.
     static func cleanPlateName(forMask mask: String) -> String? {
