@@ -90,3 +90,20 @@ struct PresetTests {
         #expect(g.motorcycles.first?.mileageKm == nil)
     }
 }
+
+@Suite("Inspirations")
+struct InspirationTests {
+    @Test func presetsMapOntoVariantComponents() {
+        let variant = MotorcycleVariant(id: "honda.cb125r.jc91.eu", generationID: "honda.cb125r.jc91", versionName: "EU",
+                                        components: [MotorcycleComponent(id: "honda.cb125r.jc91.tank", kind: .tank),
+                                                     MotorcycleComponent(id: "honda.cb125r.jc91.fork", kind: .fork)])
+        let preset = InspirationPresets.all[0]
+        let config = preset.configuration(for: variant)
+        #expect(config.vehicleVariantID == variant.id)
+        #expect(config.componentStyles.count == 2)
+        #expect(InspirationPresets.all.count >= 6)
+        #expect(Set(InspirationPresets.all.map(\.id)).count == InspirationPresets.all.count)
+        // Only finishes the engine actually renders.
+        #expect(InspirationPresets.all.allSatisfy { $0.styles.values.allSatisfy { $0.effect.renderAvailability == .available } })
+    }
+}

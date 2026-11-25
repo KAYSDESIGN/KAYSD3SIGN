@@ -104,7 +104,7 @@ private struct ProjectCard: View {
         let percent = ProjectProgress.percent(of: project)
         VStack(alignment: .leading, spacing: MFSpacing.s) {
             Button { router.open(.workshop(project.id)) } label: {
-                BikeVisual(assetName: model.variant(project.configuration.vehicleVariantID)?.view(for: .rightProfile)?.baseImageAsset)
+                ConfigurationRender(configuration: project.configuration, angle: .rightProfile)
                     .frame(height: 150)
                     .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: MFRadius.medium, style: .continuous))

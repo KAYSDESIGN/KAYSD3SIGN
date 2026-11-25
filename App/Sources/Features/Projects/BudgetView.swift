@@ -28,8 +28,7 @@ struct BudgetView: View {
             VStack(spacing: MFSpacing.l) {
                 MFCard {
                     HStack(spacing: MFSpacing.s) {
-                        BikeVisual(assetName: model.variant(project.configuration.vehicleVariantID)?.view(for: .rightProfile)?.baseImageAsset,
-                                   placeholderText: "")
+                        ConfigurationRender(configuration: project.configuration, angle: .rightProfile)
                             .frame(width: 72, height: 48)
                             .clipShape(RoundedRectangle(cornerRadius: MFRadius.small))
                         Text(project.name).font(MFTypography.headline).foregroundStyle(MFColor.textPrimary)

@@ -116,8 +116,9 @@ private struct ProductCard: View {
         let offer = OfferSelector.displayOffer(for: variant, preferredCurrency: "EUR")
         VStack(alignment: .leading, spacing: MFSpacing.xs) {
             ZStack(alignment: .topTrailing) {
-                BikeVisual(assetName: accessory.photos.first, placeholderSymbol: accessory.category.systemImage, placeholderText: "")
+                ProductVisual(accessory: accessory, compact: true)
                     .frame(height: 90)
+                    .clipShape(RoundedRectangle(cornerRadius: MFRadius.small, style: .continuous))
                     .frame(maxWidth: .infinity)
                     .clipped()
                 Button { Task { await model.toggleFavorite(accessory: accessory.id) } } label: {

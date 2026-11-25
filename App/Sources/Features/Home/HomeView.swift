@@ -10,6 +10,7 @@ struct HomeView: View {
     @State private var projectPage = 0
     @State private var showNotifications = false
     @State private var showFilters = false
+    @State private var showAllInspirations = false
 
     private var recentProjects: [CustomizationProject] { Array(model.projects.prefix(4)) }
 
@@ -101,23 +102,41 @@ struct HomeView: View {
 
     private var inspirations: some View {
         VStack(alignment: .leading, spacing: MFSpacing.s) {
-            MFSectionHeader("Inspirations")
-            // No licensed inspiration visuals yet: honest placeholder, no fake gallery.
-            MFCard {
-                HStack(spacing: MFSpacing.s) {
-                    Image(systemName: "photo.on.rectangle.angled")
-                        .font(.title2)
-                        .foregroundStyle(MFColor.textSecondary)
-                    VStack(alignment: .leading, spacing: MFSpacing.xxs) {
-                        Text("Galerie d'inspirations").font(MFTypography.callout.weight(.semibold))
-                        Text("Les configurations d'exemple arriveront avec les visuels de la CB125R.")
-                            .font(MFTypography.caption)
-                            .foregroundStyle(MFColor.textSecondary)
-                    }
-                    Spacer(minLength: 0)
-                    MFBadge(.comingSoon)
+            HStack {
+                MFSectionHeader("Inspirations")
+                Button { showAllInspirations = true } label: {
+                    HStack(spacing: 2) { Text("Voir tout"); Image(systemName: "chevron.right") }
+                        .font(MFTypography.caption.weight(.semibold))
                 }
+                .foregroundStyle(MFColor.accent)
             }
+            if let variant = model.selectedMotorcycle.flatMap({ model.variant($0.variantID) }) ?? model.catalog?.variants.first {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: MFSpacing.s) {
+                        ForEach(InspirationPresets.all) { inspiration in
+                            InspirationCard(inspiration: inspiration, variant: variant) { start(inspiration) }
+                        }
+                    }
+                }
+                .scrollClipDisabled()
+            }
+        }
+        .sheet(isPresented: $showAllInspirations) { InspirationsGallery { inspiration in showAllInspirations = false; start(inspiration) } }
+    }
+
+    /// Creates a project from an inspiration on the user's bike (adds the bike first if needed).
+    private func start(_ inspiration: Inspiration) {
+        guard let bike = model.selectedMotorcycle, let variant = model.variant(bike.variantID) else {
+            router.isAddingMotorcycle = true
+            return
+        }
+        Task {
+            guard var project = await model.createProject(for: bike, name: inspiration.name) else { return }
+            var config = inspiration.configuration(for: variant)
+            config.originalColorwayID = bike.originalColorwayID
+            project.configuration = config
+            await model.save(project)
+            router.open(.workshop(project.id))
         }
     }
 
@@ -146,7 +165,7 @@ private struct ProjectHeroCard: View {
         let variantID = project.configuration.vehicleVariantID
         Button(action: open) {
             ZStack(alignment: .bottomLeading) {
-                BikeVisual(assetName: model.variant(variantID)?.view(for: .frontThreeQuarter)?.baseImageAsset, dark: true)
+                ConfigurationRender(configuration: project.configuration, dark: true)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .clipped()
                 VStack(alignment: .leading, spacing: 2) {
@@ -268,5 +287,60 @@ private struct NotificationsView: View {
                 .navigationBarTitleDisplayMode(.inline)
         }
         .presentationDetents([.medium])
+    }
+}
+
+/// Inspiration thumbnail rendered live on the user's bike.
+private struct InspirationCard: View {
+    let inspiration: Inspiration
+    let variant: MotorcycleVariant
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(alignment: .leading, spacing: MFSpacing.xxs) {
+                ConfigurationRender(configuration: inspiration.configuration(for: variant))
+                    .frame(width: 150, height: 104)
+                    .clipShape(RoundedRectangle(cornerRadius: MFRadius.medium, style: .continuous))
+                Text(inspiration.name).font(MFTypography.caption.weight(.semibold)).foregroundStyle(MFColor.textPrimary)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(inspiration.name). \(inspiration.summary). Créer un projet.")
+    }
+}
+
+/// Full inspirations gallery.
+private struct InspirationsGallery: View {
+    @Environment(AppModel.self) private var model
+    @Environment(\.dismiss) private var dismiss
+    let pick: (Inspiration) -> Void
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                if let variant = model.selectedMotorcycle.flatMap({ model.variant($0.variantID) }) ?? model.catalog?.variants.first {
+                    LazyVGrid(columns: [GridItem(.flexible(), spacing: MFSpacing.s), GridItem(.flexible(), spacing: MFSpacing.s)], spacing: MFSpacing.m) {
+                        ForEach(InspirationPresets.all) { i in
+                            Button { pick(i) } label: {
+                                VStack(alignment: .leading, spacing: MFSpacing.xxs) {
+                                    ConfigurationRender(configuration: i.configuration(for: variant))
+                                        .frame(height: 120)
+                                        .clipShape(RoundedRectangle(cornerRadius: MFRadius.medium, style: .continuous))
+                                    Text(i.name).font(MFTypography.callout.weight(.semibold)).foregroundStyle(MFColor.textPrimary)
+                                    Text(i.summary).font(MFTypography.caption).foregroundStyle(MFColor.textSecondary).lineLimit(2)
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(MFSpacing.screen)
+                }
+            }
+            .background(MFColor.background)
+            .navigationTitle("Inspirations")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { Button("Fermer") { dismiss() } }
+        }
     }
 }

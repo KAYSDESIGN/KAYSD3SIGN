@@ -256,6 +256,8 @@ struct WorkshopStage: View {
                     .gesture(zoomAndPan)
                     .onTapGesture(count: 2) { withAnimation(.smooth) { scale = 1; baseScale = 1; offset = .zero; baseOffset = .zero } }
                     .accessibilityLabel(vm.showsOriginal ? "Moto, configuration d'origine" : "Moto personnalisée")
+            } else if vm.hasVisuals && vm.renderNotice == nil {
+                ProgressView("Rendu…").tint(MFColor.textSecondary)
             } else {
                 MissingVisualsView(vm: vm)
             }
@@ -299,7 +301,7 @@ struct MissingVisualsView: View {
             } else {
                 Image(systemName: "motorcycle").font(.system(size: 48, weight: .light)).foregroundStyle(MFColor.textSecondary)
             }
-            Text("Visuels de référence de la CB125R en cours d'intégration.\nVos choix sont enregistrés et s'afficheront sur la moto.")
+            Text("Aucun visuel pour cet angle. Vos choix sont enregistrés et s'affichent sur les autres angles.")
                 .font(MFTypography.caption)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(MFColor.textSecondary)

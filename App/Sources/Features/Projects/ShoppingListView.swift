@@ -123,8 +123,8 @@ struct ShoppingListView: View {
     }
 
     @ViewBuilder private func thumbnail(_ item: ShoppingListItem) -> some View {
-        if case .accessory(let id) = item.kind, let (accessory, _) = model.accessoryVariant(id) {
-            BikeVisual(assetName: accessory.photos.first, placeholderSymbol: accessory.category.systemImage, placeholderText: "")
+        if case .accessory(let id) = item.kind, let (accessory, variant) = model.accessoryVariant(id) {
+            ProductVisual(accessory: accessory, variant: variant, compact: true)
                 .clipShape(RoundedRectangle(cornerRadius: 6))
         } else {
             Image(systemName: "tag").foregroundStyle(MFColor.textSecondary)

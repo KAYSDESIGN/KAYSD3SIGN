@@ -1,0 +1,51 @@
+# Catalogue vérifié — Honda CB125R JC91
+
+Révision 2 · générée le 2026-11-25 · toutes les données vérifiées le 25/11/2026.
+
+## Véhicule
+
+- **JC91** : 2021–2023. Source : [Honda Japon (type 8BJ-JC91, 19/03/2021) et Honda Motor Europe (modèle 2021, 11/11/2020 ; 24YM, 21/03/2024)](https://global.honda/jp/news/2021/2210319-cb125r.html). Le millésime 24YM (Euro 5+, écran TFT 5 pouces) est traité comme JC95 conformément au périmètre du projet ; certaines fiches japonaises conservent le type 8BJ-JC91 pour 2024.
+- **Europe · 21YM–23YM (Euro 5, 11 kW)** — coloris : Pearl Smoky Gray, Mat Gunpowder Black Metallic, Candy Chromosphere Red, Mat Jeans Blue Metallic. Source : [Honda Motor Europe, annonce de la gamme 2021 (11/11/2020)](https://global.honda/newsroom/news/2020/2201111eng.html)
+- **Japon · 8BJ-JC91** — coloris : Matte Gunpowder Black Metallic (マットガンパウダーブラックメタリック), Pearl Smoky Grey (パールスモーキーグレー), Candy Chromosphere Red (キャンディークロモスフィアレッド). Source : [Honda Japon, communiqué du 19/03/2021 (type 8BJ-JC91, moteur JC91E)](https://global.honda/jp/news/2021/2210319-cb125r.html)
+
+## Références
+
+| # | Fabricant | Produit | Référence | Compatibilité (texte source) | Homologation (FR) | Prix | Source |
+|---|---|---|---|---|---|---|---|
+| 1 | MIVV | Échappement GP PRO | `H.077.L2P` | HONDA CB 125 R 2021 > 2024 | Homologué sous conditions — Homologation valable uniquement avec le catalyseur MIVV ACC.073.A1 (vendu séparément).; Euro 5 uniquement : incompatible avec les véhicules Euro 5+ à sonde lambda post-catalyseur.; dB-killer amovible requis pour la conformité. | 536 EUR (HT, MIVV (prix catalogue)) | [MIVV, fiche produit officielle](https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/) |
+| 2 | MIVV | Échappement GP PRO | `H.077.L6P` | HONDA CB 125 R 2021 > 2024 | Homologué sous conditions — Homologation valable uniquement avec le catalyseur MIVV ACC.073.A1 (vendu séparément).; Euro 5 uniquement : incompatible avec les véhicules Euro 5+ à sonde lambda post-catalyseur.; dB-killer amovible requis pour la conformité. | 536 EUR (HT, MIVV (prix catalogue)) | [MIVV, fiche produit officielle](https://mivv.com/en/exhaust/h-077-l6p-honda-cb-125-r-2021/) |
+| 3 | MIVV | Échappement GP PRO | `H.077.LXBP` | HONDA CB 125 R 2021 > 2024 | Homologué sous conditions — Homologation valable uniquement avec le catalyseur MIVV ACC.073.A1 (vendu séparément).; Euro 5 uniquement : incompatible avec les véhicules Euro 5+ à sonde lambda post-catalyseur.; dB-killer amovible requis pour la conformité. | 477 EUR (HT, MIVV (prix catalogue)) | [MIVV, fiche produit officielle](https://mivv.com/en/exhaust/h-077-lxbp-honda-cb-125-r-2021/) |
+| 4 | MIVV | Échappement MK3 | `H.078.SM3B` | HONDA CB 125 R 2021 > 2024 | Non homologué | 343 EUR (HT, MIVV (prix catalogue)) | [MIVV, fiche produit officielle](https://mivv.com/en/exhaust/h-078-sm3b-honda-cb-125-r-2021/) |
+| 5 | MIVV | Échappement MK3 | `H.078.SM3X` | HONDA CB 125 R 2021 > 2024 | Non homologué | 322 EUR (HT, MIVV (prix catalogue)) | [MIVV, fiche produit officielle](https://mivv.com/en/exhaust/h-078-sm3x-honda-cb-125-r-2021/) |
+| 6 | MIVV | Catalyseur pour GP PRO | `ACC.073.A1` | Accessoire listé pour HONDA CB 125 R 2021 > 2024 | Non vérifié | 130 EUR (HT, MIVV (prix catalogue)) | [MIVV, fiche produit officielle](https://mivv.com/en/exhaust/h-077-l2p-honda-cb-125-r-2021/) |
+| 7 | LeoVince | LV ONE EVO Carbon | `14391EK` | HONDA CB 125 R Neo Sports Café 2021 - 2023 | Homologué sous conditions — Homologué ECE/UE (bruit ECE-R92, émissions 134/2014) pour les seuls types listés dans l'ePass du fabricant. | non publié | [LeoVince, fiche produit officielle](https://www.leovince.com/en-hr/product/14391ek-lv-one-evo-carbon-fiber-honda-cb-125-r-neo-sports-cafe-2021-2023) |
+| 8 | Arrow | Silencieux X-Kone Nichrom | `51519XKIW` | Honda CB 125i R H2O 4T E5 2021-2024 | Homologué sous conditions — Homologation CE uniquement avec le catalyseur Arrow 11030KZ. | 450.18 EUR (Prix revendeur, TVA à confirmer sur le site, EasyParts) | [EasyParts (revendeur), fiche produit Arrow](https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547) |
+| 9 | Arrow | Catalyseur pour X-Kone | `11030KZ` | Produit recommandé avec 51519XKIW pour CB 125i R E5 2021-2024 | Non vérifié | 125.62 EUR (Prix revendeur, EasyParts) | [EasyParts (revendeur), fiche produit Arrow](https://www.easyparts.com/Exhaust-ARROW-X-Kone-Nichrom-C-Honda-CB-125i-R-E5-2021-p33832547) |
+| 10 | Puig | Tampons de protection R19 | `9654N` | HONDA CB125R Neo Sports Cafe 2018-2026 | Non vérifié | 121.99 EUR (TTC (TVA 21 %), prix hors promotion, ACMOTOS) | [ACMOTOS (revendeur), fiche Puig 9654N](https://acmotos.com/en/puig-r19-frame-sliders-9654n-honda-cb125r-neo-sports-cafe) |
+| 11 | Puig | Support de plaque | `9653N` | HONDA CB125R NEO SPORTS CAFE (2018-2026) | Non vérifié | 199.95 AUD (TTC, DriftnDrive) | [DriftnDrive (revendeur), fiche Puig 9653N](https://driftndrive.com.au/products/9653n) |
+| 12 | R&G Racing | Grille de radiateur | `RAD0235 (Black)` | Honda CB125R ('18-22) | Non vérifié | 59.99 GBP (TTC (PVC 70,99 £), Sportsbikeshop) | [Sportsbikeshop (revendeur), fiche R&G RAD0235](https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/729335) |
+| 13 | R&G Racing | Grille de radiateur | `RAD0235 (Titanium)` | Honda CB125R ('18-22) | Non vérifié | 59.99 GBP (TTC (PVC 70,99 £), Sportsbikeshop) | [Sportsbikeshop (revendeur), fiche R&G RAD0235](https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/729335) |
+| 14 | R&G Racing | Tampons Aero | `CP0522BL` | Honda CB125R ('21-22) | Non vérifié | 74.36 GBP (TTC (PVC 88,00 £), Sportsbikeshop) | [Sportsbikeshop (revendeur), fiche R&G CP0522BL](https://www.sportsbikeshop.co.uk/motorcycle_parts/content_prod/676789) |
+| 15 | GIVI | Support arrière MONOLOCK | `SR1169` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/optionals/sr1169) |
+| 16 | GIVI | Pare-carters tubulaire | `TN1199` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/optionals/tn1199) |
+| 17 | GIVI | Saute-vent fumé | `A1164` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26) |
+| 18 | GIVI | Projecteurs LED S312 | `S312` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/engine/s312-led-projectors) |
+| 19 | GIVI | Top case B45+ (45 L) | `B45+` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b45) |
+| 20 | GIVI | Top case B39NT TECH (39 L) | `B39NT TECH` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b39nt-tech) |
+| 21 | GIVI | Top case B47 BLADE (47 L) | `B47 BLADE` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b47-blade) |
+| 22 | GIVI | Top case B47 BLADE TECH (47 L) | `B47 BLADE TECH` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b47-blade-tech) |
+| 23 | GIVI | Top case E46 RIVIERA TECH (46 L) | `E46 RIVIERA TECH` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/e46-riviera-tech) |
+| 24 | GIVI | Top case E455 SIMPLY IV (45 L) | `E455 SIMPLY IV` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/e455-simply-iv) |
+| 25 | GIVI | Top case B37 BLADE (37 L) | `B37 BLADE` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/b37-blade) |
+| 26 | GIVI | Top case C30 (30 L) | `C30` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/c30) |
+| 27 | GIVI | Top case ALP44A2 ALPINA (44 L) | `ALP44A2 ALPINA` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/product/honda/cb-125-r-21--26/topcase/alp44a2-alpina) |
+| 28 | GIVI | Top case B39N | `B39N` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26) |
+| 29 | GIVI | Top case E340 VISION | `E340 VISION` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26) |
+| 30 | GIVI | Top case B38 BERNINA | `B38 BERNINA` | HONDA > cb 125 r (21 > 26) | Non vérifié | non publié | [GIVI, configurateur officiel « HONDA > cb 125 r (21 > 26) »](https://www.givi.it/per-la-tua-moto/bike/honda/cb-125-r-21--26) |
+
+## Limites connues
+
+- Puig et R&G Racing bloquent la lecture automatisée de leurs fiches : leurs références sont sourcées via des revendeurs (prix revendeur, devise d'origine).
+- GIVI ne publie aucun prix : les références GIVI n'ont pas d'offre.
+- Aucune photo de produit n'est copiée (droits) : l'app montre la pièce en représentation 3D sur la moto quand elle existe, sinon renvoie au site du fabricant.
+- Les compatibilités sont rattachées à la version Europe (21YM–23YM).

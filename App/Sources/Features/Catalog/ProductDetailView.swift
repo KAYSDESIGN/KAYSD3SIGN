@@ -97,11 +97,9 @@ struct ProductDetailView: View {
         VStack(spacing: MFSpacing.xs) {
             ZStack(alignment: .bottomTrailing) {
                 TabView(selection: $photoPage) {
-                    if accessory.photos.isEmpty {
-                        BikeVisual(assetName: nil, placeholderSymbol: accessory.category.systemImage, placeholderText: "Photo à venir").tag(0)
-                    }
+                    ProductVisual(accessory: accessory, variant: accessory.variants[min(variantIndex, accessory.variants.count - 1)]).tag(0)
                     ForEach(Array(accessory.photos.enumerated()), id: \.offset) { i, name in
-                        BikeVisual(assetName: name, placeholderSymbol: accessory.category.systemImage).scaledToFit().tag(i)
+                        BikeVisual(assetName: name, placeholderSymbol: accessory.category.systemImage).scaledToFit().tag(i + 1)
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
@@ -112,7 +110,13 @@ struct ProductDetailView: View {
                 .buttonStyle(.mfGlass)
                 .padding(MFSpacing.xs)
             }
-            MFPageDots(count: max(accessory.photos.count, 1), index: photoPage)
+            if !accessory.photos.isEmpty { MFPageDots(count: accessory.photos.count + 1, index: photoPage) }
+            if accessory.variants[min(variantIndex, accessory.variants.count - 1)].visualAssets.isEmpty == false {
+                Text("Représentation 3D simplifiée de la pièce montée. Photos officielles sur le site du fabricant.")
+                    .font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
+            } else if let url = accessory.manufacturerURL {
+                Button("Voir les photos chez \(accessory.manufacturer)") { openURL(url) }.font(MFTypography.caption.weight(.semibold))
+            }
         }
     }
 

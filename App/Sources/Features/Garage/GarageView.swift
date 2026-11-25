@@ -122,7 +122,8 @@ private struct GarageBikeCard: View {
                     }
                     .accessibilityLabel("Actions pour la moto")
                 }
-                BikeVisual(assetName: model.variant(bike.variantID)?.view(for: .rightProfile)?.baseImageAsset)
+                ConfigurationRender(configuration: ProjectConfiguration(vehicleVariantID: bike.variantID, originalColorwayID: bike.originalColorwayID),
+                                    angle: .rightProfile)
                     .frame(height: 170)
                     .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: MFRadius.medium, style: .continuous))
