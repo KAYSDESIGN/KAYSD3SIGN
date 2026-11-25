@@ -53,14 +53,14 @@ def mat(name, color, metallic=0.0, rough=0.4, coat=0.0, emission=None):
     return m
 
 # Base paint is Pearl Smoky Grey-like neutral so the app can recolor with preserved shading.
-PAINT = mat("paint", (0.36, 0.37, 0.38), metallic=0.35, rough=0.22, coat=1.0)
+PAINT = mat("paint", (0.22, 0.23, 0.24), metallic=0.45, rough=0.25, coat=1.0)
 BLACK = mat("black_plastic", (0.02, 0.02, 0.022), rough=0.55)
 SATIN_BLACK = mat("satin_black", (0.03, 0.03, 0.032), metallic=0.4, rough=0.35)
 FRAME = mat("frame", (0.05, 0.05, 0.055), metallic=0.6, rough=0.3, coat=0.5)
 ALU = mat("alu", (0.55, 0.56, 0.58), metallic=1.0, rough=0.28)
 CHROME = mat("chrome", (0.9, 0.9, 0.92), metallic=1.0, rough=0.08)
 GOLD = mat("fork_gold", (0.75, 0.52, 0.18), metallic=1.0, rough=0.25)
-RUBBER = mat("rubber", (0.015, 0.015, 0.015), rough=0.8)
+RUBBER = mat("rubber", (0.006, 0.006, 0.006), rough=0.9)
 RIM = mat("rim", (0.04, 0.04, 0.045), metallic=0.5, rough=0.35, coat=0.6)
 DISC = mat("disc", (0.6, 0.6, 0.62), metallic=1.0, rough=0.35)
 CALIPER = mat("caliper", (0.05, 0.05, 0.05), metallic=0.5, rough=0.4)
@@ -83,14 +83,18 @@ def link(obj, comp=None, material=None, smooth=True):
 def active():
     return bpy.context.active_object
 
-def cyl(p1, p2, r, comp=None, material=None, verts=24):
+def cyl(p1, p2, r, comp=None, material=None, verts=24, smooth=True):
     p1, p2 = Vector(p1), Vector(p2)
     d = p2 - p1
     bpy.ops.mesh.primitive_cylinder_add(vertices=verts, radius=r, depth=d.length, location=(p1 + p2) / 2)
     o = active()
     o.rotation_mode = "QUATERNION"
     o.rotation_quaternion = d.to_track_quat("Z", "Y")
-    return link(o, comp, material)
+    o = link(o, comp, material, smooth=smooth)
+    if smooth:
+        bevel = o.modifiers.new("edge", "BEVEL"); bevel.width = min(r * 0.25, 0.006); bevel.segments = 2
+        bevel.harden_normals = True
+    return o
 
 def sphere(loc, scale, comp=None, material=None, seg=32):
     bpy.ops.mesh.primitive_uv_sphere_add(segments=seg, ring_count=seg // 2, location=loc)
@@ -128,6 +132,24 @@ def loft(name, sections, comp=None, material=None, subdiv=2):
         m = o.modifiers.new("sub", "SUBSURF"); m.levels = subdiv; m.render_levels = subdiv
     return link(o, comp, material)
 
+def slab(name, pts_xz, y0, y1, comp=None, material=None, bevel=0.012, taper=0.0):
+    """Extrudes a polygon defined in the XZ plane between y0 and y1 (outer face optionally shrunk by `taper`)."""
+    me = bpy.data.meshes.new(name); bm = bmesh.new()
+    cx = sum(p[0] for p in pts_xz) / len(pts_xz); cz = sum(p[1] for p in pts_xz) / len(pts_xz)
+    inner = [bm.verts.new((x, y0, z)) for x, z in pts_xz]
+    outer = [bm.verts.new((cx + (x - cx) * (1 - taper), y1, cz + (z - cz) * (1 - taper))) for x, z in pts_xz]
+    n = len(pts_xz)
+    bm.faces.new(inner[::-1] if y1 > y0 else inner); bm.faces.new(outer if y1 > y0 else outer[::-1])
+    for i in range(n):
+        f = (inner[i], inner[(i + 1) % n], outer[(i + 1) % n], outer[i])
+        bm.faces.new(f if y1 > y0 else f[::-1])
+    bm.normal_update(); bm.to_mesh(me); bm.free()
+    o = bpy.data.objects.new(name, me); scene.collection.objects.link(o)
+    bpy.context.view_layer.objects.active = o
+    if bevel:
+        m = o.modifiers.new("bevel", "BEVEL"); m.width = bevel; m.segments = 4; m.limit_method = "ANGLE"
+    return link(o, comp, material, smooth=False)
+
 def ellipse(cy, cz, ry, rz, n=12, flat_bottom=None):
     pts = []
     for i in range(n):
@@ -141,7 +163,8 @@ def ellipse(cy, cz, ry, rz, n=12, flat_bottom=None):
 def wheel(center, r_tyre, width, slug):
     torus(center, r_tyre - width * 0.42, width * 0.46, comp=None, material=RUBBER).name = f"tyre_{slug}"
     # rim barrel + 5 Y-shaped spokes (cast wheel)
-    cyl(center - Vector((0, width * 0.42, 0)), center + Vector((0, width * 0.42, 0)), RIM_R, comp=slug, material=RIM, verts=64)
+    rim = torus(center, RIM_R - 0.012, 0.018, comp=slug, material=RIM)
+    rim.scale = (1.0, 1.0, width * 0.42 / 0.018)  # torus local Z is the wheel axis before rotation
     hub = cyl(center - Vector((0, 0.07, 0)), center + Vector((0, 0.07, 0)), 0.055, comp=slug, material=RIM)
     for k in range(5):
         a = 2 * math.pi * k / 5
@@ -151,7 +174,6 @@ def wheel(center, r_tyre, width, slug):
             cyl(mid, tip, 0.011, comp=slug, material=RIM, verts=12)
         cyl(center, center + Vector((math.cos(a) * 0.09, 0, math.sin(a) * 0.09)), 0.016, comp=slug, material=RIM, verts=12)
     # inner rim face (black) slightly inset so the rim reads as a ring
-    cyl(center - Vector((0, width * 0.43, 0)), center + Vector((0, width * 0.43, 0)), RIM_R - 0.02, material=BLACK, verts=64).hide_render = True
 
 wheel(FRONT, R_FRONT, 0.110, "front-wheel")
 wheel(REAR, R_REAR, 0.150, "rear-wheel")
@@ -234,8 +256,8 @@ box(Vector((0.72, 0, 0.40)), (0.32, 0.20, 0.24), material=ENGINE, bevel=0.03)   
 cyl(Vector((0.80, 0, 0.48)), Vector((0.92, 0, 0.68)), 0.075, material=ENGINE)                        # cylinder
 box(Vector((0.94, 0, 0.71)), (0.16, 0.19, 0.10), material=ENGINE, bevel=0.025, rot=(0, math.radians(-28), 0))   # head
 for z in (0.52, 0.56, 0.60, 0.64): cyl(Vector((0.82 + (z - 0.5) * 0.6, -0.08, z)), Vector((0.82 + (z - 0.5) * 0.6, 0.08, z)), 0.082, material=ENGINE, verts=32)  # fins look
-cyl(Vector((0.70, 0.10, 0.40)), Vector((0.70, 0.125, 0.40)), 0.10, comp="engine-covers", material=ALU, verts=48)       # left cover
-cyl(Vector((0.66, -0.10, 0.38)), Vector((0.66, -0.125, 0.38)), 0.11, comp="engine-covers", material=ALU, verts=48)     # clutch cover
+cyl(Vector((0.70, 0.10, 0.40)), Vector((0.70, 0.125, 0.40)), 0.10, comp="engine-covers", material=ALU, verts=48, smooth=False)       # left cover
+cyl(Vector((0.66, -0.10, 0.38)), Vector((0.66, -0.125, 0.38)), 0.11, comp="engine-covers", material=ALU, verts=48, smooth=False)     # clutch cover
 loft("sump_guard", [
     (0.95, ellipse(0, 0.27, 0.10, 0.03, 10)),
     (0.75, ellipse(0, 0.25, 0.11, 0.035, 10)),
@@ -253,34 +275,39 @@ cyl(Vector((0.42, -0.06, 0.25)), Vector((0.36, -0.07, 0.27)), 0.03, material=CHR
 
 # ---------------------------------------------------------------- fuel tank (10 L) + shrouds (écopes)
 loft("tank", [
-    (1.08, ellipse(0, 0.92, 0.07, 0.05, 14)),
-    (1.00, ellipse(0, 0.97, 0.15, 0.09, 14, flat_bottom=0.86)),
-    (0.88, ellipse(0, 0.99, 0.17, 0.10, 14, flat_bottom=0.86)),
-    (0.76, ellipse(0, 0.95, 0.15, 0.08, 14, flat_bottom=0.85)),
-    (0.68, ellipse(0, 0.89, 0.11, 0.05, 14)),
+    (1.12, ellipse(0, 0.93, 0.08, 0.05, 16)),
+    (1.04, ellipse(0, 0.985, 0.165, 0.085, 16, flat_bottom=0.87)),
+    (0.92, ellipse(0, 1.015, 0.19, 0.10, 16, flat_bottom=0.86)),
+    (0.80, ellipse(0, 0.985, 0.175, 0.09, 16, flat_bottom=0.84)),
+    (0.71, ellipse(0, 0.90, 0.12, 0.05, 16)),
 ], comp="tank", material=PAINT)
-for s in (1, -1):
-    loft(f"shroud_{s}", [
-        (1.10, [(0.14 * s, 0.84), (0.16 * s, 0.88), (0.15 * s, 0.70), (0.13 * s, 0.66)]),
-        (0.98, [(0.17 * s, 0.86), (0.19 * s, 0.92), (0.18 * s, 0.66), (0.155 * s, 0.60)]),
-        (0.86, [(0.16 * s, 0.84), (0.18 * s, 0.90), (0.17 * s, 0.74), (0.145 * s, 0.70)]),
-    ], comp="tank-shrouds", material=PAINT, subdiv=2)
+SHROUD = [(1.10, 0.92), (1.02, 0.98), (0.86, 0.97), (0.80, 0.86), (0.84, 0.71), (0.94, 0.60), (1.05, 0.55), (1.11, 0.62), (1.13, 0.78)]
+for side in (1, -1):
+    slab(f"shroud_{side}", SHROUD, 0.135 * side, 0.19 * side, comp="tank-shrouds", material=PAINT, taper=0.05)
+    # black inner scoop (radiator cover) visible behind the panel edge
+    slab(f"scoop_{side}", [(1.12, 0.62), (1.05, 0.56), (0.97, 0.61), (1.02, 0.78), (1.11, 0.80)], 0.10 * side, 0.137 * side,
+         material=BLACK, taper=0.0, bevel=0.006)
 
 # ---------------------------------------------------------------- seat, tail section, rear fender
 loft("seat", [
-    (0.70, ellipse(0, 0.86, 0.10, 0.03, 12)),
-    (0.55, ellipse(0, 0.83, 0.135, 0.04, 12)),
-    (0.38, ellipse(0, 0.84, 0.12, 0.035, 12)),
-    (0.30, ellipse(0, 0.90, 0.09, 0.035, 12)),
-    (0.12, ellipse(0, 0.93, 0.08, 0.03, 12)),
+    (0.74, ellipse(0, 0.86, 0.09, 0.025, 12)),
+    (0.62, ellipse(0, 0.845, 0.135, 0.035, 12)),
+    (0.46, ellipse(0, 0.845, 0.125, 0.035, 12)),
+    (0.38, ellipse(0, 0.88, 0.10, 0.03, 12)),
+    (0.30, ellipse(0, 0.905, 0.09, 0.03, 12)),
+    (0.08, ellipse(0, 0.925, 0.075, 0.025, 12)),
 ], comp="seat", material=SEAT)
-for s in (1, -1):
-    loft(f"tail_{s}", [
-        (0.42, [(0.12 * s, 0.82), (0.13 * s, 0.84), (0.11 * s, 0.74), (0.09 * s, 0.73)]),
-        (0.22, [(0.10 * s, 0.88), (0.11 * s, 0.90), (0.10 * s, 0.80), (0.08 * s, 0.79)]),
-        (0.02, [(0.06 * s, 0.93), (0.07 * s, 0.95), (0.065 * s, 0.88), (0.05 * s, 0.87)]),
-    ], comp="tail-section", material=PAINT)
-box(Vector((-0.02, 0, 0.92)), (0.05, 0.09, 0.03), material=mat("tail_led", (0.6, 0, 0), emission=(1, 0.05, 0.05)), bevel=0.008)
+loft("tail", [
+    (0.50, ellipse(0, 0.78, 0.13, 0.05, 12)),
+    (0.34, ellipse(0, 0.83, 0.115, 0.055, 12)),
+    (0.16, ellipse(0, 0.87, 0.09, 0.05, 12)),
+    (0.00, ellipse(0, 0.895, 0.06, 0.035, 12)),
+    (-0.04, ellipse(0, 0.90, 0.04, 0.02, 12)),
+], comp="tail-section", material=PAINT)
+for side in (1, -1):
+    slab(f"side_cover_{side}", [(0.70, 0.82), (0.42, 0.86), (0.18, 0.89), (0.30, 0.78), (0.50, 0.72), (0.66, 0.70)],
+         0.105 * side, 0.135 * side, comp="tail-section", material=PAINT, taper=0.06)
+box(Vector((-0.035, 0, 0.895)), (0.03, 0.08, 0.025), material=mat("tail_led", (0.6, 0, 0), emission=(1, 0.05, 0.05)), bevel=0.008)
 # rear fender / plate holder (hugger-type hanger)
 loft("rear_fender", [
     (0.06, ellipse(0, 0.80, 0.05, 0.02, 10)),
@@ -296,22 +323,21 @@ for s in (1, -1):  # indicators
 for s in (1, -1):
     cyl(Vector((0.50, 0.14 * s, 0.33)), Vector((0.50, 0.22 * s, 0.33)), 0.013, material=ALU, verts=12)
     cyl(Vector((0.30, 0.12 * s, 0.42)), Vector((0.30, 0.19 * s, 0.42)), 0.011, material=ALU, verts=12)
-cyl(Vector((0.58, 0.12, 0.30)), Vector((0.66, 0.30, 0.02)), 0.012, material=SATIN_BLACK)  # side stand (left)
 
 # ---------------------------------------------------------------- stage: shadow catcher + lights + world
 bpy.ops.mesh.primitive_plane_add(size=20, location=(0.65, 0, 0))
 ground = active(); ground.is_shadow_catcher = True
 world = bpy.data.worlds.new("world"); scene.world = world; world.use_nodes = True
-bg = world.node_tree.nodes["Background"]; bg.inputs[0].default_value = (0.92, 0.92, 0.94, 1); bg.inputs[1].default_value = 0.55
+bg = world.node_tree.nodes["Background"]; bg.inputs[0].default_value = (0.92, 0.92, 0.94, 1); bg.inputs[1].default_value = 0.35
 
 def area(loc, size, energy, target=(0.65, 0, 0.55)):
     bpy.ops.object.light_add(type="AREA", location=loc)
     l = active(); l.data.size = size; l.data.energy = energy
     d = Vector(target) - Vector(loc); l.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
-area((0.65, 0, 4.0), 4.0, 900)        # soft top
-area((3.0, 2.5, 2.0), 2.5, 450)       # key front-left
-area((-2.5, -2.5, 1.6), 2.5, 300)     # rim rear-right
-area((1.5, -3.0, 1.2), 3.0, 200)      # fill right
+area((0.65, 0, 4.0), 4.0, 320)        # soft top
+area((3.0, 2.5, 2.0), 2.5, 200)       # key front-left
+area((-2.5, -2.5, 1.6), 2.5, 140)     # rim rear-right
+area((1.5, -3.0, 1.2), 3.0, 100)      # fill right
 
 scene.render.engine = "CYCLES"
 scene.cycles.samples = SAMPLES

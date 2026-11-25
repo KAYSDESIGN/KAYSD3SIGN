@@ -291,7 +291,7 @@ struct PaintStudioView: View {
         p.gradientStops = isBicolor ? [GradientStop(position: 0, color: color), GradientStop(position: 1, color: secondColor)] : []
         let existing = vm.selectedMaterial?.baseColor
         let paint = existing?.rgb.hexString == color.hexString ? existing! : PaintColor.custom(color)
-        vm.apply(Material(baseColor: paint, effect: effect, parameters: p))
+        vm.apply(MFDomain.Material(baseColor: paint, effect: effect, parameters: p))
         Task { await model.updateFavorites { ColorMemory.pushRecent(color, into: &$0) } }
         dismiss()
     }

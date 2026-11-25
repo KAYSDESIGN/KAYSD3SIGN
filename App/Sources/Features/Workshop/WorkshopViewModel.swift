@@ -72,7 +72,7 @@ final class WorkshopViewModel {
     var changeLog: [String] { editor?.history.changeLog ?? [] }
 
     /// Current material of the selected component (override, original colorway, or nil).
-    var selectedMaterial: Material? {
+    var selectedMaterial: MFDomain.Material? {
         guard let id = selectedComponentID, case .paint(let m)? = editor?.effectiveStyle(of: id) else { return nil }
         return m
     }
@@ -82,18 +82,18 @@ final class WorkshopViewModel {
     // MARK: Intents
 
     func apply(color: PaintColor) {
-        var material = selectedMaterial ?? Material(baseColor: color)
+        var material = selectedMaterial ?? MFDomain.Material(baseColor: color)
         material.baseColor = color
         apply(material)
         Task { await model?.updateFavorites { ColorMemory.pushRecent(color.rgb, into: &$0) } }
     }
 
     func apply(effect: PaintEffect) {
-        guard let current = selectedMaterial ?? PaintPresets.quickColors.first.map({ Material(baseColor: $0) }) else { return }
-        apply(Material(baseColor: current.baseColor, effect: effect, parameters: .defaults(for: effect)))
+        guard let current = selectedMaterial ?? PaintPresets.quickColors.first.map({ MFDomain.Material(baseColor: $0) }) else { return }
+        apply(MFDomain.Material(baseColor: current.baseColor, effect: effect, parameters: .defaults(for: effect)))
     }
 
-    func apply(_ material: Material) {
+    func apply(_ material: MFDomain.Material) {
         guard let id = selectedComponentID else { return }
         mutate { try $0.setPaint(material, on: id) }
     }
