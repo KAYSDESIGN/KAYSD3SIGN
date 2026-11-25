@@ -20,6 +20,8 @@ DENOISE = "--no-denoise" not in argv
 SAMPLES = int(argv[argv.index("--samples") + 1]) if "--samples" in argv else 96
 W, H = (int(v) for v in (argv[argv.index("--size") + 1] if "--size" in argv else "1600x1100").split("x"))
 ONLY = argv[argv.index("--only") + 1].split(",") if "--only" in argv else None
+ACCESSORY = argv[argv.index("--accessory") + 1] if "--accessory" in argv else None
+CLEANPLATE = argv[argv.index("--cleanplate") + 1].split(",") if "--cleanplate" in argv else None
 os.makedirs(OUT, exist_ok=True)
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -270,8 +272,8 @@ loft("muffler", [
     (0.80, ellipse(-0.04, 0.24, 0.07, 0.05, 12)),
     (0.55, ellipse(-0.05, 0.22, 0.09, 0.06, 12)),
     (0.42, ellipse(-0.06, 0.25, 0.07, 0.05, 12)),
-], material=EXHAUST)
-cyl(Vector((0.42, -0.06, 0.25)), Vector((0.36, -0.07, 0.27)), 0.03, material=CHROME)
+], material=EXHAUST)["stock"] = "muffler"
+cyl(Vector((0.42, -0.06, 0.25)), Vector((0.36, -0.07, 0.27)), 0.03, material=CHROME)["stock"] = "muffler"
 
 # ---------------------------------------------------------------- fuel tank (10 L) + shrouds (écopes)
 loft("tank", [
@@ -369,6 +371,49 @@ def place_camera(azimuth_deg, elev_deg=8):
     cam.location = pos
     cam.rotation_euler = (CENTER - pos).to_track_quat("-Z", "Y").to_euler()
 
+# ---------------------------------------------------------------- accessories (simplified representations of catalog parts)
+ACC_OBJS = []
+def acc(o):
+    o["accessory"] = True; ACC_OBJS.append(o); return o
+
+CARBON = mat("carbon", (0.03, 0.03, 0.035), metallic=0.2, rough=0.2, coat=1.0)
+TITAN = mat("titanium", (0.55, 0.52, 0.48), metallic=1.0, rough=0.25)
+MESH_BLACK = mat("mesh_black", (0.02, 0.02, 0.02), metallic=0.5, rough=0.45)
+SMOKE = mat("smoke", (0.05, 0.05, 0.06), rough=0.05)
+TOPCASE = mat("topcase", (0.02, 0.02, 0.025), rough=0.35, coat=0.5)
+
+def build_accessory(name):
+    if name == "mivv-gp-pro":
+        # side-mounted short silencer, right side, replacing the stock underbody muffler
+        acc(cyl(Vector((0.86, -0.04, 0.30)), Vector((0.62, -0.13, 0.30)), 0.022, material=EXHAUST))
+        acc(cyl(Vector((0.62, -0.13, 0.30)), Vector((0.36, -0.17, 0.40)), 0.055, material=CARBON, verts=32))
+        acc(cyl(Vector((0.36, -0.17, 0.40)), Vector((0.31, -0.175, 0.42)), 0.045, material=TITAN, verts=32))
+    elif name == "givi-b45-sr1169":
+        acc(box(Vector((0.08, 0, 0.96)), (0.30, 0.20, 0.02), material=SATIN_BLACK, bevel=0.005))        # SR1169 plate
+        acc(box(Vector((0.02, 0, 1.12)), (0.42, 0.50, 0.30), material=TOPCASE, bevel=0.07))           # 45 L top case
+        acc(box(Vector((-0.19, 0, 1.12)), (0.01, 0.30, 0.04), material=mat("grey_insert", (0.35, 0.35, 0.37), rough=0.4)))
+    elif name == "givi-tn1199":
+        for s in (1, -1):
+            pts = [Vector((0.98, 0.10 * s, 0.70)), Vector((1.06, 0.20 * s, 0.55)), Vector((1.02, 0.22 * s, 0.38)), Vector((0.86, 0.18 * s, 0.30))]
+            for a, b in zip(pts, pts[1:]): acc(cyl(a, b, 0.0125, material=SATIN_BLACK, verts=14))
+            acc(cyl(Vector((1.03, 0.225 * s, 0.46)), Vector((1.03, 0.25 * s, 0.46)), 0.02, material=BLACK))   # integrated slider
+    elif name == "rg-radiator-guard":
+        g = box(Vector((1.035, 0, 0.60)), (0.012, 0.27, 0.25), material=MESH_BLACK, bevel=0.004, rot=(0, math.radians(-12), 0))
+        acc(g)
+        for k in range(-5, 6):
+            acc(cyl(Vector((1.045 - 0.02, k * 0.024, 0.48)), Vector((1.045 + 0.03, k * 0.024, 0.72)), 0.003, material=ALU, verts=6))
+    elif name == "puig-9653n":
+        acc(box(Vector((-0.05, 0, 0.76)), (0.16, 0.07, 0.015), material=SATIN_BLACK, bevel=0.004, rot=(0, math.radians(-30), 0)))
+        acc(box(Vector((-0.11, 0, 0.66)), (0.01, 0.20, 0.15), material=BLACK, bevel=0.004, rot=(0, math.radians(-20), 0)))
+    elif name == "rg-aero-cp0522":
+        for s in (1, -1):
+            acc(cyl(Vector((0.86, 0.10 * s, 0.62)), Vector((0.86, 0.17 * s, 0.62)), 0.008, material=ALU, verts=10))
+            acc(sphere(Vector((0.86, 0.19 * s, 0.62)), (0.035, 0.025, 0.035), material=BLACK))
+    elif name == "givi-a1164":
+        acc(box(TOP + Vector((0.10, 0, 0.16)), (0.006, 0.21, 0.28), material=SMOKE, bevel=0.01, rot=(0, math.radians(-25), 0)))
+    else:
+        raise SystemExit(f"unknown accessory {name}")
+
 # ---------------------------------------------------------------- render base + masks
 all_objs = [o for o in scene.objects if o.type == "MESH" and o is not ground]
 mask_white = bpy.data.materials.new("mask_white"); mask_white.use_nodes = True
@@ -390,6 +435,29 @@ def restore():
         for i, m in enumerate(original[o.name]): o.material_slots[i].material = m
 
 angles = ONLY or list(ANGLES)
+if ACCESSORY:
+    build_accessory(ACCESSORY)
+    bike = [o for o in scene.objects if o.type == "MESH" and o is not ground and not o.get("accessory")]
+    for o in bike: o.is_holdout = True
+    if ACCESSORY == "mivv-gp-pro":
+        for o in bike:
+            if o.get("stock") == "muffler": o.hide_render = True
+    ground.hide_render = True
+    for name in angles:
+        place_camera(*ANGLES[name])
+        scene.render.filepath = os.path.join(OUT, f"acc_{ACCESSORY}_{name}.png")
+        bpy.ops.render.render(write_still=True)
+    raise SystemExit(0)
+if CLEANPLATE:
+    hidden = set(CLEANPLATE)
+    for o in all_objs:
+        if o.get("component") in hidden or o.get("stock") in hidden: o.hide_render = True
+    tag = "-".join(sorted(hidden))
+    for name in angles:
+        place_camera(*ANGLES[name])
+        scene.render.filepath = os.path.join(OUT, f"clean_{tag}_{name}.png")
+        bpy.ops.render.render(write_still=True)
+    raise SystemExit(0)
 for name in angles:
     place_camera(*ANGLES[name])
     restore(); ground.hide_render = False

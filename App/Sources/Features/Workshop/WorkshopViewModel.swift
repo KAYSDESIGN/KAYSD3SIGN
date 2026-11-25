@@ -22,6 +22,8 @@ final class WorkshopViewModel {
     var angle: ViewAngle = .rightProfile { didSet { scheduleRender() } }
     var selectedComponentID: MotorcycleComponent.ID?
     var showsOriginal = false { didSet { scheduleRender() } }
+    /// Live preview of a style being edited in a studio (not recorded in history until applied).
+    private(set) var previewStyle: (id: MotorcycleComponent.ID, style: ComponentStyle)?
 
     private let projectID: CustomizationProject.ID
     @ObservationIgnored
@@ -79,6 +81,23 @@ final class WorkshopViewModel {
 
     func isModified(_ id: MotorcycleComponent.ID) -> Bool { editor?.isModified(id) ?? false }
 
+    /// Current wrap of the selected component, if any.
+    var selectedWrap: WrapDesign? {
+        guard let id = selectedComponentID, case .wrap(let w)? = editor?.effectiveStyle(of: id) else { return nil }
+        return w
+    }
+
+    func preview(_ style: ComponentStyle?) {
+        if let style, let id = selectedComponentID { previewStyle = (id, style) } else { previewStyle = nil }
+        scheduleRender()
+    }
+
+    func apply(wrap: WrapDesign) {
+        guard let id = selectedComponentID else { return }
+        previewStyle = nil
+        mutate { try $0.setWrap(wrap, on: id) }
+    }
+
     // MARK: Intents
 
     func apply(color: PaintColor) {
@@ -95,6 +114,7 @@ final class WorkshopViewModel {
 
     func apply(_ material: MFDomain.Material) {
         guard let id = selectedComponentID else { return }
+        previewStyle = nil
         mutate { try $0.setPaint(material, on: id) }
     }
 
@@ -168,7 +188,11 @@ final class WorkshopViewModel {
         let builder = RenderPlanBuilder(vehicle: e.vehicle, accessoryVariant: { fitted[$0] })
         let angle = self.angle
         do {
-            let plan = try e.renderPlan(angle: angle, using: builder)
+            let preview = previewStyle
+            let plan = try builder.plan(for: e.configuration, angle: angle) { id in
+                if let preview, preview.id == id { return preview.style }
+                return e.effectiveStyle(of: id)
+            }
             let original = try builder.plan(for: ProjectConfiguration(vehicleVariantID: e.vehicle.id,
                                                                       originalColorwayID: e.configuration.originalColorwayID),
                                             angle: angle) { id in

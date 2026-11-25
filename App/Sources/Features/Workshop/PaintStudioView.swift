@@ -22,230 +22,260 @@ struct PaintStudioView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                previewSection
-                colorSection
-                rgbSection
-                hsbSection
-                memorySection
-                referencesSection
-                photoSection
-                effectSection
-                parametersSection
-                multicolorSection
+            ScrollView {
+                VStack(alignment: .leading, spacing: MFSpacing.m) {
+                    stage
+                    colorPanel
+                    channelsPanel
+                    memoryPanel
+                    referencesPanel
+                    photoPanel
+                    effectPanel
+                    parametersPanel
+                    multicolorPanel
+                }
+                .padding(.horizontal, MFSpacing.screen)
+                .padding(.bottom, 90)
+            }
+            .background(MFColor.background.ignoresSafeArea())
+            .safeAreaInset(edge: .bottom) {
+                MFWideButton("Appliquer la peinture", systemImage: "paintbrush.fill") { apply() }
+                    .padding(.horizontal, MFSpacing.screen)
+                    .padding(.bottom, MFSpacing.s)
             }
             .navigationTitle(vm.selectedComponent?.displayName ?? "Peinture")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Annuler") { dismiss() } }
-                ToolbarItem(placement: .confirmationAction) { Button("Appliquer") { apply() } }
+                ToolbarItem(placement: .cancellationAction) { Button("Annuler") { vm.preview(nil); dismiss() } }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        Task { await model.updateFavorites { ColorMemory.toggleFavorite(color, in: &$0) } }
+                    } label: {
+                        Image(systemName: ColorMemory.isFavorite(color, in: model.favorites) ? "star.fill" : "star")
+                    }
+                    .accessibilityLabel(ColorMemory.isFavorite(color, in: model.favorites) ? "Retirer des couleurs favorites" : "Ajouter aux couleurs favorites")
+                }
             }
             .onAppear(perform: loadCurrent)
             .onChange(of: photoItem) { loadPhoto() }
+            .onChange(of: draft) { vm.preview(.paint(draft)) }
         }
     }
 
-    // MARK: Sections
+    /// Material being edited (live preview on the bike).
+    private var draft: MFDomain.Material {
+        var p = params
+        p.gradientStops = isBicolor ? [GradientStop(position: 0, color: color), GradientStop(position: 1, color: secondColor)] : []
+        let existing = vm.selectedMaterial?.baseColor
+        let paint = existing?.rgb.hexString == color.hexString ? existing! : PaintColor(id: Identifier("custom.\(color.hexString)"), name: color.hexString, rgb: color)
+        return MFDomain.Material(baseColor: paint, effect: effect, parameters: p)
+    }
 
-    private var previewSection: some View {
-        Section {
-            HStack(spacing: MFSpacing.m) {
+    // MARK: Panels
+
+    private var stage: some View {
+        ZStack(alignment: .bottomLeading) {
+            WorkshopStage(vm: vm)
+                .frame(height: 230)
+                .clipShape(RoundedRectangle(cornerRadius: MFRadius.card, style: .continuous))
+            HStack(spacing: MFSpacing.xs) {
                 MFFinishSample(effect: effect, color: color.adjusted(by: params).swiftUIColor, secondary: params.secondaryColor?.swiftUIColor)
-                    .frame(width: 96, height: 64)
-                VStack(alignment: .leading, spacing: MFSpacing.xxs) {
-                    Text(color.hexString).font(MFTypography.headline.monospaced())
-                    Text(effect.localizedName).font(MFTypography.callout).foregroundStyle(MFColor.textSecondary)
-                    if effect.isLightingSimulation { MFBadge(.simulation) }
+                    .frame(width: 44, height: 30)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(color.hexString).font(MFTypography.captionEmphasized.monospaced())
+                    Text(effect.localizedName).font(MFTypography.caption)
                 }
-                Spacer()
-                Button {
-                    Task { await model.updateFavorites { ColorMemory.toggleFavorite(color, in: &$0) } }
-                } label: {
-                    Image(systemName: ColorMemory.isFavorite(color, in: model.favorites) ? "star.fill" : "star")
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(MFColor.accent)
-                .accessibilityLabel(ColorMemory.isFavorite(color, in: model.favorites) ? "Retirer des couleurs favorites" : "Ajouter aux couleurs favorites")
+                if effect.isLightingSimulation { MFBadge(.simulation) }
             }
-        } footer: {
-            Text("Échantillon illustratif. Le rendu sur la moto conserve les ombres et reflets de la photo.")
+            .padding(MFSpacing.xs)
+            .mfGlass(in: RoundedRectangle(cornerRadius: MFRadius.medium, style: .continuous))
+            .padding(MFSpacing.s)
         }
     }
 
-    private var colorSection: some View {
-        Section("Couleur") {
+    private var colorPanel: some View {
+        MFPanel("Couleur", trailing: AnyView(
             ColorPicker("Sélecteur chromatique", selection: Binding(get: { color.swiftUIColor }, set: { set($0.rgbColor) }), supportsOpacity: false)
-            HStack {
-                Text("HEX")
+                .labelsHidden()
+        )) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: MFSpacing.xs), count: 6), spacing: MFSpacing.s) {
+                ForEach(PaintPresets.quickColors) { c in
+                    MFColorSwatch(color: c.rgb.swiftUIColor, name: c.name, isSelected: c.rgb.hexString == color.hexString) { set(c.rgb) }
+                }
+            }
+            HStack(spacing: MFSpacing.xs) {
+                Text("HEX").font(MFTypography.captionEmphasized).foregroundStyle(MFColor.textSecondary)
                 TextField("#RRGGBB", text: $hex)
                     .font(MFTypography.body.monospaced())
                     .textInputAutocapitalization(.characters)
                     .autocorrectionDisabled()
-                    .multilineTextAlignment(.trailing)
                     .onSubmit { if let c = RGBColor(hex: hex) { set(c) } else { hex = color.hexString } }
+                    .padding(.horizontal, MFSpacing.s)
+                    .padding(.vertical, MFSpacing.xs)
+                    .background(MFColor.background, in: Capsule())
             }
         }
     }
 
-    private var rgbSection: some View {
-        Section("RGB") {
+    private var channelsPanel: some View {
+        let hsb = color.hsb
+        return MFPanel("RGB · HSB") {
             channel("Rouge", value: Binding(get: { color.red }, set: { set(RGBColor(red: $0, green: color.green, blue: color.blue)) }))
             channel("Vert", value: Binding(get: { color.green }, set: { set(RGBColor(red: color.red, green: $0, blue: color.blue)) }))
             channel("Bleu", value: Binding(get: { color.blue }, set: { set(RGBColor(red: color.red, green: color.green, blue: $0)) }))
+            Divider()
+            MFSliderRow("Teinte", value: Binding(get: { hsb.hue }, set: { set(RGBColor(hsb: HSBColor(hue: $0, saturation: hsb.saturation, brightness: hsb.brightness))) }),
+                        in: 0...359, format: MFSliderRow.degrees)
+            MFSliderRow("Saturation", value: Binding(get: { hsb.saturation }, set: { set(RGBColor(hsb: HSBColor(hue: hsb.hue, saturation: $0, brightness: hsb.brightness))) }),
+                        in: 0...1, format: MFSliderRow.percent)
+            MFSliderRow("Luminosité", value: Binding(get: { hsb.brightness }, set: { set(RGBColor(hsb: HSBColor(hue: hsb.hue, saturation: hsb.saturation, brightness: $0))) }),
+                        in: 0...1, format: MFSliderRow.percent)
         }
     }
 
-    private var hsbSection: some View {
-        let hsb = color.hsb
-        return Section("HSB") {
-            slider("Teinte", value: Binding(get: { hsb.hue }, set: { set(RGBColor(hsb: HSBColor(hue: $0, saturation: hsb.saturation, brightness: hsb.brightness))) }),
-                   range: 0...359, format: { "\(Int($0))°" })
-            slider("Saturation", value: Binding(get: { hsb.saturation }, set: { set(RGBColor(hsb: HSBColor(hue: hsb.hue, saturation: $0, brightness: hsb.brightness))) }),
-                   range: 0...1, format: percent)
-            slider("Luminosité", value: Binding(get: { hsb.brightness }, set: { set(RGBColor(hsb: HSBColor(hue: hsb.hue, saturation: hsb.saturation, brightness: $0))) }),
-                   range: 0...1, format: percent)
-        }
-    }
-
-    @ViewBuilder private var memorySection: some View {
-        Section("Favorites") {
+    private var memoryPanel: some View {
+        MFPanel("Mes couleurs") {
+            Text("Favorites").font(MFTypography.captionEmphasized).foregroundStyle(MFColor.textSecondary)
             if model.favorites.colors.isEmpty {
-                Text("Touchez l'étoile pour enregistrer une couleur.").font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
-            } else {
-                swatchRow(model.favorites.colors)
-            }
-        }
-        Section("Historique") {
+                Text("Touchez l'étoile en haut pour enregistrer une couleur.").font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
+            } else { swatchRow(model.favorites.colors) }
+            Text("Historique").font(MFTypography.captionEmphasized).foregroundStyle(MFColor.textSecondary)
             if model.favorites.recentColors.isEmpty {
                 Text("Les couleurs appliquées apparaîtront ici.").font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
-            } else {
-                swatchRow(model.favorites.recentColors)
-            }
+            } else { swatchRow(model.favorites.recentColors) }
         }
     }
 
-    @ViewBuilder private var referencesSection: some View {
+    @ViewBuilder private var referencesPanel: some View {
         let refs = (model.catalog?.referenceColors ?? []).filter(\.isVerifiedReference)
-        Section {
+        let originals = vm.vehicle?.colorways ?? []
+        MFPanel("Références") {
+            if !originals.isEmpty {
+                Text("Coloris d'origine Honda").font(MFTypography.captionEmphasized).foregroundStyle(MFColor.textSecondary)
+                ForEach(originals) { c in
+                    HStack {
+                        Text(c.name).font(MFTypography.callout).foregroundStyle(MFColor.textPrimary)
+                        Spacer()
+                        MFBadge(.verified)
+                    }
+                }
+                Text("Honda ne publie pas de valeur numérique pour ces teintes : utilisez l'import photo pour en approcher une.")
+                    .font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
+            }
             if refs.isEmpty {
                 HStack {
-                    Text("RAL et couleurs constructeur")
+                    Text("Nuancier RAL").font(MFTypography.callout).foregroundStyle(MFColor.textPrimary)
                     Spacer()
                     MFBadge(.comingSoon)
                 }
+                Text("Les valeurs RAL sont sous licence RAL gGmbH : elles seront affichées dès qu'une source autorisée sera intégrée.")
+                    .font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
             } else {
                 ForEach(refs) { ref in
                     Button { set(ref.rgb) } label: {
                         HStack {
                             Circle().fill(ref.rgb.swiftUIColor).frame(width: 22, height: 22)
-                            Text(ref.name)
+                            Text(ref.name).foregroundStyle(MFColor.textPrimary)
                             Spacer()
                             MFBadge(.verified)
                         }
                     }
-                    .foregroundStyle(MFColor.textPrimary)
+                    .buttonStyle(.plain)
                 }
             }
-        } header: {
-            Text("Références")
-        } footer: {
-            if refs.isEmpty { Text("Les teintes de référence ne seront affichées qu'avec une source autorisée et vérifiée.") }
         }
     }
 
-    private var photoSection: some View {
-        Section {
+    private var photoPanel: some View {
+        MFPanel("Couleur depuis une photo", trailing: AnyView(
             PhotosPicker(selection: $photoItem, matching: .images) {
-                Label("Importer une couleur depuis une photo", systemImage: "eyedropper")
+                Label("Importer", systemImage: "eyedropper").font(MFTypography.caption.weight(.semibold))
             }
+            .buttonStyle(.mfPrimary)
+        )) {
             if let photo {
                 PhotoSampler(image: photo) { set($0) }
                     .frame(height: 200)
+                    .clipShape(RoundedRectangle(cornerRadius: MFRadius.medium, style: .continuous))
+                Text("Touchez la zone peinte. Reflets et ombres sont écartés autant que possible : le résultat reste une approximation.")
+                    .font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
+            } else {
+                Text("Prenez la couleur d'une moto, d'un objet ou d'un nuancier photographié.")
+                    .font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
             }
-        } footer: {
-            if photo != nil { Text("Touchez la zone peinte. Les reflets et ombres sont ignorés autant que possible : la couleur obtenue reste une approximation.") }
         }
     }
 
-    private var effectSection: some View {
-        Section("Finitions et effets") {
-            ForEach(PaintEffect.allCases, id: \.self) { e in
-                Button {
-                    effect = e
-                    params = .defaults(for: e)
-                } label: {
-                    HStack {
-                        MFFinishSample(effect: e, color: color.swiftUIColor).frame(width: 36, height: 24)
-                        Text(e.localizedName).foregroundStyle(MFColor.textPrimary)
-                        Spacer()
-                        if e.renderAvailability == .planned {
-                            MFBadge(.comingSoon)
-                        } else if e.isLightingSimulation {
-                            MFBadge(.simulation)
+    private var effectPanel: some View {
+        MFPanel("Finitions et effets") {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: MFSpacing.xs), count: 4), spacing: MFSpacing.s) {
+                ForEach(PaintEffect.allCases, id: \.self) { e in
+                    VStack(spacing: 2) {
+                        MFFinishCard(effect: e, color: color.swiftUIColor, isSelected: e == effect) {
+                            effect = e
+                            params = .defaults(for: e)
                         }
-                        if e == effect { Image(systemName: "checkmark").foregroundStyle(MFColor.accent) }
+                        .disabled(e.renderAvailability == .planned)
+                        .opacity(e.renderAvailability == .planned ? 0.45 : 1)
+                        if e.renderAvailability == .planned {
+                            Text("Bientôt").font(.system(.caption2)).foregroundStyle(MFColor.textSecondary)
+                        } else if e.isLightingSimulation {
+                            Text("Simulation").font(.system(.caption2)).foregroundStyle(MFColor.accent)
+                        }
                     }
                 }
-                .disabled(e.renderAvailability == .planned)
-                .accessibilityAddTraits(e == effect ? .isSelected : [])
             }
         }
     }
 
-    private var parametersSection: some View {
-        Section("Réglages avancés") {
-            slider("Teinte", value: $params.hueShiftDegrees, range: -180...180, format: { "\(Int($0))°" })
-            slider("Saturation", value: $params.saturation, range: 0...2, format: percent)
-            slider("Luminosité", value: $params.brightness, range: -1...1, format: percent)
-            slider("Brillance", value: $params.gloss, range: 0...1, format: percent)
-            slider("Rugosité", value: $params.roughness, range: 0...1, format: percent)
+    private var parametersPanel: some View {
+        MFPanel("Réglages avancés") {
+            MFSliderRow("Teinte", value: $params.hueShiftDegrees, in: -180...180, format: MFSliderRow.degrees)
+            MFSliderRow("Saturation", value: $params.saturation, in: 0...2, format: MFSliderRow.percent)
+            MFSliderRow("Luminosité", value: $params.brightness, in: -1...1, format: MFSliderRow.percent)
+            MFSliderRow("Brillance", value: $params.gloss, in: 0...1, format: MFSliderRow.percent)
+            MFSliderRow("Rugosité", value: $params.roughness, in: 0...1, format: MFSliderRow.percent)
             if effect != .gloss && effect != .matte && effect != .satin {
-                slider("Intensité de l'effet", value: $params.effectIntensity, range: 0...1, format: percent)
+                MFSliderRow("Intensité de l'effet", value: $params.effectIntensity, in: 0...1, format: MFSliderRow.percent)
             }
             if effect == .pearl {
-                slider("Intensité du nacrage", value: $params.pearlIntensity, range: 0...1, format: percent)
-                ColorPicker("Couleur secondaire", selection: Binding(get: { (params.secondaryColor ?? .white).swiftUIColor },
-                                                                    set: { params.secondaryColor = $0.rgbColor }), supportsOpacity: false)
+                MFSliderRow("Intensité du nacrage", value: $params.pearlIntensity, in: 0...1, format: MFSliderRow.percent)
+                HStack {
+                    Text("Couleur secondaire").font(MFTypography.callout)
+                    Spacer()
+                    ColorPicker("Couleur secondaire", selection: Binding(get: { (params.secondaryColor ?? .white).swiftUIColor },
+                                                                        set: { params.secondaryColor = $0.rgbColor }), supportsOpacity: false)
+                        .labelsHidden()
+                }
             }
             if effect.usesFlakes {
-                slider("Taille des paillettes", value: $params.flakeSize, range: 0...1, format: percent)
-                slider("Densité des paillettes", value: $params.flakeDensity, range: 0...1, format: percent)
+                MFSliderRow("Taille des paillettes", value: $params.flakeSize, in: 0...1, format: MFSliderRow.percent)
+                MFSliderRow("Densité des paillettes", value: $params.flakeDensity, in: 0...1, format: MFSliderRow.percent)
             }
         }
     }
 
-    private var multicolorSection: some View {
-        Section {
-            Toggle("Peinture bicolore", isOn: $isBicolor)
+    private var multicolorPanel: some View {
+        MFPanel("Bicolore", trailing: AnyView(Toggle("Bicolore", isOn: $isBicolor).labelsHidden().tint(MFColor.accent))) {
             if isBicolor {
-                ColorPicker("Seconde couleur", selection: Binding(get: { secondColor.swiftUIColor }, set: { secondColor = $0.rgbColor }), supportsOpacity: false)
-                slider("Angle du dégradé", value: $params.gradientAngleDegrees, range: 0...359, format: { "\(Int($0))°" })
+                HStack {
+                    Text("Seconde couleur").font(MFTypography.callout)
+                    Spacer()
+                    ColorPicker("Seconde couleur", selection: Binding(get: { secondColor.swiftUIColor }, set: { secondColor = $0.rgbColor }), supportsOpacity: false)
+                        .labelsHidden()
+                }
+                MFSliderRow("Angle du dégradé", value: $params.gradientAngleDegrees, in: 0...359, format: MFSliderRow.degrees)
+            } else {
+                Text("Transition entre deux couleurs sur l'élément.").font(MFTypography.caption).foregroundStyle(MFColor.textSecondary)
             }
-        } header: {
-            Text("Multicolore")
-        } footer: {
-            Text("Transition entre deux couleurs sur l'élément. Plus de deux teintes : bientôt disponible.")
         }
     }
 
     // MARK: Building blocks
 
     private func channel(_ label: String, value: Binding<Double>) -> some View {
-        slider(label, value: value, range: 0...1, format: { "\(Int(($0 * 255).rounded()))" })
+        MFSliderRow(label, value: value, in: 0...1, format: { "\(Int(($0 * 255).rounded()))" })
     }
-
-    private func slider(_ label: String, value: Binding<Double>, range: ClosedRange<Double>, format: @escaping (Double) -> String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            HStack {
-                Text(label)
-                Spacer()
-                Text(format(value.wrappedValue)).font(MFTypography.callout.monospacedDigit()).foregroundStyle(MFColor.textSecondary)
-            }
-            Slider(value: value, in: range).accessibilityLabel(label).accessibilityValue(format(value.wrappedValue))
-        }
-    }
-
-    private let percent: (Double) -> String = { "\(Int(($0 * 100).rounded())) %" }
 
     private func swatchRow(_ colors: [RGBColor]) -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -287,12 +317,9 @@ struct PaintStudioView: View {
     }
 
     private func apply() {
-        var p = params
-        p.gradientStops = isBicolor ? [GradientStop(position: 0, color: color), GradientStop(position: 1, color: secondColor)] : []
-        let existing = vm.selectedMaterial?.baseColor
-        let paint = existing?.rgb.hexString == color.hexString ? existing! : PaintColor.custom(color)
-        vm.apply(MFDomain.Material(baseColor: paint, effect: effect, parameters: p))
-        Task { await model.updateFavorites { ColorMemory.pushRecent(color, into: &$0) } }
+        let material = draft
+        vm.apply(material)
+        Task { await model.updateFavorites { ColorMemory.pushRecent(material.baseColor.rgb, into: &$0) } }
         dismiss()
     }
 }

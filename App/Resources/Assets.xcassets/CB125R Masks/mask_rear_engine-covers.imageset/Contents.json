@@ -1,0 +1,15 @@
+{
+ "images": [
+  {
+   "idiom": "universal",
+   "filename": "mask_rear_engine-covers.png"
+  }
+ ],
+ "info": {
+  "author": "xcode",
+  "version": 1
+ },
+ "properties": {
+  "preserves-vector-representation": false
+ }
+}

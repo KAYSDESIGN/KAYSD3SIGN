@@ -12,7 +12,10 @@ struct MotoForgeApp: App {
                 .environment(environment.router)
                 .environment(\.compositor, environment.compositor)
                 .tint(MFColor.accent)
-                .task { await environment.model.load() }
+                .task {
+                    await environment.model.load()
+                    if ProcessInfo.processInfo.arguments.contains("UITEST_SEED") { await environment.model.seedForUITests() }
+                }
         }
     }
 }

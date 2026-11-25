@@ -11,6 +11,10 @@ import MFRendering
 enum BundleAssets {
     /// Loads an image from the asset catalog (or a file in the bundle) as a Core Image image.
     static func ciImage(named name: String) -> CIImage? {
+        if name.hasPrefix("file:") {
+            let url = UserWrapImages.url(String(name.dropFirst(5)))
+            return CIImage(contentsOf: url)
+        }
         guard let ui = UIImage(named: name), let cg = ui.cgImage else { return nil }
         return CIImage(cgImage: cg)
     }

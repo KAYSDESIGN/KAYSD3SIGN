@@ -26,7 +26,7 @@ final class RootNavigationUITests: XCTestCase {
         app.launch()
         app.buttons["Garage"].tap()
         app.navigationBars["Mon garage"].buttons["Ajouter une moto"].tap()
-        let add = app.navigationBars["Ajouter une moto"].buttons["Ajouter"]
+        let add = app.buttons["addMotorcycle.confirm"]
         XCTAssertTrue(add.waitForExistence(timeout: 3))
         add.tap()
         app.buttons["Accueil"].tap()

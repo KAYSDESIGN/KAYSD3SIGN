@@ -530,3 +530,96 @@ public struct MFStageModeButton: View {
     }
 }
 #endif
+
+#if canImport(SwiftUI)
+// MARK: - Studio building blocks (designed from the validated mockups' card language)
+
+/// White rounded card with a section title, used by studios and settings.
+public struct MFPanel<Content: View>: View {
+    let title: String?
+    let trailing: AnyView?
+    let content: Content
+
+    public init(_ title: String? = nil, trailing: AnyView? = nil, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.trailing = trailing
+        self.content = content()
+    }
+
+    public var body: some View {
+        VStack(alignment: .leading, spacing: MFSpacing.s) {
+            if title != nil || trailing != nil {
+                HStack {
+                    if let title { MFSectionHeader(title) }
+                    Spacer(minLength: 0)
+                    if let trailing { trailing }
+                }
+            }
+            content
+        }
+        .padding(MFSpacing.m)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(MFColor.surface, in: RoundedRectangle(cornerRadius: MFRadius.card, style: .continuous))
+    }
+}
+
+/// Labelled slider with value readout, accent-tinted.
+public struct MFSliderRow: View {
+    let label: String
+    @Binding var value: Double
+    let range: ClosedRange<Double>
+    let format: (Double) -> String
+
+    public init(_ label: String, value: Binding<Double>, in range: ClosedRange<Double>, format: @escaping (Double) -> String) {
+        self.label = label
+        self._value = value
+        self.range = range
+        self.format = format
+    }
+
+    public var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack {
+                Text(label).font(MFTypography.callout).foregroundStyle(MFColor.textPrimary)
+                Spacer()
+                Text(format(value)).font(MFTypography.callout.monospacedDigit()).foregroundStyle(MFColor.textSecondary)
+            }
+            Slider(value: $value, in: range)
+                .tint(MFColor.accent)
+                .accessibilityLabel(label)
+                .accessibilityValue(format(value))
+        }
+    }
+
+    public static func percent(_ v: Double) -> String { "\(Int((v * 100).rounded())) %" }
+    public static func degrees(_ v: Double) -> String { "\(Int(v.rounded()))°" }
+}
+
+/// Settings-style row inside an MFPanel: icon, title, trailing value/accessory.
+public struct MFRow<Trailing: View>: View {
+    let systemImage: String
+    let title: String
+    let trailing: Trailing
+
+    public init(_ title: String, systemImage: String, @ViewBuilder trailing: () -> Trailing) {
+        self.title = title
+        self.systemImage = systemImage
+        self.trailing = trailing()
+    }
+
+    public var body: some View {
+        HStack(spacing: MFSpacing.s) {
+            Image(systemName: systemImage)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(MFColor.accent)
+                .frame(width: 32, height: 32)
+                .background(MFColor.accentSoft, in: RoundedRectangle(cornerRadius: MFRadius.small, style: .continuous))
+            Text(title).font(MFTypography.callout).foregroundStyle(MFColor.textPrimary)
+            Spacer(minLength: MFSpacing.xs)
+            trailing
+        }
+        .padding(.vertical, MFSpacing.xxs)
+        .accessibilityElement(children: .combine)
+    }
+}
+#endif

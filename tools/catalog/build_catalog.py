@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "Packages/MotoForgeKit/Sources/MFCatalog/Resources/catalog.json")
 ASSETS = sys.argv[1] if len(sys.argv) > 1 else None
+ACC_ASSETS = sys.argv[2] if len(sys.argv) > 2 else None
 VERIFIED_AT = "2026-11-25T00:00:00Z"
 
 def ver(source, url=None, notes=None):
@@ -269,6 +270,34 @@ for code, slug, name, colour, desc in TOPCASES:
     listed_only = code in ("B39N", "E340 VISION", "B38 BERNINA")
     givi(code, slug, "topcase", name, "other", f"Top case MONOLOCK, {desc}. Platine et kit universel inclus. Nécessite le support SR1169.",
          colour, ["SR1169"], url=GIVI_BIKE if listed_only else None)
+
+# ---------------------------------------------------------------- accessory visuals (tools/bike3d --accessory)
+ACC_VISUALS = {  # render id -> (catalog variant ids, hidden components, extra erase part)
+    "givi-b45-sr1169": (["givi.b45.std"], [], None),
+    "givi-a1164": (["givi.a1164.std"], [], None),
+    "rg-radiator-guard": (["rg.radiator-guard.cb125r.black"], [], None),
+    "puig-9653n": (["puig.license-support.cb125r.9653n"], ["rear-fender"], None),
+    "givi-tn1199": (["givi.tn1199.std"], [], None),
+    "rg-aero-cp0522": (["rg.aero-crash-protectors.cb125r21.cp0522bl"], [], None),
+    "mivv-gp-pro": (["mivv.gp-pro.cb125r21.h.077.l2p"], [], "muffler"),
+}
+if ACC_ASSETS:
+    index = {v["id"]: v for a in accessories for v in a["variants"]}
+    for render, (variant_ids, hides, erase) in ACC_VISUALS.items():
+        assets = []
+        for angle in ANGLES:
+            if not os.path.exists(os.path.join(ACC_ASSETS, f"acc_{render}_{angle}.png")):
+                continue
+            assets.append({
+                "angle": angle, "assetName": f"acc_{render}_{angle}",
+                "assetAnchor": {"x": 0.5, "y": 0.5},
+                "placement": {"position": {"x": 0.5, "y": 0.5}, "scale": 1, "rotationDegrees": 0},
+                "hidesComponents": [f"{GEN}.{h}" for h in hides],
+                "eraseMaskAssets": [f"mask_{angle}_{erase}"] if erase else [],
+                "zIndex": 100, "occludedBy": [],
+            })
+        for vid in variant_ids:
+            index[vid]["visualAssets"] = assets
 
 snapshot = {
     "schemaVersion": 1, "revision": 2, "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

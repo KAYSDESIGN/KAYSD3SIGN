@@ -15,6 +15,7 @@ struct WorkshopView: View {
     @State private var segment: Segment = .customize
     @State private var mode: Mode = .color
     @State private var showStudio = false
+    @State private var showCovering = false
 
     init(projectID: CustomizationProject.ID) {
         _vm = State(initialValue: WorkshopViewModel(projectID: projectID))
@@ -37,6 +38,7 @@ struct WorkshopView: View {
         .task { vm.start(model: model, compositor: compositor) }
         .onDisappear { Task { await vm.saveNow() } }
         .sheet(isPresented: $showStudio) { PaintStudioView(vm: vm) }
+        .sheet(isPresented: $showCovering) { CoveringStudioView(vm: vm) }
     }
 
     private var ready: some View {
@@ -57,7 +59,7 @@ struct WorkshopView: View {
                         partsPanel
                     }
                 case .configure:
-                    ConfigurePanel(vm: vm, openStudio: { showStudio = true })
+                    ConfigurePanel(vm: vm, openStudio: { showStudio = true }, openCovering: { showCovering = true })
                 }
             }
             .padding(.horizontal, MFSpacing.screen)
@@ -175,10 +177,16 @@ struct WorkshopView: View {
     }
 
     private var advancedEntry: some View {
-        Button { showStudio = true } label: {
-            Label("Studio de peinture avancé", systemImage: "slider.horizontal.below.square.filled.and.square")
+        HStack(spacing: MFSpacing.s) {
+            Button { showStudio = true } label: {
+                Label("Peinture avancée", systemImage: "slider.horizontal.below.square.filled.and.square")
+            }
+            .buttonStyle(.mfSecondary)
+            Button { showCovering = true } label: {
+                Label("Covering", systemImage: "square.on.square.dashed")
+            }
+            .buttonStyle(.mfSecondary)
         }
-        .buttonStyle(.mfSecondary)
     }
 
     private var partsPanel: some View {
@@ -221,7 +229,7 @@ struct WorkshopView: View {
 }
 
 /// The rendered bike with zoom, pan and direct component selection.
-private struct WorkshopStage: View {
+struct WorkshopStage: View {
     @Bindable var vm: WorkshopViewModel
     @State private var scale: CGFloat = 1
     @State private var baseScale: CGFloat = 1
@@ -278,7 +286,7 @@ private struct WorkshopStage: View {
 }
 
 /// Shown until the licensed CB125R reference visuals and masks are integrated.
-private struct MissingVisualsView: View {
+struct MissingVisualsView: View {
     let vm: WorkshopViewModel
     var body: some View {
         VStack(spacing: MFSpacing.s) {
@@ -306,6 +314,7 @@ private struct ConfigurePanel: View {
     @Environment(AppRouter.self) private var router
     @Bindable var vm: WorkshopViewModel
     let openStudio: () -> Void
+    let openCovering: () -> Void
     @State private var confirmReset = false
 
     var body: some View {
@@ -331,7 +340,7 @@ private struct ConfigurePanel: View {
             VStack(alignment: .leading, spacing: MFSpacing.s) {
                 MFSectionHeader("Modes")
                 modeRow("Peinture", "paintbrush", available: true) { openStudio() }
-                modeRow("Covering", "square.on.square.dashed", available: false) {}
+                modeRow("Covering", "square.on.square.dashed", available: true) { openCovering() }
                 modeRow("Accessoires", "cube", available: true) { router.openCatalog() }
                 modeRow("Détails", "sparkles", available: false) {}
             }

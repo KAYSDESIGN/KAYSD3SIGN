@@ -20,8 +20,9 @@ struct AppEnvironment {
     static func live() -> AppEnvironment {
         let log = Logger(subsystem: "app.motoforge", category: "bootstrap")
         let store: any ProjectStore
+        let uiTesting = ProcessInfo.processInfo.arguments.contains("UITEST")
         do {
-            store = try SwiftDataProjectStore.make()
+            store = uiTesting ? InMemoryProjectStore() : try SwiftDataProjectStore.make()
         } catch {
             log.error("SwiftData indisponible, stockage mémoire utilisé : \(error.localizedDescription)")
             store = InMemoryProjectStore()

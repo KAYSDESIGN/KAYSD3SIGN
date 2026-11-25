@@ -42,7 +42,8 @@ public final class BikeCompositor: @unchecked Sendable {
                 continue
             case .erase(let maskName):
                 let mask = try loadMask(maskName, extent: extent)
-                let fill = CIImage(color: stageColor).cropped(to: extent)
+                // Prefer a clean plate (the bike rendered without that part); fall back to the stage colour.
+                let fill = Self.cleanPlateName(forMask: maskName).flatMap(loadAsset) ?? CIImage(color: stageColor).cropped(to: extent)
                 current = blend(fill, over: current, mask: mask)
             case .component(_, let maskName, let style):
                 let mask = try loadMask(maskName, extent: extent)
@@ -67,12 +68,151 @@ public final class BikeCompositor: @unchecked Sendable {
         case .paint(let material):
             return paint(base, material: material, mask: mask)
         case .wrap(let wrap):
-            // v1: films are rendered as paint; stripes, patterns, stickers and imported logos are planned.
-            for layer in wrap.layers.reversed() {
-                if case .film(let material, _) = layer.content { return paint(base, material: material, mask: mask) }
-            }
-            return base
+            return covering(base, wrap: wrap, mask: mask)
         }
+    }
+
+    // MARK: - Covering (vinyl wrap layers)
+
+    /// Renders wrap layers bottom-to-top. Every layer keeps the photo shading (overlay blend on the
+    /// normalized luminance), is clipped to the component mask and to its own region.
+    private func covering(_ base: CIImage, wrap: WrapDesign, mask: CIImage) -> CIImage {
+        let extent = base.extent
+        let bounds = maskBounds(mask, extent: extent)
+        let shading = normalizedShading(base, mask: mask, gloss: 0.8, roughness: 0.2)
+        var result = base
+        for layer in wrap.layers {
+            // Region of the component covered by this layer (normalized to the component bounds, top-left origin).
+            let r = layer.region
+            let regionRect = CGRect(x: bounds.minX + r.x * bounds.width,
+                                    y: bounds.maxY - (r.y + r.height) * bounds.height,
+                                    width: r.width * bounds.width, height: r.height * bounds.height)
+            guard let (color, coverage) = layerImage(layer, shading: shading, base: base, mask: mask, bounds: bounds, extent: extent) else { continue }
+            var layerMask = mask.applyingFilter("CIMultiplyCompositing", parameters: [kCIInputBackgroundImageKey: coverage])
+            if wrap.coverage == .partial || r != .full {
+                let regionMask = CIImage(color: .white).cropped(to: regionRect)
+                    .composited(over: CIImage(color: .black).cropped(to: extent))
+                layerMask = layerMask.applyingFilter("CIMultiplyCompositing", parameters: [kCIInputBackgroundImageKey: regionMask])
+            }
+            if layer.opacity < 1 {
+                layerMask = layerMask.applyingFilter("CIColorMatrix", parameters: [
+                    "inputRVector": CIVector(x: layer.opacity, y: 0, z: 0, w: 0),
+                    "inputGVector": CIVector(x: 0, y: layer.opacity, z: 0, w: 0),
+                    "inputBVector": CIVector(x: 0, y: 0, z: layer.opacity, w: 0)
+                ])
+            }
+            result = blend(color, over: result, mask: layerMask.cropped(to: extent))
+        }
+        return result.cropped(to: extent)
+    }
+
+    /// Returns (colored layer image, coverage mask white where the layer has content).
+    private func layerImage(_ layer: WrapLayer, shading: CIImage, base: CIImage, mask: CIImage, bounds: CGRect, extent: CGRect) -> (CIImage, CIImage)? {
+        let full = CIImage(color: .white).cropped(to: extent)
+        func shaded(_ colorImage: CIImage) -> CIImage {
+            shading.applyingFilter("CIOverlayBlendMode", parameters: [kCIInputBackgroundImageKey: colorImage]).cropped(to: extent)
+        }
+        func solid(_ c: RGBColor) -> CIImage { CIImage(color: CIColor(red: c.red, green: c.green, blue: c.blue)).cropped(to: extent) }
+        let p = layer.placement
+        let center = CGPoint(x: extent.width * p.position.x, y: extent.height * (1 - p.position.y))
+        let size = max(bounds.width, bounds.height) * CGFloat(p.scale)
+        let rotation = CGAffineTransform(translationX: -center.x, y: -center.y)
+            .concatenating(CGAffineTransform(rotationAngle: -p.rotationDegrees * .pi / 180))
+            .concatenating(CGAffineTransform(translationX: center.x, y: center.y))
+
+        switch layer.content {
+        case .film(let material, _):
+            return (paint(base, material: material, mask: mask), full)
+        case .gradient(let stops, let angle):
+            guard let first = stops.first, let last = stops.last else { return nil }
+            let g = gradient(from: first.color, to: last.color, angle: angle, in: bounds).composited(over: solid(first.color))
+            return (shaded(g), full)
+        case .stripe(let color, let widthRatio, let count, let spacingRatio):
+            let stripeHeight = max(bounds.height * CGFloat(widthRatio) * CGFloat(p.scale), 1)
+            let spacing = bounds.height * CGFloat(spacingRatio) * CGFloat(p.scale)
+            var stripes = CIImage(color: .black).cropped(to: extent)
+            let n = max(count, 1)
+            let total = CGFloat(n) * stripeHeight + CGFloat(n - 1) * spacing
+            for i in 0..<n {
+                let y = center.y - total / 2 + CGFloat(i) * (stripeHeight + spacing)
+                let band = CIImage(color: .white).cropped(to: CGRect(x: extent.minX - extent.width, y: y, width: extent.width * 3, height: stripeHeight))
+                stripes = band.composited(over: stripes)
+            }
+            return (shaded(solid(color)), stripes.transformed(by: rotation).cropped(to: extent))
+        case .geometricPattern(let name, let primary, let secondary):
+            let cell = max(bounds.width * 0.06 * CGFloat(p.scale), 2)
+            let pattern: CIImage
+            if name == "stripes" {
+                let f = CIFilter.stripesGenerator()
+                f.center = center; f.color0 = CIColor(red: primary.red, green: primary.green, blue: primary.blue)
+                f.color1 = CIColor(red: secondary.red, green: secondary.green, blue: secondary.blue); f.width = Float(cell); f.sharpness = 1
+                pattern = f.outputImage!
+            } else {
+                let f = CIFilter.checkerboardGenerator()
+                f.center = center; f.color0 = CIColor(red: primary.red, green: primary.green, blue: primary.blue)
+                f.color1 = CIColor(red: secondary.red, green: secondary.green, blue: secondary.blue); f.width = Float(cell); f.sharpness = 1
+                pattern = f.outputImage!
+            }
+            return (shaded(pattern.transformed(by: rotation).cropped(to: extent)), full)
+        case .sticker(let assetName):
+            guard let img = loadAsset(assetName) else { return nil }
+            return decal(img, center: center, size: size, rotation: p.rotationDegrees, extent: extent, shading: shading, tile: false)
+        case .userImage(let file, let isTexture):
+            guard let img = loadAsset("file:" + file) else { return nil }
+            return decal(img, center: center, size: size, rotation: p.rotationDegrees, extent: extent, shading: shading, tile: isTexture)
+        }
+    }
+
+    /// Places an RGBA image (sticker, logo, texture) and lets the bike shading show through.
+    private func decal(_ img: CIImage, center: CGPoint, size: CGFloat, rotation: Double, extent: CGRect, shading: CIImage, tile: Bool) -> (CIImage, CIImage) {
+        let s = size / max(img.extent.width, img.extent.height)
+        var placed = img.transformed(by: CGAffineTransform(translationX: -img.extent.midX, y: -img.extent.midY)
+            .concatenating(CGAffineTransform(scaleX: s, y: s))
+            .concatenating(CGAffineTransform(rotationAngle: -rotation * .pi / 180))
+            .concatenating(CGAffineTransform(translationX: center.x, y: center.y)))
+        if tile {
+            placed = placed.applyingFilter("CIAffineTile", parameters: [kCIInputTransformKey: NSValue(cgAffineTransform: .identity)])
+        }
+        placed = placed.cropped(to: extent)
+        // Coverage = decal alpha as a grayscale mask.
+        let alpha = placed.applyingFilter("CIColorMatrix", parameters: [
+            "inputRVector": CIVector(x: 0, y: 0, z: 0, w: 1), "inputGVector": CIVector(x: 0, y: 0, z: 0, w: 1),
+            "inputBVector": CIVector(x: 0, y: 0, z: 0, w: 1), "inputAVector": CIVector(x: 0, y: 0, z: 0, w: 0),
+            "inputBiasVector": CIVector(x: 0, y: 0, z: 0, w: 1)
+        ]).composited(over: CIImage(color: .black).cropped(to: extent))
+        let opaque = placed.composited(over: CIImage(color: .white).cropped(to: extent))
+        // Printed vinyl: decal colors multiplied by the (0.5-centred) shading, i.e. overlay.
+        let shaded = shading.applyingFilter("CIOverlayBlendMode", parameters: [kCIInputBackgroundImageKey: opaque]).cropped(to: extent)
+        return (shaded, alpha)
+    }
+
+    /// Tight bounds of the white area of a mask (Core Image coordinates).
+    private func maskBounds(_ mask: CIImage, extent: CGRect) -> CGRect {
+        let scale: CGFloat = 0.125
+        let small = mask.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+        let w = Int((extent.width * scale).rounded(.up)), h = Int((extent.height * scale).rounded(.up))
+        guard w > 0, h > 0 else { return extent }
+        var px = [UInt8](repeating: 0, count: w * h * 4)
+        context.render(small, toBitmap: &px, rowBytes: w * 4, bounds: CGRect(x: 0, y: 0, width: w, height: h), format: .RGBA8, colorSpace: nil)
+        var minX = w, minY = h, maxX = -1, maxY = -1
+        for y in 0..<h { for x in 0..<w where px[(y * w + x) * 4] > 127 {
+            minX = min(minX, x); maxX = max(maxX, x); minY = min(minY, y); maxY = max(maxY, y)
+        } }
+        guard maxX >= 0 else { return extent }
+        // Bitmap rows go top-down; Core Image y goes bottom-up.
+        return CGRect(x: CGFloat(minX) / scale, y: extent.height - CGFloat(maxY + 1) / scale,
+                      width: CGFloat(maxX - minX + 1) / scale, height: CGFloat(maxY - minY + 1) / scale)
+    }
+
+    private func normalizedShading(_ base: CIImage, mask: CIImage, gloss: Double, roughness: Double) -> CIImage {
+        let gray = base.applyingFilter("CIColorControls", parameters: [kCIInputSaturationKey: 0])
+        let average = maskedAverageLuminance(gray, mask: mask)
+        let gain = average > 0.001 ? 0.5 / average : 1
+        return gray.applyingFilter("CIColorMatrix", parameters: [
+            "inputRVector": CIVector(x: gain, y: 0, z: 0, w: 0),
+            "inputGVector": CIVector(x: 0, y: gain, z: 0, w: 0),
+            "inputBVector": CIVector(x: 0, y: 0, z: gain, w: 0)
+        ]).applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: 0.45 + 0.55 * gloss * (1 - 0.6 * roughness)])
     }
 
     private func paint(_ base: CIImage, material: Material, mask: CIImage) -> CIImage {
@@ -155,6 +295,14 @@ public final class BikeCompositor: @unchecked Sendable {
     }
 
     // MARK: - Helpers
+
+    /// `mask_<angle>_<part>` → `clean_<part>_<angle>`.
+    static func cleanPlateName(forMask mask: String) -> String? {
+        guard mask.hasPrefix("mask_") else { return nil }
+        let parts = mask.dropFirst(5).split(separator: "_", maxSplits: 1)
+        guard parts.count == 2 else { return nil }
+        return "clean_\(parts[1])_\(parts[0])"
+    }
 
     private func loadMask(_ name: String, extent: CGRect) throws -> CIImage {
         guard let mask = loadAsset(name) else { throw CompositorError.missingAsset(name) }

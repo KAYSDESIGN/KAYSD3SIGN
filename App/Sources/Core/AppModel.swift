@@ -51,6 +51,22 @@ final class AppModel {
         }
     }
 
+    /// UI tests only: a garage with one CB125R and one project with two fitted parts.
+    func seedForUITests() async {
+        guard garage.motorcycles.isEmpty, let variant = catalog?.variants.first else { return }
+        let bike = OwnedMotorcycle(variantID: variant.id, originalColorwayID: variant.colorways.first?.id, year: 2022, mileageKm: 12480)
+        await addMotorcycle(bike)
+        guard let project = await createProject(for: bike, name: "CB125R Bi-ton") else { return }
+        for accessory in compatibleAccessories(for: variant.id).prefix(3) {
+            try? await addAccessory(accessory, variant: accessory.variants[0], to: project.id)
+        }
+        if var p = self.project(project.id) {
+            p.budget.maximum = Money(3500, p.budget.currency)
+            p.budget.paintEstimate = Money(450, p.budget.currency)
+            await save(p)
+        }
+    }
+
     // MARK: Catalog lookups
 
     func variant(_ id: MotorcycleVariant.ID) -> MotorcycleVariant? {

@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "revision": 2,
- "generatedAt": "2026-11-25T20:29:44Z",
+ "generatedAt": "2026-11-25T20:44:42Z",
  "brands": [
   {
    "id": "honda",
@@ -267,7 +267,1055 @@
      ]
     }
    ],
-   "views": [],
+   "views": [
+    {
+     "id": "honda.cb125r.jc91.view.front",
+     "angle": "front",
+     "baseImageAsset": "cb125r_front",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_front_tank",
+       "bounds": {
+        "x": 0.429375,
+        "y": 0.16818181818181818,
+        "width": 0.141875,
+        "height": 0.11636363636363636
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_front_tank-shrouds",
+       "bounds": {
+        "x": 0.42125,
+        "y": 0.23454545454545456,
+        "width": 0.1575,
+        "height": 0.24545454545454545
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_front_front-fender",
+       "bounds": {
+        "x": 0.47375,
+        "y": 0.4390909090909091,
+        "width": 0.0525,
+        "height": 0.07363636363636364
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_front_front-wheel",
+       "bounds": {
+        "x": 0.471875,
+        "y": 0.6072727272727273,
+        "width": 0.05875,
+        "height": 0.07
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_front_fork",
+       "bounds": {
+        "x": 0.448125,
+        "y": 0.2590909090909091,
+        "width": 0.10375,
+        "height": 0.41545454545454547
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_front_frame",
+       "bounds": {
+        "x": 0.473125,
+        "y": 0.3372727272727273,
+        "width": 0.05375,
+        "height": 0.2290909090909091
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_front_handlebar",
+       "bounds": {
+        "x": 0.36625,
+        "y": 0.17636363636363636,
+        "width": 0.2675,
+        "height": 0.017272727272727273
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_front_levers",
+       "bounds": {
+        "x": 0.33875,
+        "y": 0.16,
+        "width": 0.3225,
+        "height": 0.03090909090909091
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_front_brake-calipers",
+       "bounds": {
+        "x": 0.45375,
+        "y": 0.5609090909090909,
+        "width": 0.001875,
+        "height": 0.03909090909090909
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_front_engine-covers",
+       "bounds": {
+        "x": 0.451875,
+        "y": 0.5227272727272727,
+        "width": 0.096875,
+        "height": 0.11454545454545455
+       },
+       "zIndex": 8
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.rear",
+     "angle": "rear",
+     "baseImageAsset": "cb125r_rear",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_rear_tank",
+       "bounds": {
+        "x": 0.435,
+        "y": 0.1990909090909091,
+        "width": 0.129375,
+        "height": 0.09818181818181818
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_rear_tank-shrouds",
+       "bounds": {
+        "x": 0.430625,
+        "y": 0.26636363636363636,
+        "width": 0.13875,
+        "height": 0.21636363636363637
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_rear_rear-fender",
+       "bounds": {
+        "x": 0.455,
+        "y": 0.32545454545454544,
+        "width": 0.09,
+        "height": 0.20272727272727273
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_rear_tail-section",
+       "bounds": {
+        "x": 0.445,
+        "y": 0.24727272727272728,
+        "width": 0.11,
+        "height": 0.14272727272727273
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_rear_fork",
+       "bounds": {
+        "x": 0.460625,
+        "y": 0.3509090909090909,
+        "width": 0.07875,
+        "height": 0.2827272727272727
+       },
+       "zIndex": 11
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_rear_frame",
+       "bounds": {
+        "x": 0.46,
+        "y": 0.3181818181818182,
+        "width": 0.08,
+        "height": 0.2318181818181818
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_rear_swingarm",
+       "bounds": {
+        "x": 0.4575,
+        "y": 0.5363636363636364,
+        "width": 0.085,
+        "height": 0.09454545454545454
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_rear_handlebar",
+       "bounds": {
+        "x": 0.39125,
+        "y": 0.20727272727272728,
+        "width": 0.216875,
+        "height": 0.01818181818181818
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_rear_levers",
+       "bounds": {
+        "x": 0.35875,
+        "y": 0.19636363636363635,
+        "width": 0.2825,
+        "height": 0.03363636363636364
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_rear_brake-calipers",
+       "bounds": {
+        "x": 0.531875,
+        "y": 0.6781818181818182,
+        "width": 0.016875,
+        "height": 0.034545454545454546
+       },
+       "zIndex": 10
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_rear_seat",
+       "bounds": {
+        "x": 0.4575,
+        "y": 0.24454545454545454,
+        "width": 0.084375,
+        "height": 0.06545454545454546
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_rear_engine-covers",
+       "bounds": {
+        "x": 0.451875,
+        "y": 0.51,
+        "width": 0.09625,
+        "height": 0.12727272727272726
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_rear_protections",
+       "bounds": {
+        "x": 0.4625,
+        "y": 0.63,
+        "width": 0.006875,
+        "height": 0.02090909090909091
+       },
+       "zIndex": 12
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.leftProfile",
+     "angle": "leftProfile",
+     "baseImageAsset": "cb125r_leftProfile",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_leftProfile_tank",
+       "bounds": {
+        "x": 0.32875,
+        "y": 0.18363636363636363,
+        "width": 0.151875,
+        "height": 0.12636363636363637
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_leftProfile_tank-shrouds",
+       "bounds": {
+        "x": 0.319375,
+        "y": 0.24454545454545454,
+        "width": 0.12875,
+        "height": 0.23545454545454544
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_leftProfile_front-fender",
+       "bounds": {
+        "x": 0.17875,
+        "y": 0.44636363636363635,
+        "width": 0.136875,
+        "height": 0.06454545454545454
+       },
+       "zIndex": 11
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_leftProfile_rear-fender",
+       "bounds": {
+        "x": 0.73125,
+        "y": 0.35,
+        "width": 0.094375,
+        "height": 0.17363636363636364
+       },
+       "zIndex": 12
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_leftProfile_tail-section",
+       "bounds": {
+        "x": 0.486875,
+        "y": 0.2781818181818182,
+        "width": 0.274375,
+        "height": 0.12454545454545454
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_leftProfile_front-wheel",
+       "bounds": {
+        "x": 0.16125,
+        "y": 0.5072727272727273,
+        "width": 0.161875,
+        "height": 0.23454545454545456
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-wheel",
+       "maskAsset": "mask_leftProfile_rear-wheel",
+       "bounds": {
+        "x": 0.67,
+        "y": 0.5027272727272727,
+        "width": 0.159375,
+        "height": 0.2309090909090909
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_leftProfile_fork",
+       "bounds": {
+        "x": 0.23875,
+        "y": 0.3663636363636364,
+        "width": 0.0875,
+        "height": 0.2872727272727273
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_leftProfile_frame",
+       "bounds": {
+        "x": 0.38125,
+        "y": 0.3381818181818182,
+        "width": 0.3625,
+        "height": 0.22818181818181818
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_leftProfile_swingarm",
+       "bounds": {
+        "x": 0.535,
+        "y": 0.5354545454545454,
+        "width": 0.2025,
+        "height": 0.08272727272727273
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_leftProfile_handlebar",
+       "bounds": {
+        "x": 0.385,
+        "y": 0.18,
+        "width": 0.010625,
+        "height": 0.02181818181818182
+       },
+       "zIndex": 15
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_leftProfile_levers",
+       "bounds": {
+        "x": 0.35625,
+        "y": 0.16363636363636364,
+        "width": 0.030625,
+        "height": 0.024545454545454544
+       },
+       "zIndex": 14
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_leftProfile_brake-calipers",
+       "bounds": {
+        "x": 0.283125,
+        "y": 0.5572727272727273,
+        "width": 0.46625,
+        "height": 0.12545454545454546
+       },
+       "zIndex": 13
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_leftProfile_seat",
+       "bounds": {
+        "x": 0.471875,
+        "y": 0.27,
+        "width": 0.241875,
+        "height": 0.06363636363636363
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_leftProfile_engine-covers",
+       "bounds": {
+        "x": 0.44625,
+        "y": 0.5109090909090909,
+        "width": 0.094375,
+        "height": 0.11181818181818182
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_leftProfile_protections",
+       "bounds": {
+        "x": 0.395,
+        "y": 0.6236363636363637,
+        "width": 0.131875,
+        "height": 0.03727272727272727
+       },
+       "zIndex": 10
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.rightProfile",
+     "angle": "rightProfile",
+     "baseImageAsset": "cb125r_rightProfile",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_rightProfile_tank",
+       "bounds": {
+        "x": 0.519375,
+        "y": 0.18363636363636363,
+        "width": 0.151875,
+        "height": 0.12636363636363637
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_rightProfile_tank-shrouds",
+       "bounds": {
+        "x": 0.551875,
+        "y": 0.24454545454545454,
+        "width": 0.12875,
+        "height": 0.23636363636363636
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_rightProfile_front-fender",
+       "bounds": {
+        "x": 0.684375,
+        "y": 0.44636363636363635,
+        "width": 0.13625,
+        "height": 0.06454545454545454
+       },
+       "zIndex": 10
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_rightProfile_rear-fender",
+       "bounds": {
+        "x": 0.174375,
+        "y": 0.3490909090909091,
+        "width": 0.095,
+        "height": 0.17454545454545456
+       },
+       "zIndex": 12
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_rightProfile_tail-section",
+       "bounds": {
+        "x": 0.23875,
+        "y": 0.2781818181818182,
+        "width": 0.27375,
+        "height": 0.12454545454545454
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_rightProfile_front-wheel",
+       "bounds": {
+        "x": 0.676875,
+        "y": 0.5072727272727273,
+        "width": 0.161875,
+        "height": 0.23454545454545456
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-wheel",
+       "maskAsset": "mask_rightProfile_rear-wheel",
+       "bounds": {
+        "x": 0.170625,
+        "y": 0.5027272727272727,
+        "width": 0.159375,
+        "height": 0.2309090909090909
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_rightProfile_fork",
+       "bounds": {
+        "x": 0.673125,
+        "y": 0.3663636363636364,
+        "width": 0.088125,
+        "height": 0.2872727272727273
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_rightProfile_frame",
+       "bounds": {
+        "x": 0.25625,
+        "y": 0.3381818181818182,
+        "width": 0.3625,
+        "height": 0.22636363636363635
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_rightProfile_swingarm",
+       "bounds": {
+        "x": 0.2625,
+        "y": 0.5354545454545454,
+        "width": 0.20125,
+        "height": 0.08272727272727273
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_rightProfile_handlebar",
+       "bounds": {
+        "x": 0.604375,
+        "y": 0.18,
+        "width": 0.010625,
+        "height": 0.02181818181818182
+       },
+       "zIndex": 15
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_rightProfile_levers",
+       "bounds": {
+        "x": 0.613125,
+        "y": 0.16363636363636364,
+        "width": 0.030625,
+        "height": 0.024545454545454544
+       },
+       "zIndex": 14
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_rightProfile_brake-calipers",
+       "bounds": {
+        "x": 0.241875,
+        "y": 0.5454545454545454,
+        "width": 0.494375,
+        "height": 0.14363636363636365
+       },
+       "zIndex": 11
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_rightProfile_seat",
+       "bounds": {
+        "x": 0.28625,
+        "y": 0.27,
+        "width": 0.241875,
+        "height": 0.06363636363636363
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_rightProfile_engine-covers",
+       "bounds": {
+        "x": 0.456875,
+        "y": 0.5163636363636364,
+        "width": 0.085625,
+        "height": 0.12363636363636364
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_rightProfile_protections",
+       "bounds": {
+        "x": 0.508125,
+        "y": 0.6245454545454545,
+        "width": 0.096875,
+        "height": 0.03636363636363636
+       },
+       "zIndex": 13
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.frontThreeQuarter",
+     "angle": "frontThreeQuarter",
+     "baseImageAsset": "cb125r_frontThreeQuarter",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_frontThreeQuarter_tank",
+       "bounds": {
+        "x": 0.35875,
+        "y": 0.17181818181818181,
+        "width": 0.159375,
+        "height": 0.11454545454545455
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_frontThreeQuarter_tank-shrouds",
+       "bounds": {
+        "x": 0.3275,
+        "y": 0.23363636363636364,
+        "width": 0.19,
+        "height": 0.24545454545454545
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_frontThreeQuarter_front-fender",
+       "bounds": {
+        "x": 0.26,
+        "y": 0.4409090909090909,
+        "width": 0.115625,
+        "height": 0.07181818181818182
+       },
+       "zIndex": 12
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_frontThreeQuarter_rear-fender",
+       "bounds": {
+        "x": 0.628125,
+        "y": 0.35818181818181816,
+        "width": 0.081875,
+        "height": 0.16272727272727272
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_frontThreeQuarter_tail-section",
+       "bounds": {
+        "x": 0.50875,
+        "y": 0.2972727272727273,
+        "width": 0.1525,
+        "height": 0.10181818181818182
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_frontThreeQuarter_front-wheel",
+       "bounds": {
+        "x": 0.261875,
+        "y": 0.5072727272727273,
+        "width": 0.128125,
+        "height": 0.26181818181818184
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-wheel",
+       "maskAsset": "mask_frontThreeQuarter_rear-wheel",
+       "bounds": {
+        "x": 0.618125,
+        "y": 0.5018181818181818,
+        "width": 0.08375,
+        "height": 0.21
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_frontThreeQuarter_fork",
+       "bounds": {
+        "x": 0.3125,
+        "y": 0.26545454545454544,
+        "width": 0.116875,
+        "height": 0.40454545454545454
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_frontThreeQuarter_frame",
+       "bounds": {
+        "x": 0.38875,
+        "y": 0.2781818181818182,
+        "width": 0.27375,
+        "height": 0.2881818181818182
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_frontThreeQuarter_swingarm",
+       "bounds": {
+        "x": 0.548125,
+        "y": 0.5354545454545454,
+        "width": 0.114375,
+        "height": 0.07272727272727272
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_frontThreeQuarter_handlebar",
+       "bounds": {
+        "x": 0.335625,
+        "y": 0.16636363636363635,
+        "width": 0.195,
+        "height": 0.03909090909090909
+       },
+       "zIndex": 14
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_frontThreeQuarter_levers",
+       "bounds": {
+        "x": 0.3,
+        "y": 0.15363636363636363,
+        "width": 0.236875,
+        "height": 0.057272727272727274
+       },
+       "zIndex": 13
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_frontThreeQuarter_brake-calipers",
+       "bounds": {
+        "x": 0.32125,
+        "y": 0.5481818181818182,
+        "width": 0.304375,
+        "height": 0.10545454545454545
+       },
+       "zIndex": 15
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_frontThreeQuarter_seat",
+       "bounds": {
+        "x": 0.513125,
+        "y": 0.28545454545454546,
+        "width": 0.1225,
+        "height": 0.05818181818181818
+       },
+       "zIndex": 10
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_frontThreeQuarter_engine-covers",
+       "bounds": {
+        "x": 0.494375,
+        "y": 0.5109090909090909,
+        "width": 0.05625,
+        "height": 0.11181818181818182
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_frontThreeQuarter_protections",
+       "bounds": {
+        "x": 0.416875,
+        "y": 0.6290909090909091,
+        "width": 0.115,
+        "height": 0.034545454545454546
+       },
+       "zIndex": 11
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.rearThreeQuarter",
+     "angle": "rearThreeQuarter",
+     "baseImageAsset": "cb125r_rearThreeQuarter",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_rearThreeQuarter_tank",
+       "bounds": {
+        "x": 0.370625,
+        "y": 0.19545454545454546,
+        "width": 0.14625,
+        "height": 0.11363636363636363
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_rearThreeQuarter_tank-shrouds",
+       "bounds": {
+        "x": 0.3425,
+        "y": 0.26,
+        "width": 0.168125,
+        "height": 0.22090909090909092
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_rearThreeQuarter_front-fender",
+       "bounds": {
+        "x": 0.305625,
+        "y": 0.4509090909090909,
+        "width": 0.0725,
+        "height": 0.05909090909090909
+       },
+       "zIndex": 13
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_rearThreeQuarter_rear-fender",
+       "bounds": {
+        "x": 0.655,
+        "y": 0.33,
+        "width": 0.108125,
+        "height": 0.19727272727272727
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_rearThreeQuarter_tail-section",
+       "bounds": {
+        "x": 0.45625,
+        "y": 0.25545454545454543,
+        "width": 0.238125,
+        "height": 0.14363636363636365
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_rearThreeQuarter_front-wheel",
+       "bounds": {
+        "x": 0.2975,
+        "y": 0.5063636363636363,
+        "width": 0.08625,
+        "height": 0.21272727272727274
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-wheel",
+       "maskAsset": "mask_rearThreeQuarter_rear-wheel",
+       "bounds": {
+        "x": 0.598125,
+        "y": 0.5027272727272727,
+        "width": 0.12375,
+        "height": 0.25545454545454543
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_rearThreeQuarter_fork",
+       "bounds": {
+        "x": 0.321875,
+        "y": 0.29545454545454547,
+        "width": 0.13,
+        "height": 0.34545454545454546
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_rearThreeQuarter_frame",
+       "bounds": {
+        "x": 0.413125,
+        "y": 0.2972727272727273,
+        "width": 0.279375,
+        "height": 0.27
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_rearThreeQuarter_swingarm",
+       "bounds": {
+        "x": 0.49625,
+        "y": 0.5363636363636364,
+        "width": 0.168125,
+        "height": 0.09181818181818181
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_rearThreeQuarter_handlebar",
+       "bounds": {
+        "x": 0.3475,
+        "y": 0.19454545454545455,
+        "width": 0.174375,
+        "height": 0.03272727272727273
+       },
+       "zIndex": 12
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_rearThreeQuarter_levers",
+       "bounds": {
+        "x": 0.30125,
+        "y": 0.18363636363636363,
+        "width": 0.229375,
+        "height": 0.05454545454545454
+       },
+       "zIndex": 14
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_rearThreeQuarter_brake-calipers",
+       "bounds": {
+        "x": 0.6825,
+        "y": 0.6718181818181819,
+        "width": 0.024375,
+        "height": 0.031818181818181815
+       },
+       "zIndex": 15
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_rearThreeQuarter_seat",
+       "bounds": {
+        "x": 0.46375,
+        "y": 0.2509090909090909,
+        "width": 0.191875,
+        "height": 0.07727272727272727
+       },
+       "zIndex": 10
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_rearThreeQuarter_engine-covers",
+       "bounds": {
+        "x": 0.430625,
+        "y": 0.5109090909090909,
+        "width": 0.129375,
+        "height": 0.12
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_rearThreeQuarter_protections",
+       "bounds": {
+        "x": 0.42125,
+        "y": 0.6245454545454545,
+        "width": 0.1,
+        "height": 0.034545454545454546
+       },
+       "zIndex": 11
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    }
+   ],
    "verification": {
     "status": "verified",
     "source": "Honda Motor Europe, annonce de la gamme 2021 (11/11/2020)",
@@ -497,7 +1545,1055 @@
      ]
     }
    ],
-   "views": [],
+   "views": [
+    {
+     "id": "honda.cb125r.jc91.view.front",
+     "angle": "front",
+     "baseImageAsset": "cb125r_front",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_front_tank",
+       "bounds": {
+        "x": 0.429375,
+        "y": 0.16818181818181818,
+        "width": 0.141875,
+        "height": 0.11636363636363636
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_front_tank-shrouds",
+       "bounds": {
+        "x": 0.42125,
+        "y": 0.23454545454545456,
+        "width": 0.1575,
+        "height": 0.24545454545454545
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_front_front-fender",
+       "bounds": {
+        "x": 0.47375,
+        "y": 0.4390909090909091,
+        "width": 0.0525,
+        "height": 0.07363636363636364
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_front_front-wheel",
+       "bounds": {
+        "x": 0.471875,
+        "y": 0.6072727272727273,
+        "width": 0.05875,
+        "height": 0.07
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_front_fork",
+       "bounds": {
+        "x": 0.448125,
+        "y": 0.2590909090909091,
+        "width": 0.10375,
+        "height": 0.41545454545454547
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_front_frame",
+       "bounds": {
+        "x": 0.473125,
+        "y": 0.3372727272727273,
+        "width": 0.05375,
+        "height": 0.2290909090909091
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_front_handlebar",
+       "bounds": {
+        "x": 0.36625,
+        "y": 0.17636363636363636,
+        "width": 0.2675,
+        "height": 0.017272727272727273
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_front_levers",
+       "bounds": {
+        "x": 0.33875,
+        "y": 0.16,
+        "width": 0.3225,
+        "height": 0.03090909090909091
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_front_brake-calipers",
+       "bounds": {
+        "x": 0.45375,
+        "y": 0.5609090909090909,
+        "width": 0.001875,
+        "height": 0.03909090909090909
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_front_engine-covers",
+       "bounds": {
+        "x": 0.451875,
+        "y": 0.5227272727272727,
+        "width": 0.096875,
+        "height": 0.11454545454545455
+       },
+       "zIndex": 8
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.rear",
+     "angle": "rear",
+     "baseImageAsset": "cb125r_rear",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_rear_tank",
+       "bounds": {
+        "x": 0.435,
+        "y": 0.1990909090909091,
+        "width": 0.129375,
+        "height": 0.09818181818181818
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_rear_tank-shrouds",
+       "bounds": {
+        "x": 0.430625,
+        "y": 0.26636363636363636,
+        "width": 0.13875,
+        "height": 0.21636363636363637
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_rear_rear-fender",
+       "bounds": {
+        "x": 0.455,
+        "y": 0.32545454545454544,
+        "width": 0.09,
+        "height": 0.20272727272727273
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_rear_tail-section",
+       "bounds": {
+        "x": 0.445,
+        "y": 0.24727272727272728,
+        "width": 0.11,
+        "height": 0.14272727272727273
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_rear_fork",
+       "bounds": {
+        "x": 0.460625,
+        "y": 0.3509090909090909,
+        "width": 0.07875,
+        "height": 0.2827272727272727
+       },
+       "zIndex": 11
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_rear_frame",
+       "bounds": {
+        "x": 0.46,
+        "y": 0.3181818181818182,
+        "width": 0.08,
+        "height": 0.2318181818181818
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_rear_swingarm",
+       "bounds": {
+        "x": 0.4575,
+        "y": 0.5363636363636364,
+        "width": 0.085,
+        "height": 0.09454545454545454
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_rear_handlebar",
+       "bounds": {
+        "x": 0.39125,
+        "y": 0.20727272727272728,
+        "width": 0.216875,
+        "height": 0.01818181818181818
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_rear_levers",
+       "bounds": {
+        "x": 0.35875,
+        "y": 0.19636363636363635,
+        "width": 0.2825,
+        "height": 0.03363636363636364
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_rear_brake-calipers",
+       "bounds": {
+        "x": 0.531875,
+        "y": 0.6781818181818182,
+        "width": 0.016875,
+        "height": 0.034545454545454546
+       },
+       "zIndex": 10
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_rear_seat",
+       "bounds": {
+        "x": 0.4575,
+        "y": 0.24454545454545454,
+        "width": 0.084375,
+        "height": 0.06545454545454546
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_rear_engine-covers",
+       "bounds": {
+        "x": 0.451875,
+        "y": 0.51,
+        "width": 0.09625,
+        "height": 0.12727272727272726
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_rear_protections",
+       "bounds": {
+        "x": 0.4625,
+        "y": 0.63,
+        "width": 0.006875,
+        "height": 0.02090909090909091
+       },
+       "zIndex": 12
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.leftProfile",
+     "angle": "leftProfile",
+     "baseImageAsset": "cb125r_leftProfile",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_leftProfile_tank",
+       "bounds": {
+        "x": 0.32875,
+        "y": 0.18363636363636363,
+        "width": 0.151875,
+        "height": 0.12636363636363637
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_leftProfile_tank-shrouds",
+       "bounds": {
+        "x": 0.319375,
+        "y": 0.24454545454545454,
+        "width": 0.12875,
+        "height": 0.23545454545454544
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_leftProfile_front-fender",
+       "bounds": {
+        "x": 0.17875,
+        "y": 0.44636363636363635,
+        "width": 0.136875,
+        "height": 0.06454545454545454
+       },
+       "zIndex": 11
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_leftProfile_rear-fender",
+       "bounds": {
+        "x": 0.73125,
+        "y": 0.35,
+        "width": 0.094375,
+        "height": 0.17363636363636364
+       },
+       "zIndex": 12
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_leftProfile_tail-section",
+       "bounds": {
+        "x": 0.486875,
+        "y": 0.2781818181818182,
+        "width": 0.274375,
+        "height": 0.12454545454545454
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_leftProfile_front-wheel",
+       "bounds": {
+        "x": 0.16125,
+        "y": 0.5072727272727273,
+        "width": 0.161875,
+        "height": 0.23454545454545456
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-wheel",
+       "maskAsset": "mask_leftProfile_rear-wheel",
+       "bounds": {
+        "x": 0.67,
+        "y": 0.5027272727272727,
+        "width": 0.159375,
+        "height": 0.2309090909090909
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_leftProfile_fork",
+       "bounds": {
+        "x": 0.23875,
+        "y": 0.3663636363636364,
+        "width": 0.0875,
+        "height": 0.2872727272727273
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_leftProfile_frame",
+       "bounds": {
+        "x": 0.38125,
+        "y": 0.3381818181818182,
+        "width": 0.3625,
+        "height": 0.22818181818181818
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_leftProfile_swingarm",
+       "bounds": {
+        "x": 0.535,
+        "y": 0.5354545454545454,
+        "width": 0.2025,
+        "height": 0.08272727272727273
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_leftProfile_handlebar",
+       "bounds": {
+        "x": 0.385,
+        "y": 0.18,
+        "width": 0.010625,
+        "height": 0.02181818181818182
+       },
+       "zIndex": 15
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_leftProfile_levers",
+       "bounds": {
+        "x": 0.35625,
+        "y": 0.16363636363636364,
+        "width": 0.030625,
+        "height": 0.024545454545454544
+       },
+       "zIndex": 14
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_leftProfile_brake-calipers",
+       "bounds": {
+        "x": 0.283125,
+        "y": 0.5572727272727273,
+        "width": 0.46625,
+        "height": 0.12545454545454546
+       },
+       "zIndex": 13
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_leftProfile_seat",
+       "bounds": {
+        "x": 0.471875,
+        "y": 0.27,
+        "width": 0.241875,
+        "height": 0.06363636363636363
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_leftProfile_engine-covers",
+       "bounds": {
+        "x": 0.44625,
+        "y": 0.5109090909090909,
+        "width": 0.094375,
+        "height": 0.11181818181818182
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_leftProfile_protections",
+       "bounds": {
+        "x": 0.395,
+        "y": 0.6236363636363637,
+        "width": 0.131875,
+        "height": 0.03727272727272727
+       },
+       "zIndex": 10
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.rightProfile",
+     "angle": "rightProfile",
+     "baseImageAsset": "cb125r_rightProfile",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_rightProfile_tank",
+       "bounds": {
+        "x": 0.519375,
+        "y": 0.18363636363636363,
+        "width": 0.151875,
+        "height": 0.12636363636363637
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_rightProfile_tank-shrouds",
+       "bounds": {
+        "x": 0.551875,
+        "y": 0.24454545454545454,
+        "width": 0.12875,
+        "height": 0.23636363636363636
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_rightProfile_front-fender",
+       "bounds": {
+        "x": 0.684375,
+        "y": 0.44636363636363635,
+        "width": 0.13625,
+        "height": 0.06454545454545454
+       },
+       "zIndex": 10
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_rightProfile_rear-fender",
+       "bounds": {
+        "x": 0.174375,
+        "y": 0.3490909090909091,
+        "width": 0.095,
+        "height": 0.17454545454545456
+       },
+       "zIndex": 12
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_rightProfile_tail-section",
+       "bounds": {
+        "x": 0.23875,
+        "y": 0.2781818181818182,
+        "width": 0.27375,
+        "height": 0.12454545454545454
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_rightProfile_front-wheel",
+       "bounds": {
+        "x": 0.676875,
+        "y": 0.5072727272727273,
+        "width": 0.161875,
+        "height": 0.23454545454545456
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-wheel",
+       "maskAsset": "mask_rightProfile_rear-wheel",
+       "bounds": {
+        "x": 0.170625,
+        "y": 0.5027272727272727,
+        "width": 0.159375,
+        "height": 0.2309090909090909
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_rightProfile_fork",
+       "bounds": {
+        "x": 0.673125,
+        "y": 0.3663636363636364,
+        "width": 0.088125,
+        "height": 0.2872727272727273
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_rightProfile_frame",
+       "bounds": {
+        "x": 0.25625,
+        "y": 0.3381818181818182,
+        "width": 0.3625,
+        "height": 0.22636363636363635
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_rightProfile_swingarm",
+       "bounds": {
+        "x": 0.2625,
+        "y": 0.5354545454545454,
+        "width": 0.20125,
+        "height": 0.08272727272727273
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_rightProfile_handlebar",
+       "bounds": {
+        "x": 0.604375,
+        "y": 0.18,
+        "width": 0.010625,
+        "height": 0.02181818181818182
+       },
+       "zIndex": 15
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_rightProfile_levers",
+       "bounds": {
+        "x": 0.613125,
+        "y": 0.16363636363636364,
+        "width": 0.030625,
+        "height": 0.024545454545454544
+       },
+       "zIndex": 14
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_rightProfile_brake-calipers",
+       "bounds": {
+        "x": 0.241875,
+        "y": 0.5454545454545454,
+        "width": 0.494375,
+        "height": 0.14363636363636365
+       },
+       "zIndex": 11
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_rightProfile_seat",
+       "bounds": {
+        "x": 0.28625,
+        "y": 0.27,
+        "width": 0.241875,
+        "height": 0.06363636363636363
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_rightProfile_engine-covers",
+       "bounds": {
+        "x": 0.456875,
+        "y": 0.5163636363636364,
+        "width": 0.085625,
+        "height": 0.12363636363636364
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_rightProfile_protections",
+       "bounds": {
+        "x": 0.508125,
+        "y": 0.6245454545454545,
+        "width": 0.096875,
+        "height": 0.03636363636363636
+       },
+       "zIndex": 13
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.frontThreeQuarter",
+     "angle": "frontThreeQuarter",
+     "baseImageAsset": "cb125r_frontThreeQuarter",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_frontThreeQuarter_tank",
+       "bounds": {
+        "x": 0.35875,
+        "y": 0.17181818181818181,
+        "width": 0.159375,
+        "height": 0.11454545454545455
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_frontThreeQuarter_tank-shrouds",
+       "bounds": {
+        "x": 0.3275,
+        "y": 0.23363636363636364,
+        "width": 0.19,
+        "height": 0.24545454545454545
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_frontThreeQuarter_front-fender",
+       "bounds": {
+        "x": 0.26,
+        "y": 0.4409090909090909,
+        "width": 0.115625,
+        "height": 0.07181818181818182
+       },
+       "zIndex": 12
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_frontThreeQuarter_rear-fender",
+       "bounds": {
+        "x": 0.628125,
+        "y": 0.35818181818181816,
+        "width": 0.081875,
+        "height": 0.16272727272727272
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_frontThreeQuarter_tail-section",
+       "bounds": {
+        "x": 0.50875,
+        "y": 0.2972727272727273,
+        "width": 0.1525,
+        "height": 0.10181818181818182
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_frontThreeQuarter_front-wheel",
+       "bounds": {
+        "x": 0.261875,
+        "y": 0.5072727272727273,
+        "width": 0.128125,
+        "height": 0.26181818181818184
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-wheel",
+       "maskAsset": "mask_frontThreeQuarter_rear-wheel",
+       "bounds": {
+        "x": 0.618125,
+        "y": 0.5018181818181818,
+        "width": 0.08375,
+        "height": 0.21
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_frontThreeQuarter_fork",
+       "bounds": {
+        "x": 0.3125,
+        "y": 0.26545454545454544,
+        "width": 0.116875,
+        "height": 0.40454545454545454
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_frontThreeQuarter_frame",
+       "bounds": {
+        "x": 0.38875,
+        "y": 0.2781818181818182,
+        "width": 0.27375,
+        "height": 0.2881818181818182
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_frontThreeQuarter_swingarm",
+       "bounds": {
+        "x": 0.548125,
+        "y": 0.5354545454545454,
+        "width": 0.114375,
+        "height": 0.07272727272727272
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_frontThreeQuarter_handlebar",
+       "bounds": {
+        "x": 0.335625,
+        "y": 0.16636363636363635,
+        "width": 0.195,
+        "height": 0.03909090909090909
+       },
+       "zIndex": 14
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_frontThreeQuarter_levers",
+       "bounds": {
+        "x": 0.3,
+        "y": 0.15363636363636363,
+        "width": 0.236875,
+        "height": 0.057272727272727274
+       },
+       "zIndex": 13
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_frontThreeQuarter_brake-calipers",
+       "bounds": {
+        "x": 0.32125,
+        "y": 0.5481818181818182,
+        "width": 0.304375,
+        "height": 0.10545454545454545
+       },
+       "zIndex": 15
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_frontThreeQuarter_seat",
+       "bounds": {
+        "x": 0.513125,
+        "y": 0.28545454545454546,
+        "width": 0.1225,
+        "height": 0.05818181818181818
+       },
+       "zIndex": 10
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_frontThreeQuarter_engine-covers",
+       "bounds": {
+        "x": 0.494375,
+        "y": 0.5109090909090909,
+        "width": 0.05625,
+        "height": 0.11181818181818182
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_frontThreeQuarter_protections",
+       "bounds": {
+        "x": 0.416875,
+        "y": 0.6290909090909091,
+        "width": 0.115,
+        "height": 0.034545454545454546
+       },
+       "zIndex": 11
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    },
+    {
+     "id": "honda.cb125r.jc91.view.rearThreeQuarter",
+     "angle": "rearThreeQuarter",
+     "baseImageAsset": "cb125r_rearThreeQuarter",
+     "pixelWidth": 1600,
+     "pixelHeight": 1100,
+     "masks": [
+      {
+       "componentID": "honda.cb125r.jc91.tank",
+       "maskAsset": "mask_rearThreeQuarter_tank",
+       "bounds": {
+        "x": 0.370625,
+        "y": 0.19545454545454546,
+        "width": 0.14625,
+        "height": 0.11363636363636363
+       },
+       "zIndex": 4
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tank-shrouds",
+       "maskAsset": "mask_rearThreeQuarter_tank-shrouds",
+       "bounds": {
+        "x": 0.3425,
+        "y": 0.26,
+        "width": 0.168125,
+        "height": 0.22090909090909092
+       },
+       "zIndex": 2
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-fender",
+       "maskAsset": "mask_rearThreeQuarter_front-fender",
+       "bounds": {
+        "x": 0.305625,
+        "y": 0.4509090909090909,
+        "width": 0.0725,
+        "height": 0.05909090909090909
+       },
+       "zIndex": 13
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-fender",
+       "maskAsset": "mask_rearThreeQuarter_rear-fender",
+       "bounds": {
+        "x": 0.655,
+        "y": 0.33,
+        "width": 0.108125,
+        "height": 0.19727272727272727
+       },
+       "zIndex": 6
+      },
+      {
+       "componentID": "honda.cb125r.jc91.tail-section",
+       "maskAsset": "mask_rearThreeQuarter_tail-section",
+       "bounds": {
+        "x": 0.45625,
+        "y": 0.25545454545454543,
+        "width": 0.238125,
+        "height": 0.14363636363636365
+       },
+       "zIndex": 1
+      },
+      {
+       "componentID": "honda.cb125r.jc91.front-wheel",
+       "maskAsset": "mask_rearThreeQuarter_front-wheel",
+       "bounds": {
+        "x": 0.2975,
+        "y": 0.5063636363636363,
+        "width": 0.08625,
+        "height": 0.21272727272727274
+       },
+       "zIndex": 5
+      },
+      {
+       "componentID": "honda.cb125r.jc91.rear-wheel",
+       "maskAsset": "mask_rearThreeQuarter_rear-wheel",
+       "bounds": {
+        "x": 0.598125,
+        "y": 0.5027272727272727,
+        "width": 0.12375,
+        "height": 0.25545454545454543
+       },
+       "zIndex": 3
+      },
+      {
+       "componentID": "honda.cb125r.jc91.fork",
+       "maskAsset": "mask_rearThreeQuarter_fork",
+       "bounds": {
+        "x": 0.321875,
+        "y": 0.29545454545454547,
+        "width": 0.13,
+        "height": 0.34545454545454546
+       },
+       "zIndex": 9
+      },
+      {
+       "componentID": "honda.cb125r.jc91.frame",
+       "maskAsset": "mask_rearThreeQuarter_frame",
+       "bounds": {
+        "x": 0.413125,
+        "y": 0.2972727272727273,
+        "width": 0.279375,
+        "height": 0.27
+       },
+       "zIndex": 0
+      },
+      {
+       "componentID": "honda.cb125r.jc91.swingarm",
+       "maskAsset": "mask_rearThreeQuarter_swingarm",
+       "bounds": {
+        "x": 0.49625,
+        "y": 0.5363636363636364,
+        "width": 0.168125,
+        "height": 0.09181818181818181
+       },
+       "zIndex": 7
+      },
+      {
+       "componentID": "honda.cb125r.jc91.handlebar",
+       "maskAsset": "mask_rearThreeQuarter_handlebar",
+       "bounds": {
+        "x": 0.3475,
+        "y": 0.19454545454545455,
+        "width": 0.174375,
+        "height": 0.03272727272727273
+       },
+       "zIndex": 12
+      },
+      {
+       "componentID": "honda.cb125r.jc91.levers",
+       "maskAsset": "mask_rearThreeQuarter_levers",
+       "bounds": {
+        "x": 0.30125,
+        "y": 0.18363636363636363,
+        "width": 0.229375,
+        "height": 0.05454545454545454
+       },
+       "zIndex": 14
+      },
+      {
+       "componentID": "honda.cb125r.jc91.brake-calipers",
+       "maskAsset": "mask_rearThreeQuarter_brake-calipers",
+       "bounds": {
+        "x": 0.6825,
+        "y": 0.6718181818181819,
+        "width": 0.024375,
+        "height": 0.031818181818181815
+       },
+       "zIndex": 15
+      },
+      {
+       "componentID": "honda.cb125r.jc91.seat",
+       "maskAsset": "mask_rearThreeQuarter_seat",
+       "bounds": {
+        "x": 0.46375,
+        "y": 0.2509090909090909,
+        "width": 0.191875,
+        "height": 0.07727272727272727
+       },
+       "zIndex": 10
+      },
+      {
+       "componentID": "honda.cb125r.jc91.engine-covers",
+       "maskAsset": "mask_rearThreeQuarter_engine-covers",
+       "bounds": {
+        "x": 0.430625,
+        "y": 0.5109090909090909,
+        "width": 0.129375,
+        "height": 0.12
+       },
+       "zIndex": 8
+      },
+      {
+       "componentID": "honda.cb125r.jc91.protections",
+       "maskAsset": "mask_rearThreeQuarter_protections",
+       "bounds": {
+        "x": 0.42125,
+        "y": 0.6245454545454545,
+        "width": 0.1,
+        "height": 0.034545454545454546
+       },
+       "zIndex": 11
+      }
+     ],
+     "license": {
+      "status": "verified",
+      "source": "Rendu 3D MOTOFORGE (tools/bike3d/cb125r_jc91.py), propriété du projet",
+      "verifiedAt": "2026-11-25T00:00:00Z",
+      "notes": "Représentation 3D simplifiée construite aux cotes officielles Honda (empattement 1345 mm, longueur 2040 mm, pneus 110/70R17 et 150/60R17). Ce n'est pas une photographie."
+     }
+    }
+   ],
    "verification": {
     "status": "verified",
     "source": "Honda Japon, communiqué du 19/03/2021 (type 8BJ-JC91, moteur JC91E)",
