@@ -16,6 +16,7 @@ struct WorkshopView: View {
     @State private var mode: Mode = .color
     @State private var showStudio = false
     @State private var showCovering = false
+    @State private var showDetails = false
 
     init(projectID: CustomizationProject.ID) {
         _vm = State(initialValue: WorkshopViewModel(projectID: projectID))
@@ -39,6 +40,7 @@ struct WorkshopView: View {
         .onDisappear { Task { await vm.saveNow() } }
         .sheet(isPresented: $showStudio) { PaintStudioView(vm: vm) }
         .sheet(isPresented: $showCovering) { CoveringStudioView(vm: vm) }
+        .sheet(isPresented: $showDetails) { DetailsSheet(vm: vm) }
     }
 
     private var ready: some View {
@@ -59,7 +61,7 @@ struct WorkshopView: View {
                         partsPanel
                     }
                 case .configure:
-                    ConfigurePanel(vm: vm, openStudio: { showStudio = true }, openCovering: { showCovering = true })
+                    ConfigurePanel(vm: vm, openStudio: { showStudio = true }, openCovering: { showCovering = true }, openDetails: { showDetails = true })
                 }
             }
             .padding(.horizontal, MFSpacing.screen)
@@ -317,6 +319,7 @@ private struct ConfigurePanel: View {
     @Bindable var vm: WorkshopViewModel
     let openStudio: () -> Void
     let openCovering: () -> Void
+    let openDetails: () -> Void
     @State private var confirmReset = false
 
     var body: some View {
@@ -344,7 +347,7 @@ private struct ConfigurePanel: View {
                 modeRow("Peinture", "paintbrush", available: true) { openStudio() }
                 modeRow("Covering", "square.on.square.dashed", available: true) { openCovering() }
                 modeRow("Accessoires", "cube", available: true) { router.openCatalog() }
-                modeRow("Détails", "sparkles", available: false) {}
+                modeRow("Détails", "sparkles", available: true) { openDetails() }
             }
 
             if let id = vm.project?.id {

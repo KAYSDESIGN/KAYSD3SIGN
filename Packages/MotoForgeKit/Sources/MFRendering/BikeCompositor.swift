@@ -171,7 +171,10 @@ public final class BikeCompositor: @unchecked Sendable {
             .concatenating(CGAffineTransform(rotationAngle: -rotation * .pi / 180))
             .concatenating(CGAffineTransform(translationX: center.x, y: center.y)))
         if tile {
-            placed = placed.applyingFilter("CIAffineTile", parameters: [kCIInputTransformKey: NSValue(cgAffineTransform: .identity)])
+            let tile = CIFilter.affineTile()
+            tile.inputImage = placed
+            tile.transform = .identity
+            placed = tile.outputImage ?? placed
         }
         placed = placed.cropped(to: extent)
         // Coverage = decal alpha as a grayscale mask.
