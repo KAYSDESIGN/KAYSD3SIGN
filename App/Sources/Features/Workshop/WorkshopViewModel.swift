@@ -63,6 +63,13 @@ final class WorkshopViewModel {
         }
     }
 
+    /// Re-applies the visual set chosen in AppModel (photos / 3D) without losing history.
+    func refreshVisuals() {
+        guard let model, let e = editor, let v = model.variant(e.vehicle.id), let updated = try? e.replacingVehicleVisuals(with: v) else { return }
+        editor = updated
+        if v.view(for: angle) == nil, let first = v.availableAngles.first { angle = first } else { scheduleRender() }
+    }
+
     // MARK: Read
 
     var vehicle: MotorcycleVariant? { editor?.vehicle }
@@ -182,7 +189,8 @@ final class WorkshopViewModel {
             renderNotice = hasVisuals ? "Cet angle n'est pas encore disponible." : nil
             return
         }
-        let fitted = Dictionary(e.configuration.accessories.compactMap { selection in
+        let showsParts = !model.usesPhotos
+        let fitted = Dictionary(e.configuration.accessories.filter { _ in showsParts }.compactMap { selection in
             model.accessoryVariant(selection.variantID).map { (selection.variantID, $0.1) }
         }, uniquingKeysWith: { first, _ in first })
         let builder = RenderPlanBuilder(vehicle: e.vehicle, accessoryVariant: { fitted[$0] })
@@ -199,6 +207,7 @@ final class WorkshopViewModel {
                 ConfigurationEditor.originalStyle(of: id, vehicle: e.vehicle, colorway: e.configuration.originalColorwayID)
             }
             var notices: [String] = []
+            if !showsParts && !e.configuration.accessories.isEmpty { notices.append("Pièces visibles en vue 3D.") }
             let missing = plan.accessoriesWithoutVisual.filter { !(model.accessoryVariant($0)?.1.visualAssets.isEmpty ?? true) }
             if !missing.isEmpty { notices.append("\(missing.count) pièce(s) non visible(s) sous cet angle.") }
             renderNotice = notices.isEmpty ? nil : notices.joined(separator: " ")

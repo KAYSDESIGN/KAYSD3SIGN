@@ -11,6 +11,9 @@ import MFRendering
 enum BundleAssets {
     /// Loads an image from the asset catalog (or a file in the bundle) as a Core Image image.
     static func ciImage(named name: String) -> CIImage? {
+        if name.hasPrefix("photo:") {
+            return PrivatePhotoSet.url(String(name.dropFirst(6))).flatMap { CIImage(contentsOf: $0) }
+        }
         if name.hasPrefix("file:") {
             let url = UserWrapImages.url(String(name.dropFirst(5)))
             return CIImage(contentsOf: url)
@@ -20,6 +23,23 @@ enum BundleAssets {
     }
 
     static func exists(_ name: String) -> Bool { UIImage(named: name) != nil }
+}
+
+/// Personal photo set bundled from App/PrivatePhotos (git-ignored; absent in CI builds).
+enum PrivatePhotoSet {
+    static let folder = "PrivatePhotos"
+
+    static func url(_ name: String) -> URL? {
+        Bundle.main.url(forResource: name, withExtension: "png", subdirectory: folder)
+    }
+
+    static func load() -> [MotorcycleView] {
+        guard let url = Bundle.main.url(forResource: "photo_views", withExtension: "json", subdirectory: folder),
+              let data = try? Data(contentsOf: url) else { return [] }
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return (try? decoder.decode([MotorcycleView].self, from: data)) ?? []
+    }
 }
 
 private struct CompositorKey: EnvironmentKey {

@@ -34,6 +34,16 @@ struct MenuView: View {
                     MFRow("Pays d'homologation", systemImage: "checkmark.seal") { value("France") }
                     MFRow("Devise", systemImage: "eurosign") { value("Euro (€)") }
                     MFRow("Stockage", systemImage: "iphone") { value("Sur cet iPhone, hors ligne") }
+                    if model.hasPhotoSet {
+                        MFRow("Visuels de la moto", systemImage: "photo") {
+                            Picker("Visuels", selection: Binding(get: { model.visualMode }, set: { model.visualMode = $0 })) {
+                                Text("Photos").tag(VisualMode.photo)
+                                Text("3D").tag(VisualMode.render3D)
+                            }
+                            .pickerStyle(.segmented)
+                            .frame(width: 140)
+                        }
+                    }
                 }
                 MFPanel("Données") {
                     MFRow("Catalogue vérifié", systemImage: "shippingbox") {

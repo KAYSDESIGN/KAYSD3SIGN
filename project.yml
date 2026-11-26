@@ -22,6 +22,9 @@ targets:
     sources:
       - App/Sources
       - App/Resources
+      - path: App/PrivatePhotos
+        type: folder
+        optional: true
     dependencies:
       - package: MotoForgeKit
         product: MFDomain

@@ -86,6 +86,17 @@ struct WorkshopView: View {
             VStack {
                 HStack {
                     anglePicker
+                    if model.hasPhotoSet {
+                        Button {
+                            model.visualMode = model.visualMode == .photo ? .render3D : .photo
+                            vm.refreshVisuals()
+                        } label: {
+                            Label(model.visualMode == .photo ? "Photo" : "3D", systemImage: model.visualMode == .photo ? "camera" : "cube")
+                                .font(MFTypography.caption.weight(.semibold))
+                        }
+                        .buttonStyle(.mfGlass)
+                        .accessibilityLabel(model.visualMode == .photo ? "Visuel photo, passer en 3D" : "Visuel 3D, passer en photo")
+                    }
                     Spacer()
                     Toggle(isOn: $vm.showsOriginal) { Text("Avant") }
                         .toggleStyle(.button)

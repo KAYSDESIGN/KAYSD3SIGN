@@ -14,7 +14,7 @@ public enum ConfigurationError: Error, Equatable, Sendable {
 /// The editor is the only way the workshop mutates a configuration, which guarantees that every
 /// change is validated against the vehicle, recorded in history, and independent of the view angle.
 public struct ConfigurationEditor: Sendable {
-    public let vehicle: MotorcycleVariant
+    public private(set) var vehicle: MotorcycleVariant
     public private(set) var history: History<ProjectConfiguration>
 
     public var configuration: ProjectConfiguration { history.present }
@@ -23,6 +23,14 @@ public struct ConfigurationEditor: Sendable {
         guard configuration.vehicleVariantID == vehicle.id else { throw ConfigurationError.variantMismatch }
         self.vehicle = vehicle
         self.history = History(configuration, limit: historyLimit)
+    }
+
+    /// Same vehicle with another visual set (e.g. personal photos vs 3D renders). History is kept.
+    public func replacingVehicleVisuals(with variant: MotorcycleVariant) throws -> ConfigurationEditor {
+        guard variant.id == vehicle.id else { throw ConfigurationError.variantMismatch }
+        var copy = self
+        copy.vehicle = variant
+        return copy
     }
 
     // MARK: Read

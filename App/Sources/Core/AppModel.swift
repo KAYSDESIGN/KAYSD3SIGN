@@ -12,6 +12,14 @@ enum LoadState: Equatable {
     case failed(String)
 }
 
+/// Which reference visuals the workshop shows.
+enum VisualMode: String {
+    /// User-supplied photos (private set, personal use).
+    case photo
+    /// Project 3D renders (always available, accessories visible).
+    case render3D
+}
+
 /// Shared app state: catalog snapshot, garage, projects, favorites.
 /// Screens read from it and call its intent methods; every mutation is persisted immediately (autosave).
 @MainActor
@@ -22,6 +30,14 @@ final class AppModel {
     private(set) var projects: [CustomizationProject] = []
     private(set) var favorites = UserFavorites()
     private(set) var state: LoadState = .idle
+    /// Private photo views (App/PrivatePhotos), empty when the set is not bundled.
+    private(set) var photoViews: [MotorcycleView] = []
+    var visualMode: VisualMode = VisualMode(rawValue: UserDefaults.standard.string(forKey: "visualMode") ?? "") ?? .photo {
+        didSet { UserDefaults.standard.set(visualMode.rawValue, forKey: "visualMode") }
+    }
+    var hasPhotoSet: Bool { !photoViews.isEmpty }
+    /// Photos are shown only when the private set exists and the user chose them.
+    var usesPhotos: Bool { hasPhotoSet && visualMode == .photo }
     /// Last non-blocking error, shown as an alert.
     var errorMessage: String?
 
@@ -44,6 +60,7 @@ final class AppModel {
             garage = try await store.loadGarage()
             projects = try await store.allProjects()
             favorites = try await store.loadFavorites()
+            photoViews = PrivatePhotoSet.load()
             state = .loaded
         } catch {
             log.error("Chargement impossible : \(String(describing: error))")
@@ -71,7 +88,15 @@ final class AppModel {
 
     // MARK: Catalog lookups
 
+    /// Variant with the visuals currently selected (photos or 3D).
     func variant(_ id: MotorcycleVariant.ID) -> MotorcycleVariant? {
+        guard var v = variant3D(id) else { return nil }
+        if usesPhotos && v.generationID.rawValue == "honda.cb125r.jc91" { v.views = photoViews }
+        return v
+    }
+
+    /// Variant with the project's 3D visuals (accessory renders are aligned with these only).
+    func variant3D(_ id: MotorcycleVariant.ID) -> MotorcycleVariant? {
         catalog?.variants.first { $0.id == id }
     }
 
@@ -212,7 +237,7 @@ final class AppModel {
 
     /// Fits an accessory in a project and adds it to the shopping list.
     func addAccessory(_ accessory: Accessory, variant: AccessoryVariant, to projectID: CustomizationProject.ID) async throws {
-        guard var p = project(projectID), let vehicle = self.variant(p.configuration.vehicleVariantID) else { return }
+        guard var p = project(projectID), let vehicle = self.variant3D(p.configuration.vehicleVariantID) else { return }
         var editor = try ConfigurationEditor(vehicle: vehicle, configuration: p.configuration)
         try editor.fit(accessory, variant: variant)
         p.configuration = editor.configuration

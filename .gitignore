@@ -15,3 +15,6 @@ Packages/MotoForgeKit/.swiftpm/
 *.env
 .env*
 Secrets.xcconfig
+
+# Private visual set (user-supplied photos, personal use only — never commit)
+App/PrivatePhotos/

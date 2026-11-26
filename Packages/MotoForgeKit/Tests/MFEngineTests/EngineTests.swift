@@ -397,3 +397,20 @@ struct DisplayOfferTests {
         #expect(OfferSelector.displayOffer(for: v, preferredCurrency: "EUR")?.price.currency == "GBP")
     }
 }
+
+@Suite("Changement de visuels")
+struct VisualSwapTests {
+    @Test func swappingVisualsKeepsConfigurationAndHistory() throws {
+        var e = try ConfigurationEditor(vehicle: Fixtures.vehicle, configuration: ProjectConfiguration(vehicleVariantID: Fixtures.vehicleID))
+        try e.setPaint(Material(baseColor: Fixtures.red), on: Fixtures.tank)
+        var photos = Fixtures.vehicle
+        photos.views = [Fixtures.view(.rear, masks: [])]
+        let swapped = try e.replacingVehicleVisuals(with: photos)
+        #expect(swapped.configuration == e.configuration)
+        #expect(swapped.history.canUndo)
+        #expect(swapped.vehicle.availableAngles == [.rear])
+        var other = photos
+        other.id = Fixtures.otherVehicleID
+        #expect(throws: ConfigurationError.variantMismatch) { try e.replacingVehicleVisuals(with: other) }
+    }
+}

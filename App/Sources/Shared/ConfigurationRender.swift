@@ -11,6 +11,8 @@ struct ConfigurationRender: View {
     let configuration: ProjectConfiguration
     var angle: ViewAngle = .frontThreeQuarter
     var dark = false
+    /// Product visuals need the 3D set: accessory renders are aligned with it only.
+    var force3D = false
 
     @State private var image: CGImage?
 
@@ -25,14 +27,15 @@ struct ConfigurationRender: View {
             }
         }
         .accessibilityLabel("Rendu de la configuration")
-        .task(id: configuration) { await render() }
+        .task(id: RenderCache.Key(configuration: configuration, angle: angle, photos: !force3D && model.usesPhotos)) { await render() }
     }
 
     private func render() async {
-        guard let vehicle = model.variant(configuration.vehicleVariantID) else { return }
-        let key = RenderCache.Key(configuration: configuration, angle: angle)
+        let use3D = force3D || !model.usesPhotos
+        guard let vehicle = use3D ? model.variant3D(configuration.vehicleVariantID) : model.variant(configuration.vehicleVariantID) else { return }
+        let key = RenderCache.Key(configuration: configuration, angle: angle, photos: !use3D)
         if let cached = await RenderCache.shared.image(for: key) { image = cached; return }
-        let fitted = Dictionary(configuration.accessories.compactMap { s in model.accessoryVariant(s.variantID).map { (s.variantID, $0.1) } },
+        let fitted = Dictionary(configuration.accessories.filter { _ in use3D }.compactMap { s in model.accessoryVariant(s.variantID).map { (s.variantID, $0.1) } },
                                 uniquingKeysWith: { a, _ in a })
         let builder = RenderPlanBuilder(vehicle: vehicle, accessoryVariant: { fitted[$0] })
         guard let editor = try? ConfigurationEditor(vehicle: vehicle, configuration: configuration),
@@ -50,7 +53,7 @@ struct ConfigurationRender: View {
 /// Small in-memory cache of rendered thumbnails.
 actor RenderCache {
     static let shared = RenderCache()
-    struct Key: Hashable { let configuration: ProjectConfiguration; let angle: ViewAngle }
+    struct Key: Hashable { let configuration: ProjectConfiguration; let angle: ViewAngle; let photos: Bool }
     private var storage: [Key: CGImage] = [:]
     private var order: [Key] = []
 
@@ -78,7 +81,8 @@ struct ProductVisual: View {
             ConfigurationRender(configuration: ProjectConfiguration(
                 vehicleVariantID: vehicle,
                 accessories: [AccessorySelection(accessoryID: accessory.id, variantID: v.id, category: accessory.category)]),
-                angle: v.visualAssets.contains { $0.angle == .frontThreeQuarter } ? .frontThreeQuarter : v.visualAssets[0].angle)
+                angle: v.visualAssets.contains { $0.angle == .frontThreeQuarter } ? .frontThreeQuarter : v.visualAssets[0].angle,
+                force3D: true)
         } else {
             ZStack {
                 MFColor.neutralStage
