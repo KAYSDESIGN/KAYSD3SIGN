@@ -6,41 +6,101 @@
     "Le CB125R n'a qu'un disque avant : il ne peut apparaître, avec son étrier, que d'un seul côté. Or le profil « gauche » ET le profil « droit » montrent chacun un disque avant avec étrier → au moins une vue est fausse (miroir ou image générée).",
     "Les deux trois-quarts montrent le même côté que le profil « droit » (avant vers la droite de l'image) mais avec un logo « CB125R » sur une ligne, alors que ce profil porte le logo « CB / 125R » sur deux lignes → décors différents du même côté : configurations mélangées.",
     "Le « trois-quarts arrière » est pris à environ 200° (presque de profil), pas à 225°.",
-    "Orientation physique non établie : sur une photo non retournée, une moto dont l'avant pointe vers la droite montre son côté gauche ; la vue officielle Honda de même orientation est pourtant nommée « RHS ». Le côté réel de la chaîne et du silencieux reste à confirmer sur une photo non retournée.",
+    "Orientation (corrigée le 26/11/2026) : vue de son côté droit, une moto a l'avant tourné vers la droite de l'image ; la vue officielle Honda « RHS » et la photo presse 24YM fournie confirment : côté droit = silencieux, disque avant + étrier Nissin, disque arrière ; béquille latérale (côté gauche) visible en dessous. La chaîne est donc à gauche.",
     "Jantes et disques du profil « droit » (rayons simples, disques ronds) différents de la vue officielle 26YM (rayons en Y, disques festonnés) : différence de millésime possible, non vérifiée."
   ],
   "views": {
     "front": {
-      "mirrors": { "status": "ok", "note": "deux rétroviseurs symétriques" },
-      "fork": { "status": "ok", "note": "fourche inversée noire" },
-      "colour": { "status": "ok", "note": "noir mat cohérent avec Matt Gunpowder Black" }
+      "mirrors": {
+        "status": "ok",
+        "note": "deux rétroviseurs symétriques"
+      },
+      "fork": {
+        "status": "ok",
+        "note": "fourche inversée noire"
+      },
+      "colour": {
+        "status": "ok",
+        "note": "noir mat cohérent avec Matt Gunpowder Black"
+      }
     },
     "rear": {
-      "mirrors": { "status": "ok", "note": "" },
-      "colour": { "status": "ok", "note": "" }
+      "mirrors": {
+        "status": "ok",
+        "note": ""
+      },
+      "colour": {
+        "status": "ok",
+        "note": ""
+      }
     },
     "rightProfile": {
-      "brakeDiscs": { "status": "unverified", "note": "disque avant + étrier et disque arrière visibles, comme la vue officielle ; forme des disques différente du 26YM" },
-      "exhaust": { "status": "ok", "note": "silencieux visible à la même position que la vue officielle" },
-      "mirrors": { "status": "ok", "note": "" },
-      "fork": { "status": "ok", "note": "" },
-      "logos": { "status": "ok", "note": "« CB / 125R » deux lignes, comme la vue officielle" },
-      "wheels": { "status": "unverified", "note": "rayons différents de la vue officielle 26YM" },
-      "colour": { "status": "ok", "note": "" }
+      "brakeDiscs": {
+        "status": "unverified",
+        "note": "disque avant + étrier et disque arrière visibles, comme la vue officielle ; forme des disques différente du 26YM"
+      },
+      "exhaust": {
+        "status": "ok",
+        "note": "silencieux visible à la même position que la vue officielle"
+      },
+      "mirrors": {
+        "status": "ok",
+        "note": ""
+      },
+      "fork": {
+        "status": "ok",
+        "note": ""
+      },
+      "logos": {
+        "status": "ok",
+        "note": "« CB / 125R » deux lignes, comme la vue officielle"
+      },
+      "wheels": {
+        "status": "unverified",
+        "note": "rayons différents de la vue officielle 26YM"
+      },
+      "colour": {
+        "status": "ok",
+        "note": ""
+      }
     },
     "leftProfile": {
-      "brakeDiscs": { "status": "fail", "note": "disque avant + étrier visibles aussi de ce côté : impossible avec un disque unique" },
-      "logos": { "status": "fail", "note": "logo une ligne, différent de l'autre côté" },
-      "colour": { "status": "ok", "note": "" }
+      "brakeDiscs": {
+        "status": "fail",
+        "note": "disque avant + étrier visibles aussi de ce côté : impossible avec un disque unique"
+      },
+      "logos": {
+        "status": "fail",
+        "note": "logo une ligne, différent de l'autre côté"
+      },
+      "colour": {
+        "status": "ok",
+        "note": ""
+      }
     },
     "frontThreeQuarter": {
-      "logos": { "status": "fail", "note": "même côté que le profil « droit » mais logo différent" },
-      "colour": { "status": "ok", "note": "" }
+      "logos": {
+        "status": "fail",
+        "note": "même côté que le profil « droit » mais logo différent"
+      },
+      "colour": {
+        "status": "ok",
+        "note": ""
+      }
     },
     "rearThreeQuarter": {
-      "logos": { "status": "fail", "note": "même côté que le profil « droit » mais logo différent" },
-      "bodywork": { "status": "fail", "note": "angle ≈ 200°, pas 225°" },
-      "colour": { "status": "ok", "note": "" }
+      "logos": {
+        "status": "fail",
+        "note": "même côté que le profil « droit » mais logo différent"
+      },
+      "bodywork": {
+        "status": "fail",
+        "note": "angle ≈ 200°, pas 225°"
+      },
+      "colour": {
+        "status": "ok",
+        "note": ""
+      }
     }
   }
 }

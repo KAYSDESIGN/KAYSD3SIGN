@@ -7,8 +7,8 @@ Généré par `tools/photoqc/qc.py`. Revue : Claude (contrôle visuel à pleine 
 - **Dimensions** : L 2040 × l 820 × H 1055 mm, empattement 1345 mm (la hauteur constructeur n'inclut pas la même emprise que la silhouette photo : contrôle des proportions sur la vue officielle mesurée) — vérifié (Honda Japon 19/03/2021, Honda Motor Europe 24YM)
 - **Frein avant** : un seul disque flottant 296 mm, étrier radial Nissin 4 pistons — visible d'un seul côté — vérifié (hondanews.eu, 2024 Honda CB125R (21/03/2024))
 - **Frein arrière** : un disque 220 mm, étrier simple piston — vérifié (hondanews.eu, 2024 Honda CB125R)
-- **Transmission** : chaîne à joints toriques ; côté non indiqué par la source — côté à confirmer (hondanews.eu, 2024 Honda CB125R)
-- **Échappement** : sous le moteur, silencieux double chambre ; côté non indiqué par la source — côté à confirmer (hondanews.eu, 2024 Honda CB125R)
+- **Transmission** : chaîne à joints toriques, côté gauche (déduit : côté droit = silencieux + disques sur la vue officielle RHS et la photo presse 24YM) — vérifié par observation (hondanews.eu, 2024 Honda CB125R)
+- **Échappement** : sous le moteur, silencieux double chambre, sortie côté droit — vérifié par observation (vue officielle RHS, photo presse 24YM) (hondanews.eu, 2024 Honda CB125R)
 - **Vue studio officielle « RHS » 26YM** : avant tourné vers la droite de l'image ; disque et étrier avant, disque arrière, chaîne et silencieux visibles de ce côté ; logo « CB / 125R » sur deux lignes ; disques à bord festonné — observé (image consultée, non réutilisable) (honda.co.uk, sélecteur de coloris CB125R 26YM, consulté le 26/11/2026)
 - **Matt Gunpowder Black Metallic** : reconduit en 24YM avec fourche et jantes noircies — vérifié (presse) (Top Gear Philippines, Young Machine (2024))
 - **Droits des photos Honda** : « HONDA holds all copyrights of photos » — aucune licence de réutilisation — vérifié (hondanews.eu, Terms of Use §3.3)
@@ -19,7 +19,7 @@ Généré par `tools/photoqc/qc.py`. Revue : Claude (contrôle visuel à pleine 
 - Le CB125R n'a qu'un disque avant : il ne peut apparaître, avec son étrier, que d'un seul côté. Or le profil « gauche » ET le profil « droit » montrent chacun un disque avant avec étrier → au moins une vue est fausse (miroir ou image générée).
 - Les deux trois-quarts montrent le même côté que le profil « droit » (avant vers la droite de l'image) mais avec un logo « CB125R » sur une ligne, alors que ce profil porte le logo « CB / 125R » sur deux lignes → décors différents du même côté : configurations mélangées.
 - Le « trois-quarts arrière » est pris à environ 200° (presque de profil), pas à 225°.
-- Orientation physique non établie : sur une photo non retournée, une moto dont l'avant pointe vers la droite montre son côté gauche ; la vue officielle Honda de même orientation est pourtant nommée « RHS ». Le côté réel de la chaîne et du silencieux reste à confirmer sur une photo non retournée.
+- Orientation (corrigée le 26/11/2026) : vue de son côté droit, une moto a l'avant tourné vers la droite de l'image ; la vue officielle Honda « RHS » et la photo presse 24YM fournie confirment : côté droit = silencieux, disque avant + étrier Nissin, disque arrière ; béquille latérale (côté gauche) visible en dessous. La chaîne est donc à gauche.
 - Jantes et disques du profil « droit » (rayons simples, disques ronds) différents de la vue officielle 26YM (rayons en Y, disques festonnés) : différence de millésime possible, non vérifiée.
 
 ## Vues

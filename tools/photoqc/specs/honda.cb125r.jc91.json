@@ -37,14 +37,14 @@
     },
     {
       "item": "Transmission",
-      "value": "chaîne à joints toriques ; côté non indiqué par la source",
-      "status": "côté à confirmer",
+      "value": "chaîne à joints toriques, côté gauche (déduit : côté droit = silencieux + disques sur la vue officielle RHS et la photo presse 24YM)",
+      "status": "vérifié par observation",
       "source": "hondanews.eu, 2024 Honda CB125R"
     },
     {
       "item": "Échappement",
-      "value": "sous le moteur, silencieux double chambre ; côté non indiqué par la source",
-      "status": "côté à confirmer",
+      "value": "sous le moteur, silencieux double chambre, sortie côté droit",
+      "status": "vérifié par observation (vue officielle RHS, photo presse 24YM)",
       "source": "hondanews.eu, 2024 Honda CB125R"
     },
     {
