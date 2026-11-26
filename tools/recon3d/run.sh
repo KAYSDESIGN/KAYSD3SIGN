@@ -8,7 +8,8 @@ set -euo pipefail
 GEN=$1; OUT=$2; LEFT=$3; RIGHT=${4:-}
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 BLENDER=${BLENDER:-/opt/blender-4.2.3-linux-x64/blender}
-REF="$ROOT/web/public/models/${GEN#honda.}.glb"; REF=${REF/cb125r.jc91/cb125r-jc91}
+# Dimensioned reference model of the generation (override with REF=…)
+REF=${REF:-"$ROOT/web/public/models/$(echo "${GEN#*.}" | tr . -).glb"}
 mkdir -p "$OUT"
 ARGS=(--ref "$REF" --recon "$LEFT" --out "$OUT/$GEN.glb" --report "$OUT/assemble.json" --renders "$OUT/renders")
 [ -n "$RIGHT" ] && ARGS+=(--recon "$RIGHT" --sides left,right)

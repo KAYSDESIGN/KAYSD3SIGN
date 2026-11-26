@@ -1,0 +1,27 @@
+{
+  "reviewer": "Claude — revue des 6 rendus du modèle TRELLIS.2 (photo 3/4 avant du jeu privé)",
+  "reviewedAt": "2026-11-26",
+  "setNotes": [
+    "Reconstruction TRELLIS.2 à partir d'UNE photo (3/4 avant, avant vers la droite) : géométrie unique, texturée, cohérente sur les 6 angles.",
+    "Côté caché inventé par symétrie : disque avant + étrier et silencieux apparaissent des deux côtés (le CB125R n'a qu'un disque avant).",
+    "Profils : rapport L/H 1,50 contre 1,668 sur la vue officielle Honda (≈ 10 %).",
+    "Mode multi-images de TRELLIS v1 (4 vues) : rejeté automatiquement (empreinte carrée = deux motos croisées)."
+  ],
+  "views": {
+    "rightProfile": {
+      "brakeDiscs": { "status": "ok", "note": "disque avant + étrier et disque arrière visibles, comme la photo source" },
+      "exhaust": { "status": "ok", "note": "" }, "mirrors": { "status": "ok", "note": "" }, "fork": { "status": "ok", "note": "" },
+      "wheels": { "status": "ok", "note": "" }, "logos": { "status": "fail", "note": "logos illisibles" },
+      "engine": { "status": "unverified", "note": "détails flous" }, "colour": { "status": "ok", "note": "noir mat" }
+    },
+    "leftProfile": {
+      "brakeDiscs": { "status": "fail", "note": "disque avant + étrier copiés du côté visible" },
+      "exhaust": { "status": "fail", "note": "silencieux copié du côté visible" },
+      "logos": { "status": "fail", "note": "" }
+    },
+    "frontThreeQuarter": { "logos": { "status": "fail", "note": "illisibles" }, "colour": { "status": "ok", "note": "" } },
+    "rearThreeQuarter": { "brakeDiscs": { "status": "fail", "note": "côté caché symétrisé" } },
+    "front": { "mirrors": { "status": "ok", "note": "" }, "colour": { "status": "ok", "note": "" } },
+    "rear": { "exhaust": { "status": "unverified", "note": "" } }
+  }
+}

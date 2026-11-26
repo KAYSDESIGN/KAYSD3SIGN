@@ -19,7 +19,8 @@ Mis à jour : 2026-11-26 (vues photo). Lire ce fichier en premier (skill `motofo
 
 ## Reconstruction 3D depuis photos réelles
 - Pipeline `tools/recon3d` en place et testé sans GPU (alignement sur cotes Honda, fusion gauche/droite, découpe en composants, accessoires, 6 rendus d'une même géométrie, QC). App : import d'un modèle reconstruit privé, rotation 360°, repeinture conservant la texture.
-- **Bloqué : quota ZeroGPU** (TRELLIS.2) indisponible depuis l'IP cloud ; à lancer depuis le navigateur connecté de l'utilisateur. Détails : `docs/visuals/RECONSTRUCTION_3D.md`.
+- Cause du refus ZeroGPU trouvée et corrigée (en-tête Authorization vs x-hf-authorization). `reconstruct.py <génération>` automatise tout : droits → TRELLIS.2 → alignement/composants → 6 rendus → QC.
+- CB125R : modèle TRELLIS.2 cohérent obtenu, non accepté (côté gauche déduit par symétrie, proportions ≈ 10 %). **Manque : photos réutilisables du côté gauche** (aucune en ligne). Détails : `docs/visuals/RECONSTRUCTION_3D.md`.
 
 ## Limites connues
 - Réfraction liquid glass réelle uniquement dans Chromium ; Safari/iOS = verre dépoli teinté.

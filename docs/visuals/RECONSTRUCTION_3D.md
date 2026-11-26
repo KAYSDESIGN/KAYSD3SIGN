@@ -43,12 +43,42 @@ Nouvelle moto : un modèle de référence coté (même nommage de nœuds) + `too
 - Dans l'app : import du GLB, rotation libre, réservoir repeint en rouge en conservant la texture, changement d'angle sans changer la configuration.
 - Le contrôle détecte que le modèle simplifié actuel a des profils trop hauts (rapport 1,43 contre 1,67 sur la vue officielle Honda).
 
-## Bloqué — ressource manquante précise
+## Diagnostic TRELLIS.2 (refus « quota ZeroGPU »)
 
-**Quota GPU ZeroGPU pour le compte Hugging Face « Motoforge ».** Le jeton est valide, mais depuis l'IP partagée de cet environnement cloud, le Space TRELLIS.2 applique le quota anonyme (épuisé : « 0s left »). Contourner l'identification n'est pas fait (refusé, à juste titre).
+Ni l'authentification ni le compte : **l'environnement réseau**.
+- `gradio_client` 2.x n'envoie pas le jeton dans `Authorization` mais dans `x-hf-authorization`.
+- Le proxy de l'environnement n'injecte le jeton enregistré que dans `Authorization` : le Space recevait le jeton factice, le jugeait invalide et appliquait le quota anonyme de l'IP partagée (« 0s left »).
+- Correctif : envoyer `Authorization: Bearer …` (méthode documentée par Hugging Face pour les Spaces). Vérifié : appel GPU accepté sur le quota du compte alors que le quota anonyme était épuisé.
+- Quota gratuit (documentation Hugging Face) : 5 min GPU/jour par compte (anonyme : 2 min). Une reconstruction TRELLIS.2 ≈ 150 s → environ 2 reconstructions par jour. Code de sortie 75 = quota épuisé.
 
-Débloquer, sans dépense :
-1. Depuis ton ordinateur ou ton iPhone, connecté à Hugging Face : ouvrir https://huggingface.co/spaces/microsoft/TRELLIS.2, déposer la photo, « Extract GLB », télécharger le fichier, puis me l'envoyer ici. Ou lancer `reconstruct_trellis2.py` sur ton ordinateur avec `HF_TOKEN`.
-2. Photos d'entrée : deux photos réelles de ta CB125R, 3/4 avant côté gauche et 3/4 avant côté droit, fond dégagé, moto entière, non retournées (protocole : `PHOTO_PIPELINE.md`). Les vues du jeu privé actuel montrent toutes le même côté, et ont échoué au contrôle.
+## Plusieurs images d'une même moto
 
-Ensuite : `run.sh` produit le modèle, les 6 vues et le rapport ; correction des incohérences signalées ; import dans l'app.
+| Méthode | Résultat sur la CB125R |
+|---|---|
+| TRELLIS v1 multi-images (« experimental », algorithme stochastic), 4 vues en **une seule génération** | **Rejeté** : empreinte carrée (1,00 au lieu de 0,40) = deux motos croisées ; les vues à 90° ne sont pas placées dans un même repère |
+| TRELLIS.2, une photo 3/4 avant | Géométrie texturée cohérente (373 000 faces, écart médian aux cotes Honda 15 mm), 6 vues depuis la même géométrie. **Côté caché déduit par symétrie** (disque avant et silencieux des deux côtés) ; profils ≈ 10 % trop hauts |
+| Hunyuan3D-2mv (multi-vues) | Exclu : licence non applicable dans l'UE |
+| Fusion de deux modèles indépendants | Abandonnée (demande explicite) ; l'option `--sides` reste dans assemble.py mais n'est pas utilisée |
+
+Garde-fou ajouté : `assemble.py` rejette toute géométrie dont l'empreinte largeur/longueur dépasse 0,6 (au lieu de forcer l'alignement).
+
+## Pipeline automatisé (toutes les motos)
+
+```
+tools/recon3d/refs/<génération>.json   images de référence : source, angle, droits (free | personal | reserved), priorité,
+                                        + journal des recherches déjà faites (évite de les refaire)
+python3 tools/recon3d/reconstruct.py <génération>
+   1. contrôle des droits (reserved → refus)      2. TRELLIS.2 (en-tête Authorization, quota du compte)
+   3. run.sh : barrière d'empreinte → alignement sur le modèle coté → composants → accessoires → GLB
+               → 6 rendus d'une seule géométrie → photoqc (auto + revue mécanique reviews/<génération>-recon.json)
+   sortie : build/recon/<génération>/ (ignoré par git ; marqué PRIVÉ si une source est personnelle)
+app : Menu → Modèle 3D reconstruit (interface inchangée)
+```
+
+Nouvelle moto : un modèle de référence coté (`web/public/models/<modèle>-<code>.glb`, nœuds cmp~/stock~/acc~), `tools/photoqc/specs/<génération>.json`, `tools/recon3d/refs/<génération>.json`.
+
+## État CB125R JC91 et ce qui manque
+
+- Pipeline exécuté de bout en bout sur le jeu privé ; modèle importé et repeint dans l'app (test local). **Non accepté** : côté gauche déduit, proportions, logos (`build/recon/…/qc.md`).
+- Découpe des composants : transférée depuis le modèle simplifié ; sur le modèle reconstruit, la zone « réservoir » est partielle → à affiner (transfert guidé par la texture/SAM).
+- **Ressource manquante : des photos réutilisables du côté gauche du JC91.** Recherches faites (refs/honda.cb125r.jc91.json) : Wikimedia Commons (3 photos, toutes JC79 2018–2019), Flickr Creative Commons (1 photo amateur), Openverse (refusé depuis cet environnement), Honda (tous droits réservés). Aucune image autorisée n'existe en ligne pour ce modèle : je ne peux pas t'en fournir.

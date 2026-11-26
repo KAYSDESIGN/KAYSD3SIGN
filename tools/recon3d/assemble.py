@@ -34,6 +34,7 @@ RECONS = [argv[i + 1] for i, a in enumerate(argv) if a == "--recon"]
 SIDES = (arg("--sides") or "").split(",") if arg("--sides") else []   # e.g. left,right: keep +Y half of 1st, -Y half of 2nd
 RENDERS, REPORT = arg("--renders"), arg("--report")
 MAXD = float(arg("--max-label-dist", "0.06"))
+MAX_FOOTPRINT = float(arg("--max-footprint", "0.6"))   # CB125R: 820/2040 = 0.40 incl. mirrors
 random.seed(1)
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -88,8 +89,15 @@ def align(path):
         h = np.c_[co, np.ones(len(co))] @ np.array(M).T
         co = h[:, :3]
 
-    # 1) longest horizontal axis → X ; uniform scale ; ground
+    # 0) plausibility gate: a bike's footprint is long and narrow (width/length from the official dimensions).
+    #    A square footprint means the generator merged views into crossing bodies → reject, never force-align.
     ext = co.max(0) - co.min(0)
+    ratio = min(ext[0], ext[1]) / max(ext[0], ext[1])
+    if ratio > MAX_FOOTPRINT:
+        print(f"[reject] {os.path.basename(path)}: footprint width/length {ratio:.2f} > {MAX_FOOTPRINT:.2f} — "
+              "incoherent geometry (views merged at wrong angles)")
+        sys.exit(3)
+    # 1) longest horizontal axis → X ; uniform scale ; ground
     if ext[1] > ext[0]: apply(Matrix.Rotation(math.pi / 2, 4, "Z"))
     s = ref_len / (co[:, 0].max() - co[:, 0].min())
     apply(Matrix.Scale(s, 4))

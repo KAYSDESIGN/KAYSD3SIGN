@@ -1,0 +1,25 @@
+{
+  "generation": "honda.cb125r.jc91",
+  "searched": [
+    { "where": "Wikimedia Commons, Category:Honda_CB125R", "date": "2026-11-26", "result": "3 photos CC BY-SA, toutes 2018–2019 (JC79) : génération différente, exclues" },
+    { "where": "Flickr, licences Creative Commons (cb125r, honda cb125r, cb125r 2021)", "date": "2026-11-26", "result": "1 photo amateur en situation, pas un jeu de références" },
+    { "where": "Openverse", "date": "2026-11-26", "result": "API et site refusés depuis cet environnement (429/403)" },
+    { "where": "Honda (honda.co.uk, hondanews.eu, honda.co.jp)", "date": "2026-11-26", "result": "vues studio officielles, « HONDA holds all copyrights of photos » : non réutilisables sans autorisation" }
+  ],
+  "images": [
+    { "id": "user-ftq", "file": "App/PrivatePhotos/photo_frontThreeQuarter.png", "angle": "frontThreeQuarter", "rights": "personal", "priority": 3,
+      "source": "Jeu fourni par l'utilisateur (usage personnel)" },
+    { "id": "user-rp", "file": "App/PrivatePhotos/photo_rightProfile.png", "angle": "rightProfile", "rights": "personal", "priority": 2,
+      "source": "Jeu fourni par l'utilisateur (usage personnel)" },
+    { "id": "user-front", "file": "App/PrivatePhotos/photo_front.png", "angle": "front", "rights": "personal", "priority": 1,
+      "source": "Jeu fourni par l'utilisateur (usage personnel)" },
+    { "id": "user-rear", "file": "App/PrivatePhotos/photo_rear.png", "angle": "rear", "rights": "personal", "priority": 1,
+      "source": "Jeu fourni par l'utilisateur (usage personnel)" },
+    { "id": "user-lp", "file": "App/PrivatePhotos/photo_leftProfile.png", "angle": "leftProfile", "rights": "personal", "use": false,
+      "reason": "QC : disque avant visible des deux côtés (incohérent)", "source": "Jeu fourni par l'utilisateur" },
+    { "id": "user-rtq", "file": "App/PrivatePhotos/photo_rearThreeQuarter.png", "angle": "rearThreeQuarter", "rights": "personal", "use": false,
+      "reason": "QC : angle ≈ 200°, logo différent du même côté", "source": "Jeu fourni par l'utilisateur" },
+    { "id": "honda-rhs-26ym", "url": "https://www.honda.co.uk/content/dam/central/motorcycles/colour-picker/street/cb125r/cb125r_2026/nh-c70_matte_rock_grey/26YM_CB125R_NH-C70_MAT_ROCK_GRAY_RHS.png", "angle": "rightProfile", "rights": "reserved", "use": false,
+      "reason": "Tous droits réservés Honda ; utilisable seulement avec autorisation explicite", "source": "honda.co.uk, sélecteur de coloris 26YM" }
+  ]
+}
