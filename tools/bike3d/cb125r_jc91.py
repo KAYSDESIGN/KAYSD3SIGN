@@ -22,6 +22,7 @@ W, H = (int(v) for v in (argv[argv.index("--size") + 1] if "--size" in argv else
 ONLY = argv[argv.index("--only") + 1].split(",") if "--only" in argv else None
 ACCESSORY = argv[argv.index("--accessory") + 1] if "--accessory" in argv else None
 CLEANPLATE = argv[argv.index("--cleanplate") + 1].split(",") if "--cleanplate" in argv else None
+EXPORT_GLB = argv[argv.index("--export-glb") + 1] if "--export-glb" in argv else None
 os.makedirs(OUT, exist_ok=True)
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -436,6 +437,26 @@ def restore():
         for i, m in enumerate(original[o.name]): o.material_slots[i].material = m
 
 angles = ONLY or list(ANGLES)
+if EXPORT_GLB:
+    # One GLB with every part named for the web engine: "cmp~<slug>~n", "acc~<id>~n", "stock~<part>~n", "fixed~x~n"
+    # ("~" survives three.js node-name sanitising, ":" and "." do not).
+    ground.hide_render = True
+    bpy.data.objects.remove(ground)
+    bike_objs = [o for o in scene.objects if o.type == "MESH"]
+    for i, o in enumerate(bike_objs):
+        tag = f"cmp~{o['component']}" if o.get("component") else (f"stock~{o['stock']}" if o.get("stock") else "fixed~x")
+        o.name = f"{tag}~{i}"
+    for acc_id in ["givi-b45-sr1169", "givi-a1164", "rg-radiator-guard", "puig-9653n", "givi-tn1199", "rg-aero-cp0522", "mivv-gp-pro"]:
+        before = set(scene.objects)
+        build_accessory(acc_id)
+        for j, o in enumerate(o for o in scene.objects if o not in before and o.type == "MESH"):
+            o.name = f"acc~{acc_id}~{j}"
+    for o in scene.objects:
+        if o.type not in ("MESH",): o.select_set(False)
+        else: o.select_set(True)
+    bpy.ops.export_scene.gltf(filepath=EXPORT_GLB, export_format="GLB", use_selection=True, export_apply=True,
+                              export_yup=True, export_extras=False, export_materials="EXPORT", export_lights=False, export_cameras=False)
+    raise SystemExit(0)
 if ACCESSORY:
     build_accessory(ACCESSORY)
     bike = [o for o in scene.objects if o.type == "MESH" and o is not ground and not o.get("accessory")]
