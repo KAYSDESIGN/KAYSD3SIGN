@@ -7,14 +7,16 @@ export interface BudgetSummary {
   total: number; spent: number; remaining: number
   maximum?: number; margin?: number
   excluded: string[]        // lines in another currency (never converted)
+  unpriced: string[]        // part lines without any sourced price (never counted as 0 €)
   verifiedShare: number     // 0…1
 }
 
 export function summarize(budget: Budget, lines: ShoppingLine[]): BudgetSummary {
   const cur = budget.currency
   let parts = 0, partsEst = 0, paint = 0, wrap = 0, labor = 0, shipping = 0, spent = 0, verified = 0
-  const excluded: string[] = []
+  const excluded: string[] = [], unpriced: string[] = []
   for (const l of lines) {
+    if (l.kind === 'part' && !l.unit) { unpriced.push(l.id); continue }
     if ((l.unit && l.unit.currency !== cur) || (l.shipping && l.shipping.currency !== cur)) { excluded.push(l.id); continue }
     const amount = (l.unit?.amount ?? 0) * l.quantity
     const ship = l.shipping?.amount ?? 0
@@ -33,7 +35,7 @@ export function summarize(budget: Budget, lines: ShoppingLine[]): BudgetSummary 
     currency: cur, parts: parts + partsEst, partsVerified: partsEst === 0 && parts > 0,
     paint, wrap, labor, shipping, total, spent, remaining: total - spent,
     maximum: budget.maximum, margin: budget.maximum !== undefined ? budget.maximum - total : undefined,
-    excluded, verifiedShare: total ? verified / total : 1,
+    excluded, unpriced, verifiedShare: total ? verified / total : 1,
   }
 }
 

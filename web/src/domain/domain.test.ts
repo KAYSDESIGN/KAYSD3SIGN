@@ -45,7 +45,17 @@ describe('budget', () => {
     expect(s.spent).toBeCloseTo(186.3)
     expect(s.margin).toBeCloseTo(-88.3)
     expect(s.excluded).toEqual(['3'])
+    expect(s.unpriced).toEqual([])
     expect(progress(lines)).toBeCloseTo(1 / 6)
+  })
+})
+
+describe('budget without published price', () => {
+  it('never counts an unpriced part as 0 €', () => {
+    const s = summarize({ currency: 'EUR' }, [{ id: 'x', label: 'top case', kind: 'part', quantity: 1, status: 'toBuy' }])
+    expect(s.unpriced).toEqual(['x'])
+    expect(s.total).toBe(0)
+    expect(s.partsVerified).toBe(false)
   })
 })
 

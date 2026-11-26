@@ -63,6 +63,8 @@ test('add the CB125R, customise, add a part, budget, persistence', async ({ page
   await page.screenshot({ path: shot('11-projets') })
   await page.getByRole('button', { name: 'Actions du projet' }).first().click()
   await page.getByRole('button', { name: 'Budget' }).click()
+  await expect(page.getByRole('heading', { name: 'Budget projet' })).toBeVisible()
+  await page.waitForTimeout(400)
   await page.screenshot({ path: shot('12-budget') })
   await page.getByRole('button', { name: "Voir la liste d'achat" }).click()
   await page.waitForTimeout(500)

@@ -31,7 +31,8 @@ export function Budget({ projectID }: { projectID: string }) {
   if (!p) return <><Header title="Budget projet" /><Empty icon={<Check />} title="Projet introuvable" text="" /></>
   const s = summarize(p.budget, p.lines)
   const parts = p.lines.filter((l) => l.kind === 'part').length
-  const rows: [string, number, boolean][] = [[`Pièces (${parts})`, s.parts, s.partsVerified], ['Peinture', s.paint, false], ['Covering', s.wrap, false], ["Main-d'œuvre", s.labor, false], ['Livraison', s.shipping, false]]
+  const priced = parts - s.unpriced.length
+  const rows: [string, number, boolean][] = [[`Pièces (${priced}${s.unpriced.length ? ` + ${s.unpriced.length} sans prix` : ''})`, s.parts, s.partsVerified], ['Peinture', s.paint, false], ['Covering', s.wrap, false], ["Main-d'œuvre", s.labor, false], ['Livraison', s.shipping, false]]
   return (
     <div className="pb-dock">
       <Header title="Budget projet" right={<Btn kind="ghost" onClick={() => setEdit(true)}>Modifier</Btn>} />
@@ -49,7 +50,7 @@ export function Budget({ projectID }: { projectID: string }) {
           <div className={cx('text-[26px] font-bold tabular-nums', (s.margin ?? 0) < 0 && 'text-negative')}>{formatMoney(Math.abs(s.margin ?? s.remaining))}</div>
         </div>
         <div className="flex justify-between text-[15px]"><span>Déjà dépensé</span><b>{formatMoney(s.spent)}</b></div>
-        <p className="text-[12px] text-ink-2">Part du total basée sur des prix vérifiés : {Math.round(s.verifiedShare * 100)} %{s.excluded.length ? ` · ${s.excluded.length} ligne(s) dans une autre devise non comptée(s) (jamais convertie(s))` : ''}</p>
+        <p className="text-[12px] text-ink-2">Part du total basée sur des prix vérifiés : {Math.round(s.verifiedShare * 100)} %{s.excluded.length ? ` · ${s.excluded.length} ligne(s) dans une autre devise non comptée(s) (jamais convertie(s))` : ''}{s.unpriced.length ? ` · ${s.unpriced.length} pièce(s) au prix non publié, non comptée(s) dans le total` : ''}</p>
         <Btn kind="secondary" onClick={() => push({ name: 'list', projectID })}>Voir la liste d'achat</Btn>
       </div>
       {edit && <BudgetEditor p={p} onClose={() => setEdit(false)} onSave={(b) => { saveProject({ ...p, budget: b }); setEdit(false) }} />}
