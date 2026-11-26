@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import type { Configuration } from '../domain/types'
 import { PART_RENDERS } from '../data/visuals'
-import { paintMaterial, wrapMaterial } from './materials'
+import { paintMaterial, withTextureShading, wrapMaterial } from './materials'
 
 /** Tags in the GLB node names: cmp~<slug>~n, acc~<render>~n, stock~<part>~n, fixed~x~n. */
 export function parseTag(name: string) {
@@ -39,6 +39,10 @@ export function applyConfiguration(index: ModelIndex, configuration: Configurati
     const style = showOriginal ? undefined : configuration.styles[slug]
     const box = index.boxes.get(slug)!
     const mat = style ? (style.type === 'paint' ? paintMaterial(style.paint, box) : wrapMaterial(style.base, style.wrap, box)) : null
+    // Reconstructed (photo-textured) model: keep the photographed shading under the new paint.
+    const orig = index.original.get(meshes[0]) as THREE.MeshStandardMaterial | undefined
+    const lum = meshes[0].userData.lumMean as number | undefined
+    if (mat && orig?.map && lum) withTextureShading(mat, orig.map, lum)
     if (mat) created.push(mat)
     meshes.forEach((m) => { m.material = mat ?? index.original.get(m)! })
   })

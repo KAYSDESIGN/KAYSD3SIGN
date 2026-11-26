@@ -10,6 +10,9 @@
 | Skill frontend-design | anthropics/skills | Apache-2.0 |
 | three.js, @react-three/fiber, drei, React, Zustand, Dexie, Lucide, Vite, Tailwind, Workbox | npm | MIT / ISC / Apache-2.0 (vérifier `npm ls` avant ajout) |
 | Playwright, @playwright/mcp | Microsoft | Apache-2.0 |
+| TRELLIS.2 (via Space HF) | Microsoft | MIT — modèles produits privés tant que les photos sources ne sont pas libres |
+| gradio_client | Hugging Face | Apache-2.0 |
+| Hunyuan3D 2.x | Tencent | **Non utilisé** : licence exclue dans l'UE |
 | Rendus iOS `App/Resources/` | Blender, même modèle | Création du projet |
 | Photos personnelles `App/PrivatePhotos/`, packs photo | Propriétaire | **Privées, jamais committées ni déployées** ; importées sur l'appareil uniquement |
 | Photos Honda (vue studio consultée pour le contrôle) | Honda Motor Europe | Tous droits réservés : consultées comme référence, jamais copiées dans le dépôt ni l'app |

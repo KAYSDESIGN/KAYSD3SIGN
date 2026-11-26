@@ -15,6 +15,7 @@ import { PaintStudio } from './PaintStudio'
 import { CoveringStudio } from './CoveringStudio'
 import { PhotoStage } from '../photo/PhotoStage'
 import { generationOf, loadPack, type StoredPack } from '../photo/pack'
+import { useModel } from '../engine/modelSource'
 
 const BikeViewer = lazy(() => import('../engine/BikeViewer'))
 
@@ -58,6 +59,7 @@ export default function Workshop({ projectID }: { projectID: string }) {
   const [compare, setCompare] = useState(false)
   const [pack, setPack] = useState<StoredPack | undefined>()
   const [render, setRender] = useState<'3d' | 'photo'>('3d')
+  const modelKind = useModel((m) => m.kind)
   const [sheet, setSheet] = useState<'paint' | 'wrap' | 'component' | null>(null)
   const log = useRef<string[]>(project?.history ?? [])
 
@@ -137,7 +139,9 @@ export default function Workshop({ projectID }: { projectID: string }) {
       </div>
       <p className="px-5 pt-2 text-[12px] text-ink-2">{render === 'photo' && pack
         ? 'Photo de votre pack privé : couleurs recalculées sur l\'appareil à partir de la même configuration que la 3D. Covering et accessoires visibles en 3D uniquement.'
-        : 'Modèle 3D simplifié construit aux cotes Honda : ce n\'est pas une photo de la moto. Les vues photoréalistes attendent des sources fidèles et contrôlées.'}</p>
+        : modelKind === 'private'
+          ? 'Modèle 3D reconstruit à partir de photos réelles (privé), aligné sur les cotes Honda. Rotation libre : même géométrie pour tous les angles.'
+          : 'Modèle 3D simplifié construit aux cotes Honda : ce n\'est pas une photo de la moto. Les vues photoréalistes attendent des sources fidèles et contrôlées.'}</p>
 
       <div className="px-5 pt-4 pb-10 flex-1">
         {seg === 'customize' && mode === 'color' && <>

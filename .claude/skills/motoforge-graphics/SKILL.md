@@ -21,6 +21,9 @@ Map catalog variants → renders in `PART_RENDERS` (`visuals.ts`), with `hides` 
 ## Photorealistic views (priority requirement)
 Method and state: `docs/visuals/PHOTO_PIPELINE.md`. Photos → SAM masks → `tools/photoqc/qc.py` (auto checks + per-view mechanical review: engine, discs, transmission, exhaust, mirrors, wheels, fork, bodywork, logos, colour) → `make_pack.py` → imported on the device (Menu → Vues photo privées). Only ACCEPTED views are displayed; never substitute an approximation. Private photos and Honda photos are never committed nor deployed.
 
+## Reconstruction from real photos (tools/recon3d)
+`docs/visuals/RECONSTRUCTION_3D.md`. TRELLIS.2 (MIT) via its HF Space → `tools/recon3d/run.sh <generation> <out> left.glb [right.glb]` (align on the dimensioned reference, never mirror, fuse sides, transfer cmp~ tags, add acc~, export GLB, render 6 angles, photoqc) → Menu → Modèle 3D reconstruit. Hunyuan3D is excluded (licence excludes the EU). Self-test without GPU: `make_selftest.py`.
+
 ## Generation engines
 - No GPU, no ComfyUI and no image MCP are connected in this environment. Do not claim one.
 - Pollinations (`.claude/skills/pollinations-api`) works only with the user's key stored outside the repo (`~/.config/pollinations/agent-key`, never commit or print it). Its output is "Aperçu illustratif", never a faithful render, never used for the catalog.

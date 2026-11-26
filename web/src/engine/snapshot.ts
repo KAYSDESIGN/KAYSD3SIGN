@@ -2,7 +2,8 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import type { Configuration } from '../domain/types'
-import { ANGLES, MODEL_URL, type AngleID } from '../data/visuals'
+import { ANGLES, type AngleID } from '../data/visuals'
+import { useModel } from './modelSource'
 import { applyConfiguration, cameraPosition, CENTER, indexModel, type ModelIndex } from './scene'
 
 /**
@@ -13,8 +14,15 @@ let setup: Promise<{ renderer: THREE.WebGLRenderer; scene: THREE.Scene; camera: 
 const cache = new Map<string, string>()
 let queue: Promise<unknown> = Promise.resolve()
 
+let setupURL = ''
 function init() {
-  setup ??= new GLTFLoader().loadAsync(MODEL_URL).then((gltf) => {
+  const url = useModel.getState().url
+  if (setup && setupURL !== url) {   // model switched (public ↔ private): rebuild renderer and cache
+    const old = setup; setup = null; cache.forEach((u) => URL.revokeObjectURL(u)); cache.clear()
+    old.then((s) => s.renderer.dispose()).catch(() => undefined)
+  }
+  setupURL = url
+  setup ??= new GLTFLoader().loadAsync(url).then((gltf) => {
     const canvas = document.createElement('canvas')
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true })
     renderer.setPixelRatio(1)
@@ -32,7 +40,7 @@ function init() {
 }
 
 export function snapshot(configuration: Configuration, angle: AngleID, width = 640, height = 420): Promise<string> {
-  const key = JSON.stringify([configuration.styles, configuration.parts, angle, width, height])
+  const key = JSON.stringify([useModel.getState().url, configuration.styles, configuration.parts, angle, width, height])
   const hit = cache.get(key)
   if (hit) return Promise.resolve(hit)
   const job = queue.then(async () => {

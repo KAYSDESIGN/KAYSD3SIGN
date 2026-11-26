@@ -108,3 +108,27 @@ export function wrapMaterial(base: PaintMaterial, wrap: Wrap, box: THREE.Box3) {
   const region: [number, number] = wrap.coverage === 'partial' && wrap.region ? [wrap.region.from, wrap.region.to] : [0, 1]
   return withPatterns(m, layers, box, region)
 }
+
+/**
+ * Repaint of a photo-textured (reconstructed) component: the chosen paint replaces the albedo, and the texture's
+ * luminance, normalised by the component's mean luminance (lumMean, computed by tools/recon3d/assemble.py in linear
+ * space), keeps the photographed shading and details. Chains any pattern shader already set on the material.
+ */
+export function withTextureShading(mat: THREE.MeshPhysicalMaterial, map: THREE.Texture, lumMean: number) {
+  const prev = mat.onBeforeCompile
+  const prevKey = mat.customProgramCacheKey.bind(mat)
+  mat.map = map
+  mat.onBeforeCompile = (shader, renderer) => {
+    prev.call(mat, shader, renderer)
+    shader.uniforms.uLumMean = { value: Math.max(lumMean, 0.005) }
+    shader.fragmentShader = 'uniform float uLumMean;\n' + shader.fragmentShader
+      .replace('#include <map_fragment>', '')
+      .replace('#include <alphamap_fragment>', `#ifdef USE_MAP
+        float photoL = dot(texture2D(map, vMapUv).rgb, vec3(0.2126, 0.7152, 0.0722));
+        diffuseColor.rgb *= clamp(photoL / uLumMean, 0.0, 2.2);
+      #endif
+      #include <alphamap_fragment>`)
+  }
+  mat.customProgramCacheKey = () => 'tex-shading|' + prevKey()
+  return mat
+}

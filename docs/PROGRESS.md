@@ -17,6 +17,10 @@ Mis à jour : 2026-11-26 (vues photo). Lire ce fichier en premier (skill `motofo
 - Chaîne complète en place : QC automatique + revue mécanique (`tools/photoqc`), pack privé (`make_pack.py`), import sur l'appareil, mode Photo dans l'atelier avec recoloration par masques sur la configuration partagée (testé localement avec le jeu privé).
 - **Bloqué : aucune vue fidèle disponible.** Le jeu privé échoue au contrôle (détails : `docs/visuals/QC_CB125R_JC91.md`) ; photos Honda non réutilisables ; aucun modèle 3D fidèle trouvé. Voir `docs/visuals/PHOTO_PIPELINE.md`.
 
+## Reconstruction 3D depuis photos réelles
+- Pipeline `tools/recon3d` en place et testé sans GPU (alignement sur cotes Honda, fusion gauche/droite, découpe en composants, accessoires, 6 rendus d'une même géométrie, QC). App : import d'un modèle reconstruit privé, rotation 360°, repeinture conservant la texture.
+- **Bloqué : quota ZeroGPU** (TRELLIS.2) indisponible depuis l'IP cloud ; à lancer depuis le navigateur connecté de l'utilisateur. Détails : `docs/visuals/RECONSTRUCTION_3D.md`.
+
 ## Limites connues
 - Réfraction liquid glass réelle uniquement dans Chromium ; Safari/iOS = verre dépoli teinté.
 - Pages Cloudflare : l'envoi d'assets refuse l'authentification du proxy de session → Workers utilisé à la place (limite gratuite 3 Mo compressés ; actuel ≈ 1,2 Mo).
@@ -25,4 +29,4 @@ Mis à jour : 2026-11-26 (vues photo). Lire ce fichier en premier (skill `motofo
 - Bundle principal ~1 Mo (three chargé à la demande dans l'atelier).
 
 ## Prochaine tâche
-Obtenir des photos fidèles (protocole dans `docs/visuals/PHOTO_PIPELINE.md`) → détourage, QC, pack, intégration. En parallèle : Test sur iPhone réel par le propriétaire (installation écran d'accueil, hors ligne, rotation), puis corrections issues de ce retour. Ensuite : sourcer les prix GIVI/Kappa manquants.
+Obtenir 2 photos réelles (3/4 gauche + 3/4 droit) → TRELLIS.2 dans le navigateur connecté → `tools/recon3d/run.sh` → import ; ou des photos fidèles (protocole dans `docs/visuals/PHOTO_PIPELINE.md`) → détourage, QC, pack, intégration. En parallèle : Test sur iPhone réel par le propriétaire (installation écran d'accueil, hors ligne, rotation), puis corrections issues de ce retour. Ensuite : sourcer les prix GIVI/Kappa manquants.

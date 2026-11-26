@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
 import { ContactShadows, Decal, Environment, Lightformer, OrbitControls, useGLTF, useTexture } from '@react-three/drei'
 import type { Configuration, WrapLayer } from '../domain/types'
 import { ANGLES, MODEL_URL, stickerURL, type AngleID } from '../data/visuals'
+import { useModel } from './modelSource'
 import { applyConfiguration, cameraPosition, CENTER, indexModel, parseTag } from './scene'
 
 
@@ -18,7 +19,8 @@ export interface ViewerProps {
 }
 
 function BikeModel({ configuration, showOriginal, onSelect }: Omit<ViewerProps, 'angle' | 'still' | 'selected'>) {
-  const { scene } = useGLTF(MODEL_URL)
+  const url = useModel((m) => m.url)
+  const { scene } = useGLTF(url)
   const root = useMemo(() => scene.clone(true), [scene])
   const invalidate = useThree((s) => s.invalidate)
   const index = useMemo(() => indexModel(root), [root])

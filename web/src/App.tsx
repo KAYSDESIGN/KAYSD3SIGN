@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
+import { initModelSource } from './engine/modelSource'
 import { Bike, Heart, House, LayoutGrid, Search } from 'lucide-react'
 import { useApp } from './store/app'
 import { useNav, type Tab } from './store/nav'
@@ -42,7 +43,7 @@ function Dock() {
 export default function App() {
   const { ready, load } = useApp()
   const { tab, stack } = useNav()
-  useEffect(() => { load() }, [load])
+  useEffect(() => { load(); initModelSource() }, [load])
   const route = stack[stack.length - 1]
 
   let screen

@@ -6,6 +6,7 @@ import { bikeName, catalog } from '../data/catalog'
 import { Badge, Btn, Card, Header, Sheet } from '../ui/kit'
 import { Wordmark } from './Home'
 import { PhotoPackSheet } from '../photo/PhotoPackSheet'
+import { ModelSheet } from '../photo/ModelSheet'
 import { generationOf } from '../photo/pack'
 
 function Row({ icon, title, value, onClick }: { icon: React.ReactNode; title: string; value?: React.ReactNode; onClick?: () => void }) {
@@ -24,7 +25,7 @@ export default function Menu() {
   const bike = useApp(selectedBike)
   const { bikes, projects, clearAll } = useApp()
   const { setTab, push } = useNav()
-  const [sheet, setSheet] = useState<'install' | 'sources' | 'licenses' | 'photos' | null>(null)
+  const [sheet, setSheet] = useState<'install' | 'sources' | 'licenses' | 'photos' | 'model' | null>(null)
   const [usage, setUsage] = useState<string>('…')
   const standalone = typeof window !== 'undefined' && (window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone)
   useEffect(() => { navigator.storage?.estimate?.().then((e) => setUsage(`${((e.usage ?? 0) / 1048576).toFixed(1)} Mo utilisés`)).catch(() => setUsage('—')) }, [])
@@ -38,6 +39,7 @@ export default function Menu() {
         <Card className="px-4 py-2">
           {bike && <Row icon={<Bike size={17} />} title={`${bikeName(bike.variantID).brand} ${bikeName(bike.variantID).model}`} value={[bike.year, bikeName(bike.variantID).code].filter(Boolean).join(' · ')} onClick={() => setTab('garage')} />}
           {bike && generationOf(bike.variantID, catalog.variants) && <Row icon={<ImageIcon size={17} />} title="Vues photo privées" onClick={() => setSheet('photos')} />}
+          {bike && <Row icon={<Box size={17} />} title="Modèle 3D reconstruit" onClick={() => setSheet('model')} />}
           <Row icon={<Plus size={17} />} title="Ajouter une moto" onClick={() => push({ name: 'addBike' })} />
         </Card>
         <Card className="px-4 py-2">
@@ -58,6 +60,7 @@ export default function Menu() {
         <p className="text-[12px] text-ink-2 text-center">MOTOFORGE 0.1 · Imagine. Personnalise. Roule.</p>
       </div>
       {sheet === 'photos' && bike && <PhotoPackSheet generation={generationOf(bike.variantID, catalog.variants)!} onClose={() => setSheet(null)} />}
+      {sheet === 'model' && <ModelSheet onClose={() => setSheet(null)} />}
       {sheet === 'install' && <Sheet title="Installer MOTOFORGE" onClose={() => setSheet(null)}>
         <ol className="list-decimal pl-5 space-y-2 py-2 text-[15px]"><li>Ouvrez cette page dans <b>Safari</b>.</li><li>Touchez le bouton <b>Partager</b>.</li><li>Choisissez <b>Sur l'écran d'accueil</b>, puis <b>Ajouter</b>.</li></ol>
         <p className="text-[13px] text-ink-2">L'app s'ouvre ensuite en plein écran et fonctionne hors ligne : projets et modèle 3D sont stockés sur l'iPhone.</p>
