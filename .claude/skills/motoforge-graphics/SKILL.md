@@ -18,6 +18,9 @@ Map catalog variants → renders in `PART_RENDERS` (`visuals.ts`), with `hides` 
 ## Materials
 `web/src/engine/materials.ts`: MeshPhysicalMaterial per finish (`domain/finishes.ts`), shader patterns (gradient, stripes, carbon, …) injected via `onBeforeCompile`, stickers via drei `Decal`. Finishes not physically computed are flagged `simulated` and shown with the "Simulation" badge.
 
+## Photorealistic views (priority requirement)
+Method and state: `docs/visuals/PHOTO_PIPELINE.md`. Photos → SAM masks → `tools/photoqc/qc.py` (auto checks + per-view mechanical review: engine, discs, transmission, exhaust, mirrors, wheels, fork, bodywork, logos, colour) → `make_pack.py` → imported on the device (Menu → Vues photo privées). Only ACCEPTED views are displayed; never substitute an approximation. Private photos and Honda photos are never committed nor deployed.
+
 ## Generation engines
 - No GPU, no ComfyUI and no image MCP are connected in this environment. Do not claim one.
 - Pollinations (`.claude/skills/pollinations-api`) works only with the user's key stored outside the repo (`~/.config/pollinations/agent-key`, never commit or print it). Its output is "Aperçu illustratif", never a faithful render, never used for the catalog.

@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { ChevronRight, Database, Download, Euro, Info, Link2, Plus, ShieldCheck, Smartphone, Bike, Box } from 'lucide-react'
+import { ChevronRight, Database, Download, Euro, Info, Link2, Plus, ShieldCheck, Smartphone, Bike, Box, Image as ImageIcon } from 'lucide-react'
 import { selectedBike, useApp } from '../store/app'
 import { useNav } from '../store/nav'
 import { bikeName, catalog } from '../data/catalog'
 import { Badge, Btn, Card, Header, Sheet } from '../ui/kit'
 import { Wordmark } from './Home'
+import { PhotoPackSheet } from '../photo/PhotoPackSheet'
+import { generationOf } from '../photo/pack'
 
 function Row({ icon, title, value, onClick }: { icon: React.ReactNode; title: string; value?: React.ReactNode; onClick?: () => void }) {
   const C = onClick ? 'button' : 'div'
@@ -22,7 +24,7 @@ export default function Menu() {
   const bike = useApp(selectedBike)
   const { bikes, projects, clearAll } = useApp()
   const { setTab, push } = useNav()
-  const [sheet, setSheet] = useState<'install' | 'sources' | 'licenses' | null>(null)
+  const [sheet, setSheet] = useState<'install' | 'sources' | 'licenses' | 'photos' | null>(null)
   const [usage, setUsage] = useState<string>('…')
   const standalone = typeof window !== 'undefined' && (window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone)
   useEffect(() => { navigator.storage?.estimate?.().then((e) => setUsage(`${((e.usage ?? 0) / 1048576).toFixed(1)} Mo utilisés`)).catch(() => setUsage('—')) }, [])
@@ -35,6 +37,7 @@ export default function Menu() {
         <Card className="p-4 flex items-center gap-4"><Wordmark /><span className="ml-auto text-[12px] text-ink-2 text-right">{bikes.length} moto(s)<br />{projects.length} projet(s)</span></Card>
         <Card className="px-4 py-2">
           {bike && <Row icon={<Bike size={17} />} title={`${bikeName(bike.variantID).brand} ${bikeName(bike.variantID).model}`} value={[bike.year, bikeName(bike.variantID).code].filter(Boolean).join(' · ')} onClick={() => setTab('garage')} />}
+          {bike && generationOf(bike.variantID, catalog.variants) && <Row icon={<ImageIcon size={17} />} title="Vues photo privées" onClick={() => setSheet('photos')} />}
           <Row icon={<Plus size={17} />} title="Ajouter une moto" onClick={() => push({ name: 'addBike' })} />
         </Card>
         <Card className="px-4 py-2">
@@ -54,6 +57,7 @@ export default function Menu() {
         <Btn kind="ghost" className="!text-negative !px-0" onClick={() => { if (confirm('Effacer toutes les données locales (motos, projets, favoris) ?')) clearAll() }}>Effacer les données locales</Btn>
         <p className="text-[12px] text-ink-2 text-center">MOTOFORGE 0.1 · Imagine. Personnalise. Roule.</p>
       </div>
+      {sheet === 'photos' && bike && <PhotoPackSheet generation={generationOf(bike.variantID, catalog.variants)!} onClose={() => setSheet(null)} />}
       {sheet === 'install' && <Sheet title="Installer MOTOFORGE" onClose={() => setSheet(null)}>
         <ol className="list-decimal pl-5 space-y-2 py-2 text-[15px]"><li>Ouvrez cette page dans <b>Safari</b>.</li><li>Touchez le bouton <b>Partager</b>.</li><li>Choisissez <b>Sur l'écran d'accueil</b>, puis <b>Ajouter</b>.</li></ol>
         <p className="text-[13px] text-ink-2">L'app s'ouvre ensuite en plein écran et fonctionne hors ligne : projets et modèle 3D sont stockés sur l'iPhone.</p>

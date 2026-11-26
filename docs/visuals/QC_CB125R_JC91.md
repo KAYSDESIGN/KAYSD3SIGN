@@ -1,0 +1,34 @@
+# Contrôle qualité des vues photo — Honda CB125R JC91 (2021–)
+
+Généré par `tools/photoqc/qc.py`. Revue : Claude (contrôle visuel à pleine résolution + comparaison avec la vue studio officielle 26YM), 2026-11-26. Une vue n'est intégrée que si **tous** les contrôles automatiques et **tous** les points mécaniques sont « ok ».
+
+## Référence (sources)
+
+- **Dimensions** : L 2040 × l 820 × H 1055 mm, empattement 1345 mm (la hauteur constructeur n'inclut pas la même emprise que la silhouette photo : contrôle des proportions sur la vue officielle mesurée) — vérifié (Honda Japon 19/03/2021, Honda Motor Europe 24YM)
+- **Frein avant** : un seul disque flottant 296 mm, étrier radial Nissin 4 pistons — visible d'un seul côté — vérifié (hondanews.eu, 2024 Honda CB125R (21/03/2024))
+- **Frein arrière** : un disque 220 mm, étrier simple piston — vérifié (hondanews.eu, 2024 Honda CB125R)
+- **Transmission** : chaîne à joints toriques ; côté non indiqué par la source — côté à confirmer (hondanews.eu, 2024 Honda CB125R)
+- **Échappement** : sous le moteur, silencieux double chambre ; côté non indiqué par la source — côté à confirmer (hondanews.eu, 2024 Honda CB125R)
+- **Vue studio officielle « RHS » 26YM** : avant tourné vers la droite de l'image ; disque et étrier avant, disque arrière, chaîne et silencieux visibles de ce côté ; logo « CB / 125R » sur deux lignes ; disques à bord festonné — observé (image consultée, non réutilisable) (honda.co.uk, sélecteur de coloris CB125R 26YM, consulté le 26/11/2026)
+- **Matt Gunpowder Black Metallic** : reconduit en 24YM avec fourche et jantes noircies — vérifié (presse) (Top Gear Philippines, Young Machine (2024))
+- **Droits des photos Honda** : « HONDA holds all copyrights of photos » — aucune licence de réutilisation — vérifié (hondanews.eu, Terms of Use §3.3)
+
+## Constats sur le jeu
+
+- Jeu privé de 6 vues fourni par l'utilisateur (Matt Gunpowder Black Metallic, 23YM annoncé). Origine des images non documentée.
+- Le CB125R n'a qu'un disque avant : il ne peut apparaître, avec son étrier, que d'un seul côté. Or le profil « gauche » ET le profil « droit » montrent chacun un disque avant avec étrier → au moins une vue est fausse (miroir ou image générée).
+- Les deux trois-quarts montrent le même côté que le profil « droit » (avant vers la droite de l'image) mais avec un logo « CB125R » sur une ligne, alors que ce profil porte le logo « CB / 125R » sur deux lignes → décors différents du même côté : configurations mélangées.
+- Le « trois-quarts arrière » est pris à environ 200° (presque de profil), pas à 225°.
+- Orientation physique non établie : sur une photo non retournée, une moto dont l'avant pointe vers la droite montre son côté gauche ; la vue officielle Honda de même orientation est pourtant nommée « RHS ». Le côté réel de la chaîne et du silencieux reste à confirmer sur une photo non retournée.
+- Jantes et disques du profil « droit » (rayons simples, disques ronds) différents de la vue officielle 26YM (rayons en Y, disques festonnés) : différence de millésime possible, non vérifiée.
+
+## Vues
+
+| Vue | Verdict | Contrôles automatiques | Revue mécanique |
+|---|---|---|---|
+| 0° front | **Rejetée** | ✅ transparentBackground : 72% de pixels transparents<br>❌ fullyVisible : marge minimale 0 px<br>✅ resolution : moto 891×1307 px (minimum 1000 px côté long)<br>✅ proportions : pas de référence mesurée pour cet angle : contrôle par la revue<br>✅ uniformLighting : luminance moyenne 0.214, écart +3% / médiane (±25%) | ❔ engine<br>❔ brakeDiscs<br>❔ transmission<br>❔ exhaust<br>✅ mirrors : deux rétroviseurs symétriques<br>❔ wheels<br>✅ fork : fourche inversée noire<br>❔ bodywork<br>❔ logos<br>✅ colour : noir mat cohérent avec Matt Gunpowder Black |
+| 45° frontThreeQuarter | **Rejetée** | ✅ transparentBackground : 55% de pixels transparents<br>❌ fullyVisible : marge minimale 0 px<br>✅ resolution : moto 1255×1018 px (minimum 1000 px côté long)<br>✅ proportions : pas de référence mesurée pour cet angle : contrôle par la revue<br>✅ uniformLighting : luminance moyenne 0.190, écart -9% / médiane (±25%) | ❔ engine<br>❔ brakeDiscs<br>❔ transmission<br>❔ exhaust<br>❔ mirrors<br>❔ wheels<br>❔ fork<br>❔ bodywork<br>❌ logos : même côté que le profil « droit » mais logo différent<br>✅ colour |
+| 90° rightProfile | **Rejetée** | ✅ transparentBackground : 55% de pixels transparents<br>❌ fullyVisible : marge minimale 0 px<br>✅ resolution : moto 1579×887 px (minimum 1000 px côté long)<br>❌ proportions : rapport L/H 1.782, référence 1.668 ±4% (vue studio officielle Honda 26YM « RHS » (honda.co.uk), pixels opaques, mesurée le 26/11/2026 ; même génération JC91, cotes inchangées)<br>✅ uniformLighting : luminance moyenne 0.204, écart -2% / médiane (±25%) | ❔ engine<br>❔ brakeDiscs : disque avant + étrier et disque arrière visibles, comme la vue officielle ; forme des disques différente du 26YM<br>❔ transmission<br>✅ exhaust : silencieux visible à la même position que la vue officielle<br>✅ mirrors<br>❔ wheels : rayons différents de la vue officielle 26YM<br>✅ fork<br>❔ bodywork<br>✅ logos : « CB / 125R » deux lignes, comme la vue officielle<br>✅ colour |
+| 180° rear | **Rejetée** | ✅ transparentBackground : 74% de pixels transparents<br>✅ fullyVisible : marge minimale 7 px<br>✅ resolution : moto 791×1297 px (minimum 1000 px côté long)<br>✅ proportions : pas de référence mesurée pour cet angle : contrôle par la revue<br>✅ uniformLighting : luminance moyenne 0.221, écart +6% / médiane (±25%) | ❔ engine<br>❔ brakeDiscs<br>❔ transmission<br>❔ exhaust<br>✅ mirrors<br>❔ wheels<br>❔ fork<br>❔ bodywork<br>❔ logos<br>✅ colour |
+| 225° rearThreeQuarter | **Rejetée** | ✅ transparentBackground : 50% de pixels transparents<br>❌ fullyVisible : marge minimale 0 px<br>✅ resolution : moto 1395×1017 px (minimum 1000 px côté long)<br>✅ proportions : pas de référence mesurée pour cet angle : contrôle par la revue<br>✅ uniformLighting : luminance moyenne 0.212, écart +2% / médiane (±25%) | ❔ engine<br>❔ brakeDiscs<br>❔ transmission<br>❔ exhaust<br>❔ mirrors<br>❔ wheels<br>❔ fork<br>❌ bodywork : angle ≈ 200°, pas 225°<br>❌ logos : même côté que le profil « droit » mais logo différent<br>✅ colour |
+| 270° leftProfile | **Rejetée** | ✅ transparentBackground : 55% de pixels transparents<br>❌ fullyVisible : marge minimale 0 px<br>✅ resolution : moto 1547×877 px (minimum 1000 px côté long)<br>❌ proportions : rapport L/H 1.767, référence 1.668 ±4% (vue studio officielle Honda 26YM « RHS » (honda.co.uk), pixels opaques, mesurée le 26/11/2026 ; même génération JC91, cotes inchangées)<br>✅ uniformLighting : luminance moyenne 0.203, écart -2% / médiane (±25%) | ❔ engine<br>❌ brakeDiscs : disque avant + étrier visibles aussi de ce côté : impossible avec un disque unique<br>❔ transmission<br>❔ exhaust<br>❔ mirrors<br>❔ wheels<br>❔ fork<br>❔ bodywork<br>❌ logos : logo une ligne, différent de l'autre côté<br>✅ colour |

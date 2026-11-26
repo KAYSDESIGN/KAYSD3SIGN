@@ -19,3 +19,7 @@ Secrets.xcconfig
 # Private visual set (user-supplied photos, personal use only — never commit)
 App/PrivatePhotos/*
 !App/PrivatePhotos/README.md
+
+# Local-only checks with private data, Playwright MCP output
+web/e2e-local/
+.playwright-mcp/

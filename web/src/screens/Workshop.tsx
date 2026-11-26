@@ -13,6 +13,8 @@ import { Glass } from '../ui/Glass'
 import { Badge, Btn, Card, cx, Empty, RoundBtn, Segmented, Sheet } from '../ui/kit'
 import { PaintStudio } from './PaintStudio'
 import { CoveringStudio } from './CoveringStudio'
+import { PhotoStage } from '../photo/PhotoStage'
+import { generationOf, loadPack, type StoredPack } from '../photo/pack'
 
 const BikeViewer = lazy(() => import('../engine/BikeViewer'))
 
@@ -54,6 +56,8 @@ export default function Workshop({ projectID }: { projectID: string }) {
   const [seg, setSeg] = useState<'customize' | 'configure'>('customize')
   const [mode, setMode] = useState<'color' | 'finish' | 'parts'>('color')
   const [compare, setCompare] = useState(false)
+  const [pack, setPack] = useState<StoredPack | undefined>()
+  const [render, setRender] = useState<'3d' | 'photo'>('3d')
   const [sheet, setSheet] = useState<'paint' | 'wrap' | 'component' | null>(null)
   const log = useRef<string[]>(project?.history ?? [])
 
@@ -67,6 +71,8 @@ export default function Workshop({ projectID }: { projectID: string }) {
 
   const variant = project && variantById(project.configuration.vehicleVariantID)
   const components = useMemo(() => variant?.components.map((c) => c.id.split('.').pop()!) ?? [], [variant])
+  const generation = project && generationOf(project.configuration.vehicleVariantID, catalog.variants)
+  useEffect(() => { if (generation) loadPack(generation).then(setPack).catch(() => setPack(undefined)) }, [generation])
   if (!project || !hist) return <Empty icon={<Box size={36} />} title="Projet introuvable" text="Ce projet a été supprimé." action={<Btn onClick={pop}>Retour</Btn>} />
 
   const config = draft ?? hist.present
@@ -104,7 +110,9 @@ export default function Workshop({ projectID }: { projectID: string }) {
       {/* Stage: the bike is the main element; UI around it stays neutral (no tint behind the render). */}
       <div className="relative mx-5 mt-3 rounded-[var(--radius-card)] overflow-hidden bg-[#EDEDF0] h-[min(48dvh,420px)]">
         <Suspense fallback={<div className="absolute inset-0 grid place-items-center text-ink-2 text-[14px]">Chargement du modèle 3D…</div>}>
-          <BikeViewer configuration={config} angle={angle} showOriginal={compare} onSelect={(s) => { setSelected(s); setSeg('customize'); setMode('color') }} />
+          {render === 'photo' && pack
+            ? <PhotoStage pack={pack} angle={angle} configuration={config} showOriginal={compare} />
+            : <BikeViewer configuration={config} angle={angle} showOriginal={compare} onSelect={(s) => { setSelected(s); setSeg('customize'); setMode('color') }} />}
         </Suspense>
         <div className="absolute left-2 right-2 top-2 flex justify-between gap-2 pointer-events-none">
           <Glass radius={18} className="pointer-events-auto flex overflow-x-auto no-scrollbar p-1 gap-1 max-w-[74%]">
@@ -112,7 +120,8 @@ export default function Workshop({ projectID }: { projectID: string }) {
               <button key={a.id} onClick={() => setAngle(a.id)} aria-pressed={angle === a.id} className={cx('shrink-0 h-8 px-2.5 rounded-full text-[12px] font-semibold', angle === a.id ? 'bg-white text-ink shadow' : 'text-ink')}>{a.label}</button>
             ))}
           </Glass>
-          <Glass radius={18} className="pointer-events-auto p-1">
+          <Glass radius={18} className="pointer-events-auto p-1 flex gap-1">
+            {pack && <button onClick={() => setRender((r) => (r === '3d' ? 'photo' : '3d'))} aria-label={render === '3d' ? 'Afficher les photos' : 'Afficher le modèle 3D'} className="h-8 px-3 rounded-full text-[12px] font-semibold">{render === '3d' ? 'Photo' : '3D'}</button>}
             <button onClick={() => setCompare((c) => !c)} aria-pressed={compare} className={cx('h-8 px-3 rounded-full text-[12px] font-semibold', compare && 'bg-white shadow')}>{compare ? 'Origine' : 'Avant'}</button>
           </Glass>
         </div>
@@ -126,8 +135,11 @@ export default function Workshop({ projectID }: { projectID: string }) {
           ))}
         </div>
       </div>
+      <p className="px-5 pt-2 text-[12px] text-ink-2">{render === 'photo' && pack
+        ? 'Photo de votre pack privé : couleurs recalculées sur l\'appareil à partir de la même configuration que la 3D. Covering et accessoires visibles en 3D uniquement.'
+        : 'Modèle 3D simplifié construit aux cotes Honda : ce n\'est pas une photo de la moto. Les vues photoréalistes attendent des sources fidèles et contrôlées.'}</p>
 
-      <div className="px-5 pt-5 pb-10 flex-1">
+      <div className="px-5 pt-4 pb-10 flex-1">
         {seg === 'customize' && mode === 'color' && <>
           <div className="flex items-center justify-between mb-3">
             <button onClick={() => setSheet('component')} className="flex items-center gap-1 text-[17px] font-semibold" aria-label={`Élément : ${label}`}>Couleur {article(label)} <ChevronDown size={16} /></button>

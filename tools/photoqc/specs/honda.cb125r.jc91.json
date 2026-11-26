@@ -1,0 +1,69 @@
+{
+  "generation": "honda.cb125r.jc91",
+  "name": "Honda CB125R JC91 (2021–)",
+  "dimensionsMM": {
+    "length": 2040,
+    "width": 820,
+    "height": 1055,
+    "wheelbase": 1345
+  },
+  "qc": {
+    "minLongSidePx": 1000,
+    "aspectTolerance": 0.04,
+    "lightingTolerance": 0.25,
+    "profileAspectReference": {
+      "value": 1.668,
+      "source": "vue studio officielle Honda 26YM « RHS » (honda.co.uk), pixels opaques, mesurée le 26/11/2026 ; même génération JC91, cotes inchangées"
+    }
+  },
+  "facts": [
+    {
+      "item": "Dimensions",
+      "value": "L 2040 × l 820 × H 1055 mm, empattement 1345 mm (la hauteur constructeur n'inclut pas la même emprise que la silhouette photo : contrôle des proportions sur la vue officielle mesurée)",
+      "status": "vérifié",
+      "source": "Honda Japon 19/03/2021, Honda Motor Europe 24YM"
+    },
+    {
+      "item": "Frein avant",
+      "value": "un seul disque flottant 296 mm, étrier radial Nissin 4 pistons — visible d'un seul côté",
+      "status": "vérifié",
+      "source": "hondanews.eu, 2024 Honda CB125R (21/03/2024)"
+    },
+    {
+      "item": "Frein arrière",
+      "value": "un disque 220 mm, étrier simple piston",
+      "status": "vérifié",
+      "source": "hondanews.eu, 2024 Honda CB125R"
+    },
+    {
+      "item": "Transmission",
+      "value": "chaîne à joints toriques ; côté non indiqué par la source",
+      "status": "côté à confirmer",
+      "source": "hondanews.eu, 2024 Honda CB125R"
+    },
+    {
+      "item": "Échappement",
+      "value": "sous le moteur, silencieux double chambre ; côté non indiqué par la source",
+      "status": "côté à confirmer",
+      "source": "hondanews.eu, 2024 Honda CB125R"
+    },
+    {
+      "item": "Vue studio officielle « RHS » 26YM",
+      "value": "avant tourné vers la droite de l'image ; disque et étrier avant, disque arrière, chaîne et silencieux visibles de ce côté ; logo « CB / 125R » sur deux lignes ; disques à bord festonné",
+      "status": "observé (image consultée, non réutilisable)",
+      "source": "honda.co.uk, sélecteur de coloris CB125R 26YM, consulté le 26/11/2026"
+    },
+    {
+      "item": "Matt Gunpowder Black Metallic",
+      "value": "reconduit en 24YM avec fourche et jantes noircies",
+      "status": "vérifié (presse)",
+      "source": "Top Gear Philippines, Young Machine (2024)"
+    },
+    {
+      "item": "Droits des photos Honda",
+      "value": "« HONDA holds all copyrights of photos » — aucune licence de réutilisation",
+      "status": "vérifié",
+      "source": "hondanews.eu, Terms of Use §3.3"
+    }
+  ]
+}

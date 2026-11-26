@@ -1,6 +1,6 @@
 # MOTOFORGE — Avancement (web)
 
-Mis à jour : 2026-11-26. Lire ce fichier en premier (skill `motoforge-token-optimizer`).
+Mis à jour : 2026-11-26 (vues photo). Lire ce fichier en premier (skill `motoforge-token-optimizer`).
 
 ## En ligne
 **https://motoforge.homehub-28saz.workers.dev** — iPhone : Safari → Partager → « Sur l'écran d'accueil ».
@@ -13,6 +13,10 @@ Mis à jour : 2026-11-26. Lire ce fichier en premier (skill `motoforge-token-opt
 - Déploiement gratuit : `npm run deploy` (Worker unique, fichiers embarqués) ; workflow `.github/workflows/web.yml` (build + tests + déploiement si secret Cloudflare présent).
 - Skills : frontend-design, liquid-glass-web, pollinations-api, motoforge-design/-graphics/-catalog/-pwa/-token-optimizer. Playwright MCP déclaré dans `.mcp.json`.
 
+## Vues photoréalistes (exigence prioritaire)
+- Chaîne complète en place : QC automatique + revue mécanique (`tools/photoqc`), pack privé (`make_pack.py`), import sur l'appareil, mode Photo dans l'atelier avec recoloration par masques sur la configuration partagée (testé localement avec le jeu privé).
+- **Bloqué : aucune vue fidèle disponible.** Le jeu privé échoue au contrôle (détails : `docs/visuals/QC_CB125R_JC91.md`) ; photos Honda non réutilisables ; aucun modèle 3D fidèle trouvé. Voir `docs/visuals/PHOTO_PIPELINE.md`.
+
 ## Limites connues
 - Réfraction liquid glass réelle uniquement dans Chromium ; Safari/iOS = verre dépoli teinté.
 - Pages Cloudflare : l'envoi d'assets refuse l'authentification du proxy de session → Workers utilisé à la place (limite gratuite 3 Mo compressés ; actuel ≈ 1,2 Mo).
@@ -21,4 +25,4 @@ Mis à jour : 2026-11-26. Lire ce fichier en premier (skill `motoforge-token-opt
 - Bundle principal ~1 Mo (three chargé à la demande dans l'atelier).
 
 ## Prochaine tâche
-Test sur iPhone réel par le propriétaire (installation écran d'accueil, hors ligne, rotation), puis corrections issues de ce retour. Ensuite : sourcer les prix GIVI/Kappa manquants.
+Obtenir des photos fidèles (protocole dans `docs/visuals/PHOTO_PIPELINE.md`) → détourage, QC, pack, intégration. En parallèle : Test sur iPhone réel par le propriétaire (installation écran d'accueil, hors ligne, rotation), puis corrections issues de ce retour. Ensuite : sourcer les prix GIVI/Kappa manquants.

@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 const sizes = [[375, 812], [390, 844], [393, 852], [430, 932]] as const
 export default defineConfig({
-  testDir: 'e2e',
+  testDir: process.env.E2E_DIR ?? 'e2e',
   timeout: 120_000,
   use: { baseURL: process.env.E2E_URL ?? 'http://localhost:4173', trace: 'off', screenshot: 'off' },
   webServer: process.env.E2E_URL ? undefined : { command: 'npm run preview', port: 4173, reuseExistingServer: true },
