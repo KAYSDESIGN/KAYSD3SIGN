@@ -87,3 +87,22 @@ Transverses : `Identifier<T>` (slugs stables), `Verification` (source + date + s
 
 - `project.yml` (XcodeGen) génère `MotoForge.xcodeproj` (non versionné).
 - Cible iOS 17+ ; Liquid Glass natif à partir d'iOS 26 (`mfGlass`, `TabView` système), matériaux système Apple en dessous.
+
+## Application web (PWA) — `web/`
+
+Priorité actuelle ; l'app iOS reste intacte. Mêmes principes : la configuration est la source de vérité, indépendante de l'angle de vue.
+
+```
+src/domain   types, couleurs, finitions, historique, catalogue (compatibilité, homologation, offres), budget — logique pure, Vitest
+src/data     catalog.json (copié depuis MFCatalog par scripts/sync-catalog.mjs), visuels (angles, PART_RENDERS), inspirations
+src/store    Zustand (useApp) + Dexie/IndexedDB (bikes, projects, kv) ; nav.ts = onglets + pile synchronisés avec l'historique navigateur
+src/engine   three.js / R3F : BikeViewer (Canvas unique, OrbitControls, Decal), materials (PBR + motifs shader), scene (index du GLB, application de la configuration), snapshot (rendu hors écran partagé pour les vignettes)
+src/ui       kit de composants, Glass (liquid glass), icônes
+src/screens  Accueil, Garage, Atelier, Peinture, Covering, Catalogue, Produit, Projets, Budget, Menu
+```
+
+- Un seul modèle 3D (`public/models/cb125r-jc91.glb`) pour tous les angles ; nœuds `cmp~`/`acc~`/`stock~`/`fixed~`.
+- three/R3F chargés à la demande (atelier en `lazy`), `frameloop="demand"`, reprise après perte de contexte WebGL.
+- Hors ligne : vite-plugin-pwa (Workbox, précache versionné, `cleanupOutdatedCaches`).
+- Déploiement : `scripts/deploy-worker.mjs` → Cloudflare Workers gratuit ; CI `.github/workflows/web.yml`.
+- Tests : Vitest (`src/**/*.test.ts`), Playwright (`e2e/`, 4 tailles iPhone Chromium + WebKit, `E2E_URL` pour tester la prod).

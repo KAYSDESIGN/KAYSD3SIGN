@@ -90,3 +90,12 @@ Ne pas committer `MotoForge.xcodeproj` (généré).
 ## 8. Compte rendu
 
 Après chaque étape : fonctionnalités terminées, tests effectués, problèmes rencontrés, éléments restants. Tenir `docs/ROADMAP.md` à jour.
+
+## 9. Application web (PWA) — priorité actuelle
+
+- Dossier `web/` : React + TypeScript strict + Vite + Tailwind + Zustand + Dexie + three/R3F/drei + vite-plugin-pwa. L'app iOS reste dans le dépôt, en pause.
+- Lire d'abord `docs/PROGRESS.md` (état + prochaine tâche), puis le skill utile : `motoforge-pwa`, `motoforge-design`, `motoforge-catalog`, `motoforge-graphics`, `motoforge-token-optimizer`.
+- Toutes les règles ci-dessus s'appliquent au web (tokens via le thème Tailwind, aucune donnée inventée, aucun bouton factice, badges « Simulation » / « Estimation » / « Prix non publié »).
+- Avant tout commit web : `npm test`, `npm run build`, `npx playwright test --trace off`.
+- Déploiement gratuit uniquement (`npm run deploy`, Cloudflare Workers). Aucun plan payant.
+- Mettre à jour `docs/PROGRESS.md` avant chaque arrêt ou compaction.
