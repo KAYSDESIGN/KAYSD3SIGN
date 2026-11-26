@@ -28,6 +28,8 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ap = argparse.ArgumentParser()
 ap.add_argument("generation"); ap.add_argument("--engine", default="trellis2", choices=["trellis-mv", "trellis2"])
 ap.add_argument("--out"); ap.add_argument("--dry-run", action="store_true"); ap.add_argument("--seed", type=int, default=1)
+ap.add_argument("--images", help="comma-separated ref ids to use (default: every usable image)")
+ap.add_argument("--mv-algo", default="multidiffusion", choices=["multidiffusion", "stochastic"])
 o = ap.parse_args()
 refs = json.load(open(os.path.join(ROOT, "tools/recon3d/refs", f"{o.generation}.json")))
 out = o.out or os.path.join(ROOT, "build/recon", o.generation)
@@ -38,6 +40,8 @@ images = []
 for ref in refs["images"]:
     if ref.get("use") is False:
         print(f"  skip  {ref['id']}: {ref.get('reason', 'excluded')}"); continue
+    if o.images and ref["id"] not in o.images.split(","):
+        continue
     if ref["rights"] not in ("free", "personal"):
         sys.exit(f"REFUSED {ref['id']}: rights '{ref['rights']}' do not allow reuse ({ref.get('source')})")
     dst = os.path.join(out, "inputs", f"{ref['id']}.png")
@@ -50,6 +54,9 @@ for ref in refs["images"]:
     images.append((ref, dst))
     print(f"  use   {ref['id']}: {ref['angle']} · {ref['rights']} · {ref.get('source', '')}")
 if not images: sys.exit("No usable reference image (see refs file).")
+colorways = {r.get("colorway") for r, _ in images if r.get("colorway")}
+if o.engine == "trellis-mv" and len(colorways) > 1:
+    print(f"WARNING: views of different colourways {sorted(colorways)} — geometry test only, texture not representative")
 private = any(r["rights"] == "personal" for r, _ in images)
 json.dump({"generation": o.generation, "engine": o.engine, "private": private,
            "inputs": [r for r, _ in images]}, open(os.path.join(out, "provenance.json"), "w"), indent=1, ensure_ascii=False)
@@ -71,7 +78,7 @@ try:
             return x.get("path") if isinstance(x, dict) else x
         mv = [{"image": handle_file(path_of(x)), "caption": None} for x in pre]
         res = c.predict(image=mv[0]["image"], multiimages=mv, seed=o.seed, ss_guidance_strength=7.5, ss_sampling_steps=12,
-                        slat_guidance_strength=3, slat_sampling_steps=12, multiimage_algo="stochastic",
+                        slat_guidance_strength=3, slat_sampling_steps=12, multiimage_algo=o.mv_algo,
                         mesh_simplify=0.9, texture_size=2048, api_name="/generate_and_extract_glb")
         path = next(x for x in (res if isinstance(res, (list, tuple)) else [res]) if isinstance(x, str) and x.endswith(".glb"))
     else:

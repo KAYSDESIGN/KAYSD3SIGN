@@ -29,7 +29,27 @@
       "angle": "frontThreeQuarter (côté droit)",
       "rights": "personal",
       "priority": 5,
-      "source": "Photo presse Honda 24YM+ fournie par l'utilisateur le 26/11/2026 — droits Honda, usage strictement privé (modèle jamais publié)"
+      "source": "Photo presse Honda 24YM+ fournie par l'utilisateur le 26/11/2026 — droits Honda, usage strictement privé (modèle jamais publié)",
+      "colorway": "Matt Gunpowder Black Metallic 24YM+"
+    },
+    {
+      "id": "user-left-rtq-silver",
+      "file": "App/PrivatePhotos/refs/user_left_rtq_21ym_silver.png",
+      "angle": "rearThreeQuarter (côté gauche)",
+      "rights": "personal",
+      "priority": 4,
+      "colorway": "argent/gris mat, fourche dorée (≈ 21YM) — différent de la référence droite (noir 24YM)",
+      "source": "Photo studio fournie par l'utilisateur le 26/11/2026 — droits du photographe/Honda, usage strictement privé",
+      "qc": "cohérente : chaîne, sélecteur et repose-pied à gauche, pas de disque arrière de ce côté, logo correct"
+    },
+    {
+      "id": "user-left-profile",
+      "file": "App/PrivatePhotos/refs/user_left_profile_altered.png",
+      "angle": "leftProfile",
+      "rights": "personal",
+      "use": false,
+      "reason": "QC : logo « CB 1255R » — image altérée (agrandissement ou génération IA)",
+      "source": "fournie par l'utilisateur le 26/11/2026"
     },
     {
       "id": "user-ftq",
