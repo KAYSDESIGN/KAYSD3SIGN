@@ -14,8 +14,8 @@ Steps
  2. Align it on the reference: longest horizontal axis → X, uniform scale to the official length, ground on Z=0,
     then ICP (rotation + translation + uniform scale, Umeyama). Two headings are tried (0° / 180°).
     NEVER mirrored: a mirror would swap the mechanical asymmetries (chain, exhaust, brake discs).
- 3. Each face gets the component of the nearest reference surface (≤ max-label-dist, else fixed), then 2 rounds of
-    neighbour majority smoothing. Faces become objects cmp~<slug>~0 / stock~<part>~0 / fixed~x~0.
+ 3. Each face gets the component of the nearest reference surface (≤ max-label-dist, else fixed), then neighbour voting
+    (--smooth passes) and merging of islands smaller than --min-island faces into their surroundings. Faces become objects cmp~<slug>~0 / stock~<part>~0 / fixed~x~0.
  4. Each paintable component stores its mean texture luminance (extras "lumMean") so the app can repaint it while
     keeping the photographed shading.
  5. The reference accessories (acc~) are copied in: same frame, so fitted parts land at their real place.
@@ -34,7 +34,9 @@ RECONS = [argv[i + 1] for i, a in enumerate(argv) if a == "--recon"]
 SIDES = (arg("--sides") or "").split(",") if arg("--sides") else []   # e.g. left,right: keep +Y half of 1st, -Y half of 2nd
 RENDERS, REPORT = arg("--renders"), arg("--report")
 MAXD = float(arg("--max-label-dist", "0.06"))
-MAX_FOOTPRINT = float(arg("--max-footprint", "0.6"))   # CB125R: 820/2040 = 0.40 incl. mirrors
+MAX_FOOTPRINT = float(arg("--max-footprint", "0.6"))
+SMOOTH_ITERS = int(arg("--smooth", "10"))
+MIN_ISLAND = int(arg("--min-island", "400"))   # faces   # CB125R: 820/2040 = 0.40 incl. mirrors
 random.seed(1)
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -168,17 +170,41 @@ labels, gaps = [], []
 for f in bm.faces:
     loc, _, idx, dist = ref_bvh.find_nearest(f.calc_center_median())
     labels.append(poly_tag[idx] if dist <= MAXD else "fixed~x"); gaps.append(dist)
-for _ in range(2):
-    new = labels[:]
-    for f in bm.faces:
-        votes = {}
-        for e in f.edges:
-            for g in e.link_faces:
-                if g.index != f.index: votes[labels[g.index]] = votes.get(labels[g.index], 0) + 1
-        if votes:
-            top = max(votes, key=votes.get)
-            if votes[top] >= 2 and top != labels[f.index]: new[f.index] = top
-    labels = new
+# Region cleanup (vectorised): neighbour voting, then small islands merged into their surroundings.
+# The reference is a simplified model, so raw nearest-surface labels are noisy where shapes differ.
+F = len(bm.faces)
+pairs = np.array([(e.link_faces[0].index, e.link_faces[1].index) for e in bm.edges if len(e.link_faces) == 2], dtype=np.int64)
+names = sorted(set(labels)); L = len(names); lab = np.array([names.index(l) for l in labels])
+for _ in range(SMOOTH_ITERS):
+    votes = np.zeros((F, L), dtype=np.int32)
+    np.add.at(votes, (pairs[:, 0], lab[pairs[:, 1]]), 1)
+    np.add.at(votes, (pairs[:, 1], lab[pairs[:, 0]]), 1)
+    votes[np.arange(F), lab] += 1                          # a face keeps its label on ties
+    lab = votes.argmax(1)
+adj = [[] for _ in range(F)]
+for a, b in pairs: adj[a].append(b); adj[b].append(a)
+seen = np.full(F, -1); comps = []
+for f0 in range(F):
+    if seen[f0] >= 0: continue
+    stack, comp = [f0], []; seen[f0] = len(comps)
+    while stack:
+        f = stack.pop(); comp.append(f)
+        for g in adj[f]:
+            if seen[g] < 0 and lab[g] == lab[f0]: seen[g] = len(comps); stack.append(g)
+    comps.append(comp)
+merged = 0
+for comp in sorted(comps, key=len):
+    if len(comp) >= MIN_ISLAND: break
+    cs = set(comp); around = {}
+    for f in comp:
+        for g in adj[f]:
+            if g not in cs: around[lab[g]] = around.get(lab[g], 0) + 1
+    if around:
+        new = max(around, key=around.get)
+        for f in comp: lab[f] = new
+        merged += 1
+labels = [names[i] for i in lab]
+print(f"[labels] {SMOOTH_ITERS} voting passes, {merged} small islands merged")
 bm.free()
 
 # split into tagged objects
