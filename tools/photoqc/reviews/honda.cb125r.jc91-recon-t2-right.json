@@ -1,0 +1,26 @@
+{
+  "reviewer": "Claude — rendus du modèle TRELLIS.2 (photo presse 24YM, côté droit), 27/11/2026",
+  "reviewedAt": "2026-11-27",
+  "setNotes": [
+    "Meilleur modèle à ce jour : côté droit fidèle (disques festonnés 24YM, étrier, silencieux, béquille), écart médian aux cotes 13 mm.",
+    "Côté gauche déduit par symétrie : disque avant et silencieux recopiés, chaîne absente.",
+    "Profils : 1,545 / 1,596 contre 1,668 (−7 % / −4 %).",
+    "Vue avant : écart d'éclairage dû au phare blanc très lumineux (pas un défaut de géométrie)."
+  ],
+  "views": {
+    "rightProfile": {
+      "brakeDiscs": { "status": "ok", "note": "disques festonnés 24YM, étrier radial" }, "exhaust": { "status": "ok", "note": "" },
+      "mirrors": { "status": "ok", "note": "" }, "fork": { "status": "ok", "note": "" }, "wheels": { "status": "ok", "note": "" },
+      "colour": { "status": "ok", "note": "Matt Gunpowder Black" }, "logos": { "status": "fail", "note": "illisibles" },
+      "engine": { "status": "unverified", "note": "détails flous" }, "transmission": { "status": "ok", "note": "pas de chaîne de ce côté" }, "bodywork": { "status": "ok", "note": "" }
+    },
+    "leftProfile": {
+      "brakeDiscs": { "status": "fail", "note": "disque avant recopié du côté droit" }, "exhaust": { "status": "fail", "note": "silencieux recopié" },
+      "transmission": { "status": "fail", "note": "chaîne absente" }
+    },
+    "rearThreeQuarter": { "brakeDiscs": { "status": "fail", "note": "côté gauche symétrisé" } },
+    "frontThreeQuarter": { "logos": { "status": "fail", "note": "" }, "colour": { "status": "ok", "note": "" } },
+    "front": { "mirrors": { "status": "ok", "note": "" }, "fork": { "status": "ok", "note": "" }, "colour": { "status": "ok", "note": "" } },
+    "rear": { "colour": { "status": "ok", "note": "" } }
+  }
+}
